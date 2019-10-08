@@ -1,0 +1,201 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+# Load Balancer
+
+Hiện nay, nhu cầu truy cập mạng của các tổ chức, doanh nghiệp ngày càng tăng cao , dẫn tới việc băng thông đường truyền bị quá tải. Để giải quyết vấn đề này , không chỉ đơn giản là nâng cao tốc độ hay băng thông đường truyền mà còn phải chú trọng đến việc tránh các rủi ro về sự cố trên đường truyền, giải pháp load balancing cho đường truyền là giải pháp tối ưu cho vấn đề này
+
+BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên cạnh các tính năng của NGFW như URL Filter, Black list IP,... BLB là 1 trong những Firewall thế hệ mới hiếm hoi trên thế giới trang bị đầy đủ tính năng giới hạn băng thông (Traffic Shapping) và cân bằng tải cho đường truyền( Load Balancer)
+
+## About [/about]
+### System infomation [GET]
+
++ Response 200 (application/json)
+
+        {
+            "dashboard_name": "Bkav-LoadBalancer",
+            "dashboard_version": "1.0.1 5/9/2019 ",
+            "dashboard_cpu": "Intel Core i3 Kabylake 7020U 2.30 GHz",
+            "dashboard_ram": "16 GB",
+            "dashboard_disk": "HDD : 1TB (21%)",
+            "Temperature": "70°C"
+            "Licence": "123 day ",
+            "System time": "Sat 2019-09-07 09:22:31 UTC+07 
+        }
+## Licence [/licence]
+
+### Licence [GET]
+
++ Response 200 (application/json)
+
+        {
+            "licence": "$2y$10$0AyR.0oC2cj2M..NvqdnxewSPqoH8CrlrcPJOhC6by/xEi5lHBvcO",
+            "licence_expired": "2019-12-20"
+        }
+        
+### Add Licence [POST]
+
+Thêm licence cho BLB
+
++ Attributes (object)
+    + licence (string, required)
+
++ Request (application/json)
+
+        {
+            "licence": "$2y$10$0AyR.0oC2cj2M..NvqdnxewSPqoH8CrlrcPJOhC6by/xEi5lHBvcO"
+        }
+
++ Response 201 (application/json)
+    
+    + Body
+
+            {
+                "status": 1,
+                "message": "LICENCE ADD SUCCESS",
+                "data": {
+                    "licence": "$2y$10$0AyR.0oC2cj2M..NvqdnxewSPqoH8CrlrcPJOhC6by/xEi5lHBvcO",
+                    "licence_expired": "2019-12-20",
+                    "server_message": "Licence OK"
+                }
+            }
+
++ Response 403 (application/json)
+    
+    + Body
+
+            {
+                "status": 0,
+                "message": "LICENCE ADD FAIL",
+                "data": {
+                    "server_message": "Licence Invaild"
+                }
+            }
+
+## Login [/login]
+
+### Send login info [POST]
+
++ Attributes (object)
+    + username (string, required)
+    + password (string, required)
+
+
++ Request (application/json)
+
+        {
+            "username": "admin",
+            "password": "123456"
+        }
+
+
+
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "status": 1,
+                "message": "Authenticated",
+                "data": {
+                    "username":"admin",
+                    "name":"Admin",
+                    "id":1,
+                    "expires_in" : 3600,
+                    "access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGVzdGp3dHJlc291cmNlaWQiXSwidXNlcl9uYW1lIjoidXNlciIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1MTM4MzE3ODcsImF1dGhvcml0aWVzIjpbIlNUQU5EQVJEX1VTRVIiXSwianRpIjoiYzBiNjE0NDgtZWQyMi00OTMxLThkZGQtZDkyZTI1ZWE1OTU1IiwiY2xpZW50X2lkIjoiY2xpZW50aWQifQ.2IraSC0vG7iT98NqdtJ4YMAOh7wXnHcLq2hCstTYxN8",
+                    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+                }
+            }
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "status": 0,
+                "message": "Authentication Failed",
+                "data": {}
+            }
+## Refresh token [/refresh_token]
+### Refresh [GET]
++ Response 200 (application/json)
+
+    + Body
+
+        {
+            "data": {
+                "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2NsYWltcyI6eyJpZCI6MTZ9LCJqdGkiOiIzNjg1YThmMC0zMzRjLTQ0ZWYtYTg2Mi0zNGYwZmIxNTQzYzYiLCJleHAiOjE1NjkzMTEyOTEsImZyZXNoIjpmYWxzZSwiaWF0IjoxNTY5MzEwMzkxLCJ0eXBlIjoiYWNjZXNzIiwibmJmIjoxNTY5MzEwMzkxLCJpZGVudGl0eSI6ImFkbWluIn0.Y6tfljESXbPdT8VPjnSBMy4Cx5kYArl4LEkdGRRlJKQ"
+            },
+            "message": "",
+            "status": 1
+        }
+
+
+## Logout [/logout]
+
+### Log user out [GET]
+
+
++ Response 200 (application/json)
+
+    + Body
+
+        {
+            "data": "",
+            "message": "Logout success",
+            "status": 1
+        }
+
++ Response 403 (application/json)
+    
+    + Body
+    
+            {
+                "status": 0,
+                "message": "Logout Unsuccess",
+                "data": {}
+            }
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "status": 0,
+                "message": "Unauthorized",
+                "data": {}
+            }
+## Logout [/logout_refresh_token]
+### Log Refresh token [GET]
+
+
++ Response 200 (application/json)
+
+    + Body
+
+        {
+            "data": "",
+            "message": "Logout refresh token successfuly",
+            "status": 1
+        }
+
++ Response 403 (application/json)
+    
+    + Body
+    
+            {
+                "status": 0,
+                "message": "Logout Unsuccess",
+                "data": {}
+            }
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "status": 0,
+                "message": "Unauthorized",
+                "data": {}
+            }

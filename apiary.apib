@@ -389,20 +389,99 @@ Chứa các thông tin cấu hình về một bản ghi
     + description: đây là nhóm test
 ### Retrieve a Service Object [GET]
 Lấy thông tin về một 
++ Response 200 (application/json)
+    + Attributes (Object Service)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
 ### Edit a Object Service [PUT]
 sua 1 object service
-### Delete a Object Service [DELETE]
++ Attributes (object)
+    + groupservice_id: 1 (number, required)
+    + name: test
+    + description: đây là nhóm test
++ Request (application/json)
+    
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Object Service)
 
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string))
+### Delete a Object Service [DELETE]
+sua 1 object service
++ Attributes (object)
+    + groupservice_id: 1 (number, required)
+    + name: test
+    + description: đây là nhóm test
++ Request (application/json)
+    
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Object Service)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string))
 ## Object Service Collection [/groupservices]
 chua cau hinh cua ca ban ghi
++ Attributes
+    + groupservice_id: 1 (number, required)
+    + name: test
+    + description: đây là nhóm test
 ### List all  Object Service [GET]
 list tat ca cac ban ghi cua bang
++ Response 200 (application/json)
+    + Attributes (Object Service Collection)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
 ### Show entries and pagination [GET /groupservices{?search,limit,page}]
 show theo entries
 ### Create a Object Service [POST]
 tạo 1 bản ghi cho group
 
-## Services add [/groupservices/{groupservice_id}/services{service_id}]
++ Request (application/json)
+    + Attributes (object)
+        + groupservice_id: 1 (number, required)
+        + name: test
+        + description: đây là nhóm test
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Object Service)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
 
 ### Get a Service [GET]
 + Response 200 (application/json)

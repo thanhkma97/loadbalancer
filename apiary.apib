@@ -20,7 +20,7 @@ BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên 
             "dashboard_disk": "HDD : 1TB (21%)",
             "Temperature": "70°C"
             "Licence": "123 day ",
-            "System time": "Sat 2019-09-07 09:22:31 UTC+07 
+            "System time": "Sat 2019-09-07 09:22:31 UTC+07 "
         }
 ## Licence [/licence]
 
@@ -202,7 +202,170 @@ Thêm licence cho BLB
 ## Dashboad [/dashboard]
 ## Network interface [/interfae]
 cau hinh interface
-## network nat [/nat]
+
+# Group NAT
+Hỗ trợ cấu hình NAT trên mạng. Đường dẫn cấu hình Setting -> Networking -> NAT
+
+## NAT [/nat/{nat_id}]
+Chứa các thông tin cấu hình về một bản ghi nat
++ Parameters
+    + nat_id (number)
+
++ Attributes (NAT Base)
+    + id: 1 (number, required)
+### Retrieve a NAT [GET]
+Lấy thông tin về một nat
+
++ Response 200 (application/json)
+    + Attributes (NAT)
+        + interface (Interface)
+            + name: port0
+            + type: WAN
+            + ip_address: 27.72.28.152
+            + netmask: 255.255.255.255
+            + gateway: 10.56.239.2
+            + active: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Edit a NAT [PUT]
++ Attributes (NAT Base)
+    + nat_id: 1 (number)
+
++ Request (application/json)
+    
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (NAT)
+            + interface (Interface)
+                + name: port0
+                + type: WAN
+                + ip_address: 27.72.28.152
+                + netmask: 255.255.255.255
+                + gateway: 10.56.239.2
+                + active: 1 (number)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string))
+
+### Delete a NAT [DELETE]
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string) 
+
+## NAT Collection [/nat]
++ Attributes (array)
+    + (NAT)
+        + interface (Interface)
+            + name: port0
+            + type: WAN
+            + ip_address: 27.72.28.152
+            + netmask: 255.255.255.255
+            + gateway: 10.56.239.2
+            + active: 1 (number)
+    + (NAT)
+        + type: 1 (number)
+        + name: nat_internet
+        + interface (Interface)
+            + name: port0
+            + type: WAN
+            + ip_address: 27.72.28.152
+            + netmask: 255.255.255.255
+            + gateway: 10.56.239.2
+            + active: 1 (number)
+        + ip
+        + service_port
+        + protocol
+        + ip_map: 27.72.28.152
+        + port_map
+
+### List all nat [GET]
++ Response 200 (application/json)
+    + Attributes (NAT Collection) 
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Show entries and pagination [GET /nat{?search,limit,page}]
++ Parameters
+    + limit (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+        + Sample: 10
+    + page (number, optional) - Số trang
+        + Default: 1
+    + search: 27.72.28.152 (string) - Trong trường hợp dùng tính năng search thì sẽ có thêm parameter search. Nếu chỉ lấy tổng dữ liệu bình thường thì bỏ parameter này.
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (NAT Collection)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Create a NAT [POST]
++ Attributes (NAT Base)
+    + interface: 1 (number)
+
++ Request (application/json)
+
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (NAT)
+            + interface (Interface)
+                + name: port0
+                + type: WAN
+                + ip_address: 27.72.28.152
+                + netmask: 255.255.255.255
+                + gateway: 10.56.239.2
+                + active: 1 (number)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
 cau hinh nat
 ## network loadbalancer [/balancer]
 cau hinh balancer
@@ -214,8 +377,114 @@ cau hinh system
 cau hinh object IP address
 ### 
 
-## object servicer [/servicer]
-cau hinh object servicer 
+# Group Object Services
+Hỗ trợ cấu hình Group Services. Đường dẫn cấu hình Setting -> Object -> Service
+## Object Service [/groupservices/{groupservice_id}]
+Chứa các thông tin cấu hình về một bản ghi
++ Parameters
+    + groupservice_id (number)
++ Attributes (object)
+    + groupservice_id: 1 (number, required)
+    + name: test
+    + description: đây là nhóm test
+### Retrieve a Service Object [GET]
+Lấy thông tin về một 
+### Edit a Object Service [PUT]
+sua 1 object service
+### Delete a Object Service [DELETE]
+
+## Object Service Collection [/groupservices]
+chua cau hinh cua ca ban ghi
+### List all  Object Service [GET]
+list tat ca cac ban ghi cua bang
+### Show entries and pagination [GET /groupservices{?search,limit,page}]
+show theo entries
+### Create a Object Service [POST]
+tạo 1 bản ghi cho group
+
+## Services add [/groupservices/{groupservice_id}/services{service_id}]
+
+### Get a Service [GET]
++ Response 200 (application/json)
+    + Attributes (object)
+        + service_id: 1 (number)
+        + protocol: `tcp,udp`
+        + port: 53
+        + define
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+### Edit a Service [PUT]
++ Request (application/json)
+    + Attributes (object)
+        + service_id: 1 (number)
+        + protocol: `tcp,udp`
+        + port: 53
+        + define
+        
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (object)
+            + service_id: 1 (number)
+            + protocol: `tcp,udp`
+            + port: 53
+            + define
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)0
+
+## Services Collection [/groupservices/{groupservice_id}/services]
++ Parameters
+    + groupservice_id: 4 (number)
+### Get detail a Service [GET /groupservices/{groupservice_id}/services{?search,limit,page}]
++ Parameters
+    + limit (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+        + Sample: 10
+    + page (number, optional) - Số trang
+        + Default: 1
+    + search: 53 (string) - Trong trường hợp dùng tính năng search thì sẽ có thêm parameter search. Nếu chỉ lấy tổng dữ liệu bình thường thì bỏ parameter này.
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array)
+            + (object)
+                + service_id: 1 (number)
+                + protocol: `tcp,udp`
+                + port: 53
+                + define
+            + (object)
+                + service_id: 1 (number)
+                + protocol: tcp
+                + port: 20-21
+                + define
+        + paging (object)
+            + total_count: 2 (number)
+            + total_page: 1 (number)
+            + current_page: 1 (number)
+
+    
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
 
 ## object schedules [/schedules]
 cau hinh scheddule servicer

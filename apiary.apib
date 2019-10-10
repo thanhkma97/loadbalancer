@@ -1,476 +1,41 @@
 FORMAT: 1A
-HOST: http://bif.apiblueprint.org/
+HOST: http://polls.apiblueprint.org/
 
-# LBL
+# Load Balancer
 
 Hiện nay, nhu cầu truy cập mạng của các tổ chức, doanh nghiệp ngày càng tăng cao , dẫn tới việc băng thông đường truyền bị quá tải. Để giải quyết vấn đề này , không chỉ đơn giản là nâng cao tốc độ hay băng thông đường truyền mà còn phải chú trọng đến việc tránh các rủi ro về sự cố trên đường truyền, giải pháp load balancing cho đường truyền là giải pháp tối ưu cho vấn đề này
 
 BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên cạnh các tính năng của NGFW như URL Filter, Black list IP,... BLB là 1 trong những Firewall thế hệ mới hiếm hoi trên thế giới trang bị đầy đủ tính năng giới hạn băng thông (Traffic Shapping) và cân bằng tải cho đường truyền( Load Balancer)
 
-# Data Structures
-## Route Base (object)
-+ name: testroute (string, required)
-+ destination: 10.2.32.0 (string, required)
-+ netmask: 255.255.255.0 (string, required)
-+ gateway: 10.2.32.1 (string, required)
-+ metric: 1 (number, optional)
-+ description: đây là mô tả (string, optional)
-
-## Policy Route Base (object)
-+ pos: 1 (number)
-+ name: test1
-+ source (object)
-    + ip: 10.2.32.11
-    + netmask: 255.255.255.255
-+ destination (object)
-    + ip: 0.0.0.0
-    + netmask: 0.0.0.0
-+ protocol (object)
-    + protocol: tcp,udp (array)
-    + port: 3389,22
-+ gateway: 27.72.28.152
-+ description
-
-## Service Access Base (object)
-+ type (enum[string])
-    + Members
-        + physical - Ứng với cấu hình servervice access cho giao diện vật lý
-        + vlan - Ứng với cấu hình servervice access cho giao diện VLAN
-    + Sample: physical
-+ interface_id: 1 (number)
-+ services_access (array)
-    + (object)
-        + service: ICMP - Ứng với dịch vụ ICMP trên web
-        + protocol: icmp (string, required)
-        + port
-    + (object)
-        + service: HTTP (string, required) - Ứng với dịch vụ HTTP trên web
-        + protocol: tcp (string, required)
-        + port: 80 (string, required)
-    + (object)
-        + service: HTTPS (string, required) - Ứng với dịch vụ HTTPS trên web
-        + protocol: tcp (string, required)
-        + port: 443 (string, required)
-    + (object)
-        + service: DNS (string, required) - Ứng với dịch vụ DNS trên web
-        + protocol: tcp,udp (string, required)
-        + port: 53 (string, required)
-    + (object)
-        + service: SSH (string, required) - Ứng với dịch vụ SSH trên web
-        + protocol: tcp (string, required)
-        + port: 22 (string, required)
-    + (object)
-        + service: VPN SSL (string, required) - Ứng với dịch vụ VPN SSL trên web
-        + protocol: tcp (string, required)
-        + port: 1194 (string, required)
-    + (object)
-        + service: VPN IPSEC (string, required) - Ứng với dịch vụ VPN IPSEC trên web
-        + protocol: udp,esp,ah (string, required)
-        + port: 500,4500,50,51,1701 (string, required)
-    + (object)
-        + service: Admin (string, required) - Ứng với dịch vụ Admin trên web
-        + protocol: tcp (string, required)
-        + port: 8008 (string, required)
-    + (object)
-        + service
-        + protocol: tcp,udp (string, required)
-        + port: 1234 (string, required)  
-
-## PPPoE Base (object)
-+ username: viettel-provider (string, required)
-+ password: xxxxxx (string, required)
-+ mtu (number)
-    + Default: 1480
-+ fixed_ip: 27.72.28.152 (string)
-+ clone_mac: 20:1a:06:96:c5:36 (string)
-
-## Interface Base (object)
-+ name (string, required)
-+ type (enum[string], required)
-    + Default: LAN
-    + Members
-        + LAN
-        + WAN
-+ addressing_mode (enum[string], required)
-    + Default: Static
-    + Sample: PPPoE
-    + Members
-        + Static
-        + DHCP
-        + PPPoE
-
-+ ip_address (string)
-+ netmask (string)
-    + Default: 0.0.0.0
-+ gateway (string)
-+ dns (string)
-    + Default: 8.8.8.8, 8.8.4.4
-+ active (enum[number], required)
-    + Default: 0
-    + Members
-        + 0 - off
-        + 1 - on
-+ status: 1 (number)
-
-
-## Virual IP Base (object)
-+ interface (number) - đây interface_id của Group Interface
-+ ip_address (string)
-+ netmask (string)
-    + Default: 255.255.255.255
-
-## VLAN Base (object)
-+ interface (number) - đây interface_id của Group Interface
-+ vlanID (number)
-+ ip_address (string)
-+ netmask (string)
-    + Default: 255.255.255.0
-+ dns (string)
-    + Default: 8.8.8.8, 8.8.4.4
-+ active (enum[number], required)
-    + Default: 0
-    + Members
-        + 0 - off
-        + 1 - on
-+ name (string) - Tên VLAN bằng vlan + vlanID
-
-## NAT Base (object)
-+ type: 0 (number) - 0 đây là kiểu nat External -Internal, 1 là kiểu nat Internal-External
-+ name: test (string)
-+ interface: 1 (number) - đây interface_id của Group Interface
-+ ip: 27.72.28.152 (string)
-+ service_port: 3389
-+ protocol (enum[array[string]])
-    + Members
-        + TCP
-        + UDP
-        + SCTP
-    + Sample: tcp,udp
-+ ip_map: 10.2.32.92 (string)
-+ port_map: 3389 (string)
-+ active (enum[number], required)
-    + Default: 1
-    + Members
-        + 0 - off
-        + 1 - on
-
-## Load Balancer Base (object)
-+ name: test (string)
-+ gateway (array)
-    + (object)
-        + interface_id: 1
-        + weight: 1
-    + (object)
-        + interface_id: 3
-        + weight: 1
-+ status_checking (object)
-    + protocol: ping (string)
-    + server_check: 8.8.8.8 (string)
-    + timeout: 3 (number)
-    + threshold_before_failover: 5 (number)
-+ description: test loadbalancer (string)
-
-## DNS Server Base (object)
-+ type: master (enum[string])
-    + Default: master
-    + Members
-        + Master
-        + Slave
-+ subnet: 192.168 (string)
-+ dns_zone: bkav.com (string)
-+ ttl (number)
-    + Default: 604800
-+ ip_master: 192.168.0.1 (string)
-+ ip_slave (string)
-+ records (array)
-    + (object)
-        + type (enum[string])
-            + Default: A
-            + Members
-                + A
-                + NS
-        + domain: ns.bkav.com
-        + ip_address: 192.168.0.1
-    + (object)
-        + type (enum[string])
-            + Default: A
-            + Members
-                + A
-                + NS
-        + domain: test.bkav.com
-        + ip_address: 192.168.0.100
-
-## DHCP Server Base (object)
-+ interface (object):
-    + interface_type (enum[string])
-        + Members
-            + physical - Đây là loại interface vậy lý, tương ứng sẽ lấy interface-id từ bảng của tài nguyên Interface
-            + virual - Đây là loại interface ảo, tương ứng sẽ lấy interface-id từ bảng của tài nguyên VLAN
-        + Sample: physical
-    + interface_id: 2 (number)
-+ address_range (object)
-    + from: 192.168.0.10
-    + to: 192.168.0.100
-+ netmask: 255.255.255.0 (string)
-+ default_gateway: 192.168.0.1 (string)
-+ dns_server (object)
-    + dns1
-        + Default: 8.8.8.8
-    + dns2
-        + Default: 8.8.4.4
-+ options (array)
-    + (object)
-        + hostname: printer (string)
-        + mac_address: 0:0:c0:5d:bd:95 (string)
-        + ip_address: 192.168.0.50 (string)
-+ default_lease_time (number)
-    + Default: 3200
-+ max_lease_time (number)
-    + Default: 7200
-
-## IP Object Base (object)
-+ name: lan-port1-serverweb
-+ description: đây là nhóm test
-
-
-## Blacklist C&C Server Base (object)
-+ no: 1 (number)
-+ ip/domain: 58.221.49.33 (string)
-
-## Service Object Base (object)
-+ name: test
-+ description: đây là nhóm test
-
-
-## Schedule Object Base (object)
-+ name: test
-+ description: đây là nhóm test
-+ type (enum[number])
-    + Default: 1
-    + Members
-        + 1 - Weekly - Chọn member này thì cần điền tham số start_time, stop_time, days_of_the_week. Còn lại để rỗng
-        + 2 - Monthly - Chọn member này thì cần điền tham số start_time, stop_time, days_of_the_month, months. Còn lại để rỗng
-        + 3 - Ontime - Chọn member này thì cần điền tham số start_time, stop_time. Còn lại để rỗng
-+ start_time: `2019-04-23 09:47` (string) - typetime %Y-%m-%d %H:%M
-+ stop_time: `2019-04-23 09:48` (string) - typetime %Y-%m-%d %H:%M
-+ days_of_the_week (enum[string])
-    + Members
-        + MON
-        + TUE
-        + WED
-        + THU
-        + FRI
-        + SAT
-        + SUN
-    + Sample: Mon,Tue,Wed,Thu,Fri,Sat
-
-+ days_of_the_month (string) - Example: 2,3,4,5,10,12,25. Bao gồm từ 1 -> 30
-+ months (string) - Example: Jan,Feb,Mar,Dec. Bao gồm 12 tháng
-
-## URL Object Base (object)
-+ name: test
-+ description: đây là nhóm test
-+ URL/Domain: dantri.vn, vnexpress.net (array[string])
-
-## Backup Base (object)
-+ password: xxxxx (string)
-
-## Restore Base (object)
-+ path_file_backup: /tmp/xxxxx.bif (string)
-+ password: xxxxx (string)
-
-## Firewall Policy Base (object)
-+ pos (number)
-    + Default: 1
-+ name: permit web (string)
-+ sources (array) - Nếu giá trị là mảng rỗng [] sẽ  tương ứng hiển thị trên web là Any
-    + (Object IP)
-        + groupip_id: 4 (number)
-        + name: lan-vlan10
-    + (Object IP)
-        + groupip_id: 5 (number)
-        + name: lan-vlan20
-+ destinations (array) - Nếu giá trị là mảng rỗng [] sẽ  tương ứng hiển thị trên web là Any
-    + (Object IP)
-+ services (array) - Nếu giá trị là mảng rỗng [] sẽ  tương ứng hiển thị trên web là Any
-    + (Object Service)
-+ schedules (array) - Nếu giá trị là mảng rỗng [] sẽ  tương ứng hiển thị trên web là Any
-    + (Object Schedule)
-        + groupschedule_id: 2 (number)
-        + name: test ontime
-        + type: 3 (number)
-        + start_time: `2019-04-23 09:47`
-        + stop_time: `2019-04-23 09:48`
-        + days_of_the_week
-        + days_of_the_month
-        + months
-+ action (enum[string])
-    + Default: Drop
-    + Members
-        + Accept
-        + Drop
-        + Reject
-    + Sample: accept
-+ security_options (object)
-    + status: 0 (number) - Trạng thái có bật tính năng security options hay không.
-    + blacklist: 0 (number)
-    + application_control (array)
-    + url_filter (array)
-+ interfaces (array) - Nếu giá trị là mảng rỗng [] sẽ  tương ứng hiển thị trên web là Any. Giá trị interface ở đây có thể là tài nguyên của bảng Interface hoặc bảng VLAN
-    + (VLAN)
-        + vlanID: 10 (number)
-        + ip_address: 172.16.10.1
-        + active: 1 (number)
-        + vlan_id: 1 (number)
-        + name: vlan10
-    + (Interface)
-        + interface_id: 2 (number)
-        + name: port1
-        + type: LAN
-        + addressing_mode: Static
-        + ip_address: 10.2.32.90
-        + netmask: 255.255.255.0
-        + active: 1
-+ log (enum[number])
-    + Default: 0
-    + Members
-        + 0
-        + 1
-    + Sample: 0
-+ active (enum[number], required)
-    + Default: 1
-    + Members
-        + 0 - off
-        + 1 - on
-
-## Traffic Shaper Base (object)
-+ interfaces (array)
-    + (Interface)
-        + interface_id: 2 (number)
-        + name: port1
-        + type: LAN
-        + addressing_mode: Static
-        + ip_address: 10.2.32.90
-        + netmask: 255.255.255.0
-        + active: 1 (number)
-+ ip_address (array)
-    + (Object IP)
-        + groupip_id: 3 (number)
-        + name: lan-port1
-        + description: Đây là nhóm Blacklist CC Server cố định
-        + group_ip (array)
-            + (object)
-                + ip: 10.2.32.0
-                + netmask: 255.255.255.0
-                + define
-+ whitelist_ip (array)
-    + (Object IP)
-
-+ download: 10240 (number) - Trường hợp người dùng không điền ô này thì mặc định = 0
-+ upload: 10240 (number) - Trường hợp người dùng không điền ô này thì mặc định = 0
-+ description (string)
-
-## Monitor Resource Base (object)
-+ ram (number) - Đơn vị là phần trăm sử dụng
-+ cpu (number) - Đơn vị là phần trăm sử dụng
-+ disk (number) - Đơn vị là phần trăm sử dụng
-
-## Monitor Traffic Base (object)
-+ interface (object)
-    + interface_id (number)
-    + interface_name (string)
-+ bw_input (number) - Đơn vị MB/s
-+ bw_output (number) - Đơn vị MB/s
-
-## Monitor Traffic Detail Base (object)
-+ no: 1 (number)
-+ datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-+ interface (object)
-    + interface_id: 1 (number)
-    + interface_name: port0 (string)
-+ sources: 192.168.3.1
-+ sources (object)
-    + ip_address: 192.168.3.1
-    + country: Other (string)
-+ destinations (object)
-    + ip_address: 220.231.105.23
-    + country: VN (string)
-+ destinations_port: 53
-+ protocol: udp
-+ application: dns
-+ byte_send: 536 - đơn vị tính băng byte
-+ byte_received: 777 - - đơn vị tính băng byte 
-
-## Monitor Setting Base (object)
-+ no: 1 (number)
-+ datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-+ user: admin (string)
-+ address (object)
-    + ip_address: 10.2.32.11
-    + country: Other
-+ action: edit (string)
-+ status (enum[number])
-    + Members
-        + 1 - Thể hiện trạng thái hành động đấy là thành công
-        + 0 - Thể hiện trạng thái hành động đấy bị lỗi
-    + Sample: 1
-+ content: Edit GroupIp BIF-Team (string)
-
-## Monitor Firewall Base (object)
-+ no: 1 (number)
-+ datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-+ protocol: tcp
-+ source (object)
-    + ip_address: 10.2.32.42
-    + country: Other (string)
-+ destination (object)
-    + ip_address: 10.2.44.35
-    + country: Other (string)
-+ source_port: 2018 (number)
-+ destination_port: 9999 (number)
-+ policy: Block all
-+ action: Deny
-
-
-
-## Error Base (object)
-+ error: tin nhắn lỗi trả về từ server (string)
-
-## Success Base (object)
-+ sucess: tin nhắn lỗi trả về từ server (string)
-
-
-# About, Licence & Login
-
 ## About [/about]
-
-### System info [GET]
+### System infomation [GET]
 
 + Response 200 (application/json)
 
         {
-            "dashboard_name": "BIF NGFW",
-            "dashboard_version": "2.0.4",
-            "dashboard_cpu": "Intel(R) Xeon(R) CPU E3-1220 v3 @ 3.10GHz",
-            "dashboard_memory": "8GB",
-            "dashboard_hdd": "1TB",
-            "server_name": "BIF Lab Bkav"
+            "dashboard_name": "Bkav-LoadBalancer",
+            "dashboard_version": "1.0.1 5/9/2019 ",
+            "dashboard_cpu": "Intel Core i3 Kabylake 7020U 2.30 GHz",
+            "dashboard_ram": "16 GB",
+            "dashboard_disk": "HDD : 1TB (21%)",
+            "Temperature": "70°C"
+            "Licence": "123 day ",
+            "System time": "Sat 2019-09-07 09:22:31 UTC+07 "
         }
-
 ## Licence [/licence]
 
-### Current Licence [GET]
+### Licence [GET]
 
 + Response 200 (application/json)
-        
+
         {
             "licence": "$2y$10$0AyR.0oC2cj2M..NvqdnxewSPqoH8CrlrcPJOhC6by/xEi5lHBvcO",
             "licence_expired": "2019-12-20"
         }
-
+        
 ### Add Licence [POST]
 
-Thêm licence cho BIF
+Thêm licence cho BLB
 
 + Attributes (object)
     + licence (string, required)
@@ -506,44 +71,6 @@ Thêm licence cho BIF
                     "server_message": "Licence Invaild"
                 }
             }
-            
-
-
-## Sign up [/signup]
-
-### Send login info [POST]
-
-+ Attributes (object)
-    + username (string, required)
-    + password (string, required)
-
-
-+ Request (application/json)
-
-        {
-            "username": "quinhquinh",
-            "password": "123456",
-            "name":"Ngô Hồng Quí"
-        }
-
-
-
-
-+ Response 200 (application/json)
-
-    + Body
-
-            {
-                "status": 1,
-                "message": "Sign Up successful",
-                "data": {
-                    "username":"quinh",
-                    "name":"Ngô Hồng Quí",
-                }
-            }            
-
-
-
 
 ## Login [/login]
 
@@ -576,7 +103,6 @@ Thêm licence cho BIF
                     "name":"Admin",
                     "id":1,
                     "expires_in" : 3600,
-                    "avatar":"https://picsum.photos/200/200",
                     "access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGVzdGp3dHJlc291cmNlaWQiXSwidXNlcl9uYW1lIjoidXNlciIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1MTM4MzE3ODcsImF1dGhvcml0aWVzIjpbIlNUQU5EQVJEX1VTRVIiXSwianRpIjoiYzBiNjE0NDgtZWQyMi00OTMxLThkZGQtZDkyZTI1ZWE1OTU1IiwiY2xpZW50X2lkIjoiY2xpZW50aWQifQ.2IraSC0vG7iT98NqdtJ4YMAOh7wXnHcLq2hCstTYxN8",
                     "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
                 }
@@ -591,7 +117,6 @@ Thêm licence cho BIF
                 "message": "Authentication Failed",
                 "data": {}
             }
-
 ## Refresh token [/refresh_token]
 ### Refresh [GET]
 + Response 200 (application/json)
@@ -600,7 +125,7 @@ Thêm licence cho BIF
 
         {
             "data": {
-                "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2NsYWltcyI6eyJpZCI6MTZ9LCJqdGkiOiIzNjg1YThmMC0zMzRjLTQ0ZWYtYTg2Mi0zNGYwZmIxNTQzYzYiLCJleHAiOjE1NjkzMTEyOTEsImZyZXNoIjpmYWxzZSwiaWF0IjoxNTY5MzEwMzkxLCJ0eXBlIjoiYWNjZXNzIiwibmJmIjoxNTY5MzEwMzkxLCJpZGVudGl0eSI6ImFkbWluIn0.Y6tfljESXbPdT8VPjnSBMy4Cx5kYArl4LEkdGRRlJKQ"
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2NsYWltcyI6eyJpZCI6MTZ9LCJqdGkiOiIzNjg1YThmMC0zMzRjLTQ0ZWYtYTg2Mi0zNGYwZmIxNTQzYzYiLCJleHAiOjE1NjkzMTEyOTEsImZyZXNoIjpmYWxzZSwiaWF0IjoxNTY5MzEwMzkxLCJ0eXBlIjoiYWNjZXNzIiwibmJmIjoxNTY5MzEwMzkxLCJpZGVudGl0eSI6ImFkbWluIn0.Y6tfljESXbPdT8VPjnSBMy4Cx5kYArl4LEkdGRRlJKQ"
             },
             "message": "",
             "status": 1
@@ -625,10 +150,10 @@ Thêm licence cho BIF
 + Response 403 (application/json)
     
     + Body
-    
+
             {
                 "status": 0,
-                "message": "Logout Unsuccess",
+                "message": "Authentication Failed",
                 "data": {}
             }
 
@@ -656,12 +181,12 @@ Thêm licence cho BIF
         }
 
 + Response 403 (application/json)
-    
+
     + Body
-    
+
             {
                 "status": 0,
-                "message": "Logout Unsuccess",
+                "message": "Authentication Failed",
                 "data": {}
             }
 
@@ -675,170 +200,15 @@ Thêm licence cho BIF
                 "data": {}
             }
 
-## Users [/users]
-
-### Get users info - Admin role [GET]
-
-+ Response 200 (application/json)
-
-        [
-            {
-                "allow_write": 1,
-                "username":"admin",
-                "id":1,
-                "password":"aaaa",
-                "is_active":1
-            },{
-                "allow_write": 1,
-                "username":"qhinh",
-                "id":2,
-                "password":"aaaa",
-                "is_active":1
-            }
-            
-        ]
-
-### Create new user - Admin Role [POST]
-+ Attributes (object)
-    + username: user3 (string, required)
-    + password: 123456 (string, required)
-    + allow_write: 0 (number, required)
-
-+ Request (application/json)
-
-        {
-                "allow_write": 1,
-                "username":"qhinh",
-                "password":"aaaa",
-                "is_active":1
-        }
-
-+ Response 201 (application/json)
-
-    + Body
-
-            {
-                "status": 1,
-                "message": "CREATE USER SUCCESS",
-                "data": {
-                    "allow_write": 1,
-                    "username":"qhinh",
-                    "id":2,
-                    "password":"aaaa",
-                    "is_active":1
-                }
-            }        
-
-## User by id [/users/{user_id}]
-
+## Interface [/interfaces/{interfaces_id}]
 + Parameters
-    + user_id: 1 (number)
+    + interfaces_id (number)
 
-### Get User info [GET]
-
-+ Response 200 (application/json)
-    
-    + Body
-
-            {
-                "username":"admin",
-                "name":"Admin",
-                "id":1,
-                "avatar":"https://picsum.photos/200/200",
-                "password":"123123"
-            }
-
-### Delete user - Admin role [DELETE]
-
-+ Response 200 (application/json)
-
-    + Body
-
-            {
-                "status": 1,
-                "message": "DELETE SUCCESS",
-                "data": {}
-            }
-
-
-### Edit user - Admin role  [PUT]
-
-
-+ Request (application/json)
-
-            {
-                "allow_write": 1,
-                "username":"qhinh",
-                "id":2,
-                "password":"aaaa",
-                "is_active":1
-            }
-
-+ Response 200 (application/json)
-
-    + Body
-
-            {
-                "status": 1,
-                "message": "USER UPDATE SUCCESS",
-                "data": {
-                    "allow_write": 1,
-                    "username":"qhinh",
-                    "id":2,
-                    "password":"aaaa",
-                    "is_active":1
-                }
-            }
-
-
-### Edit user [PUT]
-
-
-+ Request (application/json)
-
-            {
-                "name":"Admin",
-                "id":1,
-                "avatar":"https://picsum.photos/200/200",
-                "password":"123123"
-            }
-
-+ Response 200 (application/json)
-
-    + Body
-
-            {
-                "status": 1,
-                "message": "USER UPDATE SUCCESS",
-                "data": {
-                    "name":"Admin",
-                    "id":1,
-                    "avatar":"https://picsum.photos/200/200",
-                    "password":"123123"
-                }
-            }
-
-
-
-
-
-# Group Interface
-Hỗ trợ cấu hình thêm sửa xóa cho Interface. Đường dẫn cấu hình Setting -> Networking -> Interface
-
-## Interface [/interfaces/{interface_id}]
-+ Parameters
-    + interface_id: 1 (required, number) - ID ở đây là fix cứng và giới hạn từ 1-> 10 tương ứng từ port0 -> port9
-
-+ Attributes (Interface Base)
-    + interface_id: 1 (number, required)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-
-### Retrieve a Interface [GET]
+### Get a Interface [GET]
 Lấy thông tin về một interface
 
 + Response 200 (application/json)
-    + Attributes (Interface)
+    + Attributes
         + name: port0
         + type: WAN
         + ip_address: 27.72.28.152
@@ -854,52 +224,40 @@ Lấy thông tin về một interface
             + clone_mac: 20:1a:06:96:c5:36 (string)
         + active: 1 (number)
         + mac: 20:1a:06:96:c5:36 (string) - Địa chỉ MAC của interface
-
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
 + Response 500 (application/json)
     + Attributes
         + status: 0 (number)
-        + message: lỗi database (string)
-
+        
 ### Edit a Interface [PUT]
-+ Attributes (Interface Base)
-    + interface_id: 1 (number)
-    + name: port0
-    + type: WAN
-    + ip_address: 27.72.28.152
-    + netmask: 255.255.255.255
-    + gateway: 10.56.239.2
-    + pppoe (object)
-        + ispname: test (string)
-        + username: viettel-provider (string, required)
-        + password: xxxxxx (string, required)
-        + mtu (number)
-            + Default: 1480
-        + fixed_ip: 27.72.28.152 (string)
-        + clone_mac: 20:1a:06:96:c5:36 (string)
-    + active: 1 (number)
-
+sua 1 interface
 + Request (application/json)
-    
+    + Attributes
+        + interface_id: 1 (number)
+        + name: port0
+        + type: WAN
+        + ip_address: 27.72.28.152
+        + netmask: 255.255.255.255
+        + gateway: 10.56.239.2
+        + pppoe (object)
+            + ispname: test (string)
+            + username: viettel-provider (string, required)
+            + password: xxxxxx (string, required)
+            + mtu (number)
+                + Default: 1480
+            + clone_mac: 20:1a:06:96:c5:36 (string)
+        + active: 1 (number)
 + Response 200 (application/json)
     + Attributes
         + status: 1 (number)
-        + message (string)
-        + data (Interface)
-            + name: port0
-            + type: WAN
-            + ip_address: 27.72.28.152
-            + netmask: 255.255.255.255
-            + gateway: 10.56.239.2
-            + pppoe (object)
-                + username: viettel-provider (string, required)
-                + password: xxxxxx (string, required)
-                + mtu (number)
-                    + Default: 1480
-                + fixed_ip: 27.72.28.152 (string)
-                + clone_mac: 20:1a:06:96:c5:36 (string)
-            + active: 1 (number)
-            + mac: 20:1a:06:96:c5:36 (string) - Địa chỉ MAC của interface
-
+        + message: Success (string)
+        + data :{
+            + Attributes 
+                iterface_id :1 (number)
+    }
 + Response 400 (application/json)
     + Attributes
         + status: 0 (number)
@@ -910,12 +268,33 @@ Lấy thông tin về một interface
         + status: 0 (number)
         + message: lỗi database (string)
 
-### Delete a Interface [DELETE]
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-
+### FLUSH a Interface [PUT]
+sua 1 interface - cac gia trij cau hinh tro ve null, van giu nguyen interface_id, name cua bang
++ Response 200 (application/json)
+    {
+        "status": 1,
+        "mesages": "success",
+        "data":
+        {
+            "interface_id":"1",
+            "name":"port0",
+            "netmask": "255.255.255.255"
+            "gateway": "null"
+            "pppoe: "{
+                "ispname": "null" (string)
+                "username": "null" (string, required)
+                "password": "null" (string, required)
+                
+                "mtu":{
+                    "Default": "null"
+                }
+                    
+                "clone_mac": "20:1a:06:96:c5:36" (string)
+            }
+    
+            "active": 0 (number)
+            }
+    }
 + Response 400 (application/json)
     + Attributes
         + status: 0 (number)
@@ -924,332 +303,27 @@ Lấy thông tin về một interface
 + Response 500 (application/json)
     + Attributes
         + status: 0 (number)
-        + message: lỗi database (string)
-
+        
 ## Interface Collection [/interfaces]
-+ Attributes (array)
-    + (Interface)
-        + name: port0
-        + type: WAN
-        + ip_address: 27.72.28.152
-        + netmask: 255.255.255.255
-        + gateway: 10.56.239.2
-        + pppoe (object)
-            + ispname: test (string)
-            + username: viettel-provider (string, required)
-            + password: xxxxxx (string, required)
-            + mtu (number)
-                + Default: 1480
-            + fixed_ip: 27.72.28.152 (string)
-            + clone_mac: 20:1a:06:96:c5:36 (string)
-        + active: 1 (number)
-        + mac: 20:1a:06:96:c5:36 (string) - Địa chỉ MAC của interface
-    + (Interface)
-        + interface_id: 2 (number)
-        + name: port1
-        + type: LAN
-        + addressing_mode: Static
-        + ip_address: 10.2.32.90
-        + netmask: 255.255.255.0
-        + gateway (string)
-        + active: 1 (number)
-        + mac: 20:1a:06:96:c5:36 (string) - Địa chỉ MAC của interface
-    + (Interface)
-        + interface_id: 3 (number)
-        + name: port2
-        + type: WAN
-        + addressing_mode: DHCP
-        + ip_address: 192.168.1.20
-        + netmask: 255.255.255.0
-        + gateway: 192.168.1.1
-        + active: 1 (number)
-    + (Interface)
-        + interface_id: 4 (number)
-        + name: port3
-        + type
-        + addressing_mode
-        + active: 0 (number)
-        + mac: 20:1a:06:96:c5:36 (string) - Địa chỉ MAC của interface
 
 ### List all Interfaces [GET]
 
 + Response 200 (application/json)
-    + Attributes (Interface Collection)
-
-+ Response 500 (application/json)
     + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-## Service Access [/services-access]
-### List all Service Access with interface[GET /services-access{?interfacetype,interfaces}]
-+ Parameters
-    + interfacetype (enum[string])
-        + Sample: physical
-        + Members
-            + physical - Đây là loại interface vậy lý, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên Interface
-            + vlan - Đây là loại interface ảo, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên VLAN
-    + interfaces: 1 (number) - Đây là id trong Group Interface hoặc VLAN
-+ Response 200 (application/json)
-    + Attributes (Service Access Base)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Update Service Access[PUT]
-+ Attributes (Service Access Base)
-
-+ Request (application/json)
-
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-
-# Group Virual IP
-Cấu hình Virual IP cho Interface. Đường dẫn cấu hình Setting -> Networking -> Interface
-
-## Virual IP [/virual-ip/{virual_id}]
-Chứa các thông tin cấu hình về một bản ghi nat
-+ Parameters
-    + virual_id (number)
-
-+ Attributes (Virual IP Base)
-    + virual_id: 1 (number, required)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-
-### Retrieve a Virual IP [GET]
-Lấy thông tin về một
-
-+ Response 200 (application/json)
-    + Attributes (Virual IP)
-        + interface (Interface)
-            + name: port0
-            + type: WAN
-            + ip_address: 27.72.28.152
-            + netmask: 255.255.255.255
-            + gateway: 10.56.239.2
-            + active: 1 (number)
-        + ip_address: 27.72.28.153
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Edit a Virual IP [PUT]
-+ Attributes (Virual IP Base)
-    + interface: 1 (number)
-    + ip_address: 27.72.28.153
-
-+ Request (application/json)
-    
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (Virual IP)
-            + interface (Interface)
-                + name: port0
-                + type: WAN
-                + ip_address: 27.72.28.152
-                + netmask: 255.255.255.255
-                + gateway: 10.56.239.2
-                + active: 1 (number)
-            + ip_address: 27.72.28.153
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string))
-
-### Delete a Virual IP [DELETE]
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string) 
-
-## Virual IP Collection [/virual-ip]
-+ Attributes (array)
-    + (Virual IP)
-        + virual_id: 1 (number)
-        + interface (Interface)
-            + name: port0
-            + type: WAN
-            + ip_address: 27.72.28.152
-            + netmask: 255.255.255.255
-            + gateway: 10.56.239.2
-            + active: 1 (number)
-        + ip_address: 27.72.28.153
-    + (Virual IP)
-        + virual_id: 2 (number)
-        + interface (Interface)
-            + name: port0
-            + type: WAN
-            + ip_address: 27.72.28.152
-            + netmask: 255.255.255.255
-            + gateway: 10.56.239.2
-            + active: 1 (number)
-        + ip_address: 27.72.28.154
-    + (Virual IP)
-        + virual_id: 3 (number)
-        + interface (Interface)
-            + name: port0
-            + type: WAN
-            + ip_address: 27.72.28.152
-            + netmask: 255.255.255.255
-            + gateway: 10.56.239.2
-            + active: 1 (number)
-        + ip_address: 27.72.28.155
-
-### List all virual ip [GET]
-+ Response 200 (application/json)
-    + Attributes (Virual IP Collection)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Get list Virual IP according to Interface [GET /virual-ip{?interface_id}]
-+ Parameters
-    + interface_id: 1 (number) - Đây là ID của mỗi bản ghi tính năng interface. Giới hạn từ 1 -> 10
-
-+ Response 200 (application/json)
-    + Attributes (Virual IP Collection)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Create a Virual IP [POST]
-+ Attributes (Virual IP Base)
-    + interface: 1 (number)
-    + ip_address: 27.72.28.153
-
-+ Request (application/json)
-
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (Virual IP)
-            + interface (Interface)
-                + name: port0
-                + type: WAN
-                + ip_address: 27.72.28.152
-                + netmask: 255.255.255.255
-                + gateway: 10.56.239.2
-                + active: 1 (number)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-
-
-# Group VLAN
-Cấu hình thêm một VLAN. Đường dẫn cấu hình Setting -> Networking -> Interface
-
-## VLAN [/vlan/{vlan_id}]
-Chứa các thông tin cấu hình về một bản ghi nat
-+ Parameters
-    + vlan_id (number)
-
-+ Attributes (VLAN Base)
-    + vlan_id: 1 (number, required)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-
-### Retrieve a VLAN [GET]
-Lấy thông tin về một
-
-+ Response 200 (application/json)
-    + Attributes (VLAN)
-        + interface (Interface)
-            + interface_id: 2 (number)
-            + name: port1
-            + type: LAN
-            + addressing_mode: Static
-            + ip_address: 10.2.32.90
-            + netmask: 255.255.255.0
-            + active: 1 (number)
-        + vlanID: 10 (number)
-        + ip_address: 172.16.10.1
-        + netmask: 255.255.255.0
+        + interface_id: 1 (number)
+        + name: port0
+        + type: WAN
+        + ip_address: 27.72.28.152
+        + netmask: 255.255.255.255
+        + gateway: 10.56.239.2
+        + pppoe (object)
+            + ispname: test (string)
+            + username: viettel-provider (string, required)
+            + password: xxxxxx (string, required)
+            + mtu (number)
+                + Default: 1480
+            + clone_mac: 20:1a:06:96:c5:36 (string)
         + active: 1 (number)
-        + name: vlan10
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Edit a VLAN [PUT]
-+ Attributes (VLAN Base)
-    + vlan_id: 1 (number)
-    + interface: 2 (number)
-    + vlanID: 10 (number)
-    + ip_address: 172.16.10.1
-    + netmask: 255.255.255.0
-
-+ Request (application/json)
-    
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (VLAN)
-            + interface (Interface)
-                + interface_id: 2 (number)
-                + name: port1
-                + type: LAN
-                + addressing_mode: Static
-                + ip_address: 10.2.32.90
-                + netmask: 255.255.255.0
-                + active: 1 (number)
-            + vlanID: 10
-            + ip_address: 172.16.10.1
-            + netmask: 255.255.255.0
-            + active: 1 (number)
-            + name: vlan10
-
 + Response 400 (application/json)
     + Attributes
         + status: 0 (number)
@@ -1258,440 +332,3 @@ Lấy thông tin về một
 + Response 500 (application/json)
     + Attributes
         + status: 0 (number)
-        + message: lỗi database (string))
-
-### Delete a VLAN [DELETE]
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string) 
-
-## VLAN Collection [/vlan]
-+ Attributes (array)
-    + (VLAN)
-        + vlan_id: 1 (number)
-        + interface (Interface)
-            + name: port1
-            + type: LAN
-            + addressing_mode: Static
-            + ip_address: 10.2.32.90
-            + netmask: 255.255.255.0
-            + active: 1 (number)
-        + vlanID: 10 (number)
-        + ip_address: 172.16.10.1
-        + active: 1 (number)
-        + name: vlan10
-
-    + (VLAN)
-        + vlan_id: 2 (number)
-        + interface (Interface)
-            + name: port1
-            + type: LAN
-            + addressing_mode: Static
-            + ip_address: 10.2.32.90
-            + netmask: 255.255.255.0
-            + active: 1 (number)
-        + vlanID: 20 (number)
-        + ip_address: 172.16.20.1
-        + active: 1 (number)
-        + name: vlan20
-    + (VLAN)
-        + vlan_id: 3 (number)
-        + interface (Interface)
-            + name: port1
-            + type: LAN
-            + addressing_mode: Static
-            + ip_address: 10.2.32.90
-            + netmask: 255.255.255.0
-            + active: 1 (number)
-        + vlanID: 30 (number)
-        + ip_address: 172.16.30.1
-        + active: 1 (number)
-        + name: vlan30
-
-### List all VLAN [GET]
-+ Response 200 (application/json)
-    + Attributes (VLAN Collection)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Get list VLAN according to Interface [GET /vlan{?interface_id}]
-+ Parameters
-    + interface_id: 1 (number) - Đây là ID của mỗi bản ghi tính năng interface. Giới hạn từ 1 -> 10
-
-+ Response 200 (application/json)
-    + Attributes (VLAN Collection)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Create a VLAN [POST]
-+ Attributes (VLAN Base)
-    + interface: 1 (number)
-    + vlanID: 10 (number)
-    + ip_address: 172.16.10.1
-    + active: 1 (number)
-
-+ Request (application/json)
-
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (VLAN)
-            + vlan_id: 1 (number)
-            + interface (Interface)
-                + name: port1
-                + type: LAN
-                + addressing_mode: Static
-                + ip_address: 10.2.32.90
-                + netmask: 255.255.255.0
-                + active: 1 (number)
-            + vlanID: 10 (number)
-            + ip_address: 172.16.10.1
-            + active: 1 (number)
-            + name: vlan10
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-
-
-# Group Load Balancers
-Hỗ trợ cấu hình Load Balancing. Đường dẫn cấu hình Setting -> Networking -> Load Balancing
-
-## Load Balancer [/loadbalancers/{loadbalancer_id}]
-Chứa các thông tin cấu hình về một bản ghi nat
-+ Parameters
-    + loadbalancer_id (number)
-
-+ Attributes (Load Balancer Base)
-    + loadbalancer_id: 1 (number, required)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-
-### Retrieve a Load Balancers [GET]
-Lấy thông tin về một
-+ Response 200 (application/json)
-    + Attributes (Load Balancer)
-        + gateway (array)
-            + (object)
-                + interface (Interface)
-                    + interface_id: 1 (number)
-                    + name: port0
-                    + type: WAN
-                    + ip_address: 27.72.28.152
-                    + netmask: 255.255.255.255
-                    + gateway: 10.56.239.2
-                    + active: 1 (number)
-                + weight: 1 (number)
-            + (object)
-                + interface (Interface)
-                    + interface_id: 3 (number)
-                    + name: port2
-                    + type: WAN
-                    + addressing_mode: DHCP
-                    + ip_address: 192.168.1.20
-                    + netmask: 255.255.255.0
-                    + gateway: 192.168.1.1
-                    + active: 1 (number)
-                + weight: 1 (number)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Edit a Load Balancer [PUT]
-+ Attributes (Load Balancer Base)
-    + loadbalancer_id: 1 (number)
-
-+ Request (application/json)
-    
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (Load Balancer)
-            + gateway (array)
-                + (object)
-                    + interface (Interface)
-                        + interface_id: 1 (number)
-                        + name: port0
-                        + type: WAN
-                        + ip_address: 27.72.28.152
-                        + netmask: 255.255.255.255
-                        + gateway: 10.56.239.2
-                        + active: 1 (number)
-                    + weight: 1 (number)
-                + (object)
-                    + interface (Interface)
-                        + interface_id: 3 (number)
-                        + name: port2
-                        + type: WAN
-                        + addressing_mode: DHCP
-                        + ip_address: 192.168.1.20
-                        + netmask: 255.255.255.0
-                        + gateway: 192.168.1.1
-                        + active: 1 (number)
-                    + weight: 1 (number)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string))
-
-### Delete a Load Balancer [DELETE]
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Create a Load Balancer [POST /loadbalancers]
-+ Attributes (Load Balancer Base)
-
-+ Request (application/json)
-
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (Load Balancer)
-            + gateway (array)
-                + (object)
-                    + interface (Interface)
-                        + interface_id: 1 (number)
-                        + name: port0
-                        + type: WAN
-                        + ip_address: 27.72.28.152
-                        + netmask: 255.255.255.255
-                        + gateway: 10.56.239.2
-                        + active: 1 (number)
-                    + weight: 1 (number)
-                + (object)
-                    + interface (Interface)
-                        + interface_id: 3 (number)
-                        + name: port2
-                        + type: WAN
-                        + addressing_mode: DHCP
-                        + ip_address: 192.168.1.20
-                        + netmask: 255.255.255.0
-                        + gateway: 192.168.1.1
-                        + active: 1 (number)
-                    + weight: 1 (number)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-
-
-# Group NAT
-Hỗ trợ cấu hình NAT trên mạng. Đường dẫn cấu hình Setting -> Networking -> NAT
-
-## NAT [/nat/{nat_id}]
-Chứa các thông tin cấu hình về một bản ghi nat
-+ Parameters
-    + nat_id (number)
-
-+ Attributes (NAT Base)
-    + id: 1 (number, required)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-
-### Retrieve a NAT [GET]
-Lấy thông tin về một nat
-
-+ Response 200 (application/json)
-    + Attributes (NAT)
-        + interface (Interface)
-            + name: port0
-            + type: WAN
-            + ip_address: 27.72.28.152
-            + netmask: 255.255.255.255
-            + gateway: 10.56.239.2
-            + active: 1 (number)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Edit a NAT [PUT]
-+ Attributes (NAT Base)
-    + nat_id: 1 (number)
-
-+ Request (application/json)
-    
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (NAT)
-            + interface (Interface)
-                + name: port0
-                + type: WAN
-                + ip_address: 27.72.28.152
-                + netmask: 255.255.255.255
-                + gateway: 10.56.239.2
-                + active: 1 (number)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string))
-
-### Delete a NAT [DELETE]
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string) 
-
-## NAT Collection [/nat]
-+ Attributes (array)
-    + (NAT)
-        + interface (Interface)
-            + name: port0
-            + type: WAN
-            + ip_address: 27.72.28.152
-            + netmask: 255.255.255.255
-            + gateway: 10.56.239.2
-            + active: 1 (number)
-    + (NAT)
-        + type: 1 (number)
-        + name: nat_internet
-        + interface (Interface)
-            + name: port0
-            + type: WAN
-            + ip_address: 27.72.28.152
-            + netmask: 255.255.255.255
-            + gateway: 10.56.239.2
-            + active: 1 (number)
-        + ip
-        + service_port
-        + protocol
-        + ip_map: 27.72.28.152
-        + port_map
-
-### List all nat [GET]
-+ Response 200 (application/json)
-    + Attributes (NAT Collection)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Show entries and pagination [GET /nat{?search,limit,page}]
-+ Parameters
-    + limit (number, optional) - Giới hạn số bản ghi trong một page
-        + Default: 10
-        + Members
-            + 10
-            + 25
-            + 50
-            + 100
-        + Sample: 10
-    + page (number, optional) - Số trang
-        + Default: 1
-    + search: 27.72.28.152 (string) - Trong trường hợp dùng tính năng search thì sẽ có thêm parameter search. Nếu chỉ lấy tổng dữ liệu bình thường thì bỏ parameter này.
-
-+ Response 200 (application/json)
-    + Attributes (object)
-        + data (NAT Collection)
-        + paging (object)
-            + total_count: 12 (number)
-            + total_page: 2 (number)
-            + current_page: 1 (number)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Create a NAT [POST]
-+ Attributes (NAT Base)
-    + interface: 1 (number)
-
-+ Request (application/json)
-
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (NAT)
-            + interface (Interface)
-                + name: port0
-                + type: WAN
-                + ip_address: 27.72.28.152
-                + netmask: 255.255.255.255
-                + gateway: 10.56.239.2
-                + active: 1 (number)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)

@@ -1,11 +1,10 @@
 FORMAT: 1A
 HOST: http://bif.apiblueprint.org/
 
-# LBL
+# BIF
+Hiện nay, dịch vụ website, cổng thông tin điện tử của các tổ chức, doanh nghiệp đang là đích nhắm thường trực của hacker. Hầu hết các sản phẩm phòng chống tấn công như Firewall, IDS/IPS trên thị trường hiện nay chưa có giải pháp hiệu quả cho vấn đề này.
 
-Hiện nay, nhu cầu truy cập mạng của các tổ chức, doanh nghiệp ngày càng tăng cao , dẫn tới việc băng thông đường truyền bị quá tải. Để giải quyết vấn đề này , không chỉ đơn giản là nâng cao tốc độ hay băng thông đường truyền mà còn phải chú trọng đến việc tránh các rủi ro về sự cố trên đường truyền, giải pháp load balancing cho đường truyền là giải pháp tối ưu cho vấn đề này
-
-BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên cạnh các tính năng của NGFW như URL Filter, Black list IP,... BLB là 1 trong những Firewall thế hệ mới hiếm hoi trên thế giới trang bị đầy đủ tính năng giới hạn băng thông (Traffic Shapping) và cân bằng tải cho đường truyền( Load Balancer)
+Bkav IPS Next Generation Firewall (BIF NGFW) là Firewall thế hệ mới, bên cạnh các tính năng của NGFW như URL Filter, Web Content Filter, Application Control, Load Balancing... BIF NGFW là là một trong những Firewall thế hệ mới hiếm hoi trên thế giới hiện nay được trang bị đầy đủ tính năng chống tấn công từ chối dịch vụ DDoS và chống tấn công xâm nhập web.
 
 # Data Structures
 ## Route Base (object)
@@ -431,7 +430,54 @@ BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên 
 + policy: Block all
 + action: Deny
 
+## Monitor IPS Base (object)
++ no: 1 (number)
++ datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
++ address (object)
+    + ip_address: 14.161.41.169 (string)
+    + country: VN
 
++ blocktime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
++ rule: trietly1
++ websites: bkav.com.vn
++ group_websites: sitebkav
++ unlock (enum[number])
+    + Default: 1 - Unlock
+    + Members
+        + 1 - Unlock
+        + 0 - Lock
++ proof: dữ liệu log
+
+## Monitor WAF Base (object)
++ no: 1 (number)
++ datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
++ blocktime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
++ address (object)
+    + ip_address: 14.161.41.169 (string)
+    + country: VN
++ action: block
++ websites: bkav.com.vn
++ group_websites: sitebkav
++ group_rule: APPLICATION ATTACK SQLI
++ request_header: data
++ matched_info: data
+
+
+## Monitor VPN Base (object)
++ no: 1 (number)
++ datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
++ account: vpnipsec
++ address_connect (object)
+    + ip_address: 58.187.67.52
+    + country: VN
++ ip_vpn: 172.26.10.10
++ vpn_type: ipsec
++ name_tunel: remotetest
++ status (enum[number])
+    + Default: 1
+    + Members
+        + 1 - Login
+        + 0 - Logout
 
 ## Error Base (object)
 + error: tin nhắn lỗi trả về từ server (string)
@@ -675,150 +721,97 @@ Thêm licence cho BIF
                 "data": {}
             }
 
-## Users [/users]
 
-### Get users info - Admin role [GET]
+# Group Dashboard
+## Dashboard [/dashboard]
+---
+Dashboard
 
-+ Response 200 (application/json)
 
-        [
-            {
-                "allow_write": 1,
-                "username":"admin",
-                "id":1,
-                "password":"aaaa",
-                "is_active":1
-            },{
-                "allow_write": 1,
-                "username":"qhinh",
-                "id":2,
-                "password":"aaaa",
-                "is_active":1
-            }
-            
-        ]
-
-### Create new user - Admin Role [POST]
 + Attributes (object)
-    + username: user3 (string, required)
-    + password: 123456 (string, required)
-    + allow_write: 0 (number, required)
+    + firewall: 0  (number, required) 
+    + ips: 0 (number,required)
+    + waf: 0 (number,required)
+    + name: "BIF NGFW" (string,required)
+    + version: "3.0.1" (string,required)
+    + license: "123123123123123123" (string,required)
+    + cpu: "Xeon CPU E3-1220 v3" (string,required)
+    + memory: "16GB" (string,required)
+    + hdd: "5TB" (string,required)
+    + system_time: 1556617095 (number,required)
 
-+ Request (application/json)
+
+### Retrieve data [GET]
+Lấy dữ liệu Dashboard.
++ Response 200 (application/json)
 
         {
-                "allow_write": 1,
-                "username":"qhinh",
-                "password":"aaaa",
-                "is_active":1
+            "firewall": {
+                "count":3,
+                "serious":0,
+                "shortcut": ""
+                },
+            "ips": {
+                "count":100,
+                "serious":1,
+                "shortcut":""
+                },
+            "waf": {
+                "count":0,
+                "serious":0,
+                "shortcut":""
+                },
+            "name":"BIF NGFW",
+            "version": "3.0.1",
+            "license": "Activated",
+            "hdd": "30%",
+            "system_time": "Mon 2018-10-22 2209:220931:11 +07"
         }
 
-+ Response 201 (application/json)
 
-    + Body
+### Get System time [GET /dashboard/system_time]
+Lấy thông tin giờ hệ thống
 
-            {
-                "status": 1,
-                "message": "CREATE USER SUCCESS",
-                "data": {
-                    "allow_write": 1,
-                    "username":"qhinh",
-                    "id":2,
-                    "password":"aaaa",
-                    "is_active":1
-                }
-            }        
-
-## User by id [/users/{user_id}]
-
-+ Parameters
-    + user_id: 1 (number)
-
-### Get User info [GET]
-
-+ Response 200 (application/json)
-    
-    + Body
-
-            {
-                "username":"admin",
-                "name":"Admin",
-                "id":1,
-                "avatar":"https://picsum.photos/200/200",
-                "password":"123123"
-            }
-
-### Delete user - Admin role [DELETE]
 
 + Response 200 (application/json)
 
-    + Body
-
-            {
-                "status": 1,
-                "message": "DELETE SUCCESS",
-                "data": {}
-            }
-
-
-### Edit user - Admin role  [PUT]
+        {
+            "system_time": 1556617095,
+            "time_zone" : "GMT +07",
+            "sync_on" : 0,
+            "server" : ""
+                
+        }
 
 
-+ Request (application/json)
+### Set System time [PUT /dashboard/system_time]
+Cập nhật thông tin giờ hệ thống
 
-            {
-                "allow_write": 1,
-                "username":"qhinh",
-                "id":2,
-                "password":"aaaa",
-                "is_active":1
-            }
++ Request
+
+        {
+            "system_time": 1556617095,
+            "time_zone" : "07",
+            "sync_on" : 0,
+            "server" : ""
+        }
+
 
 + Response 200 (application/json)
 
-    + Body
 
-            {
-                "status": 1,
-                "message": "USER UPDATE SUCCESS",
-                "data": {
-                    "allow_write": 1,
-                    "username":"qhinh",
-                    "id":2,
-                    "password":"aaaa",
-                    "is_active":1
-                }
+        {
+            "status":1,
+            "message":"",
+            "data":{
+                "system_time": 1556617095,
+                "time_zone" : "07",
+                "sync_on" : 0,
+                "server" : ""
             }
+        }
 
-
-### Edit user [PUT]
-
-
-+ Request (application/json)
-
-            {
-                "name":"Admin",
-                "id":1,
-                "avatar":"https://picsum.photos/200/200",
-                "password":"123123"
-            }
-
-+ Response 200 (application/json)
-
-    + Body
-
-            {
-                "status": 1,
-                "message": "USER UPDATE SUCCESS",
-                "data": {
-                    "name":"Admin",
-                    "id":1,
-                    "avatar":"https://picsum.photos/200/200",
-                    "password":"123123"
-                }
-            }
-
-
+        
 
 
 
@@ -1378,156 +1371,25 @@ Lấy thông tin về một
         + message: lỗi database (string)
 
 
-
 # Group Load Balancers
 Hỗ trợ cấu hình Load Balancing. Đường dẫn cấu hình Setting -> Networking -> Load Balancing
 
 ## Load Balancer [/loadbalancers/{loadbalancer_id}]
-Chứa các thông tin cấu hình về một bản ghi nat
+Chứa các thông tin cấu hình về LBL
 + Parameters
     + loadbalancer_id (number)
 
 + Attributes (Load Balancer Base)
     + loadbalancer_id: 1 (number, required)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
 
 ### Retrieve a Load Balancers [GET]
-Lấy thông tin về một
-+ Response 200 (application/json)
-    + Attributes (Load Balancer)
-        + gateway (array)
-            + (object)
-                + interface (Interface)
-                    + interface_id: 1 (number)
-                    + name: port0
-                    + type: WAN
-                    + ip_address: 27.72.28.152
-                    + netmask: 255.255.255.255
-                    + gateway: 10.56.239.2
-                    + active: 1 (number)
-                + weight: 1 (number)
-            + (object)
-                + interface (Interface)
-                    + interface_id: 3 (number)
-                    + name: port2
-                    + type: WAN
-                    + addressing_mode: DHCP
-                    + ip_address: 192.168.1.20
-                    + netmask: 255.255.255.0
-                    + gateway: 192.168.1.1
-                    + active: 1 (number)
-                + weight: 1 (number)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
 
 ### Edit a Load Balancer [PUT]
-+ Attributes (Load Balancer Base)
-    + loadbalancer_id: 1 (number)
 
-+ Request (application/json)
-    
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (Load Balancer)
-            + gateway (array)
-                + (object)
-                    + interface (Interface)
-                        + interface_id: 1 (number)
-                        + name: port0
-                        + type: WAN
-                        + ip_address: 27.72.28.152
-                        + netmask: 255.255.255.255
-                        + gateway: 10.56.239.2
-                        + active: 1 (number)
-                    + weight: 1 (number)
-                + (object)
-                    + interface (Interface)
-                        + interface_id: 3 (number)
-                        + name: port2
-                        + type: WAN
-                        + addressing_mode: DHCP
-                        + ip_address: 192.168.1.20
-                        + netmask: 255.255.255.0
-                        + gateway: 192.168.1.1
-                        + active: 1 (number)
-                    + weight: 1 (number)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string))
 
 ### Delete a Load Balancer [DELETE]
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
 
 ### Create a Load Balancer [POST /loadbalancers]
-+ Attributes (Load Balancer Base)
-
-+ Request (application/json)
-
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (Load Balancer)
-            + gateway (array)
-                + (object)
-                    + interface (Interface)
-                        + interface_id: 1 (number)
-                        + name: port0
-                        + type: WAN
-                        + ip_address: 27.72.28.152
-                        + netmask: 255.255.255.255
-                        + gateway: 10.56.239.2
-                        + active: 1 (number)
-                    + weight: 1 (number)
-                + (object)
-                    + interface (Interface)
-                        + interface_id: 3 (number)
-                        + name: port2
-                        + type: WAN
-                        + addressing_mode: DHCP
-                        + ip_address: 192.168.1.20
-                        + netmask: 255.255.255.0
-                        + gateway: 192.168.1.1
-                        + active: 1 (number)
-                    + weight: 1 (number)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-
 
 # Group NAT
 Hỗ trợ cấu hình NAT trên mạng. Đường dẫn cấu hình Setting -> Networking -> NAT
@@ -1690,6 +1552,3350 @@ Lấy thông tin về một nat
     + Attributes
         + status: 0 (number)
         + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+
+
+
+# Group Object IP
+Hỗ trợ cấu hình Group IP. Đường dẫn cấu hình Setting -> Object -> IP
+## Object IP [/groupip/{groupip_id}]
+Chứa các thông tin cấu hình về một bản ghi
++ Parameters
+    + groupip_id (number)
+
++ Attributes (IP Object Base)
+    + groupip_id: 4 (number, required)
+    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
+### Retrieve a Object IP [GET]
+Lấy thông tin về một 
+
++ Response 200 (application/json)
+    + Attributes (Object IP)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Edit a Object IP [PUT]
++ Attributes (IP Object Base)
+    + groupip_id: 4 (number)
+
++ Request (application/json)
+    
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Object IP)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string))
+
+### Delete a Object IP [DELETE]
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+## Object IP Collection [/groupip]
++ Attributes (array)
+    + (Object IP)
+        + groupip_id: 1 (number)
+        + name: Blacklist C&C Server
+        + description: Đây là nhóm Blacklist CC Server cố định
+
+    + (Object IP)
+        + groupip_id: 2 (number)
+        + name: Whitelist IP Address
+        + description: Đây là nhóm Whitelist IP cố định
+
+    + (Object IP)
+        + groupip_id: 3 (number)
+        + name: Anti DDoS
+        + description: Đây là nhóm IP chan tan cong
+
+    + (Object IP)
+    + (Object IP)
+        + groupip_id: 5 (number)
+        + name: lan-port1
+        + description
+
+    + (Object IP)
+        + groupip_id: 6 (number)
+        + name: lan-vlan10
+
+    + (Object IP)
+        + groupip_id: 7 (number)
+        + name: lan-vlan20
+
+
+
+### List all  Object IP [GET]
++ Response 200 (application/json)
+    + Attributes (Object IP Collection)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Show entries and pagination [GET /groupip{?search,limit,page}]
++ Parameters
+    + limit (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+        + Sample: 10
+    + page (number, optional) - Số trang
+        + Default: 1
+    + search: lan-vlan10 (string) - Trong trường hợp dùng tính năng search thì sẽ có thêm parameter search. Nếu chỉ lấy tổng dữ liệu bình thường thì bỏ parameter này.
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (Object IP Collection)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Create a Object IP [POST]
++ Attributes (IP Object Base)
+
++ Request (application/json)
+
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Object IP)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+## IP Address Collection [/groupip/{groupip_id}/ip]
++ Parameters
+    + groupip_id: 4 (number)
+
+### Get detail a Group IP [GET /groupip/{groupip_id}/ip{?search,limit,page}]
++ Parameters
+    + limit (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+        + Sample: 10
+    + page (number, optional) - Số trang
+        + Default: 1
+    + search: 10.2.32 (string) - Trong trường hợp dùng tính năng search thì sẽ có thêm parameter search. Nếu chỉ lấy tổng dữ liệu bình thường thì bỏ parameter này.
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array)
+            + (object)
+                + ip: 10.2.32.12
+                + netmask: 255.255.255.255
+                + define: ip của server 1
+            + (object)
+                + ip: 10.2.32.155
+                + netmask: 255.255.255.255
+                + define: ip của server2
+        + paging (object)
+            + total_count: 2 (number)
+            + total_page: 1 (number)
+            + current_page: 1 (number)
+
+    
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Creat a IP [POST]
++ Request (application/json)
+    + Attributes (object)
+        + ip: 10.2.32.155
+        + netmask: 255.255.255.255
+        + define: ip của server2
+        
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (object)
+            + ip_id: 1 (number)
+            + ip: 10.2.32.155
+            + netmask: 255.255.255.255
+            + define: ip của server2 
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+## IP Address [/groupip/{groupip_id}/ip/{ip_id}]
++ Parameters
+    + groupip_id: 4 (number)
+    + ip_id: 1 (number)
+
+
+### Get a IP [GET]
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + ip_id: 1 (number)
+        + ip: 10.2.32.155
+        + netmask: 255.255.255.255
+        + define: ip của server2 
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Edit a IP [PUT]
++ Request (application/json)
+    + Attributes (object)
+        + ip_id: 1 (number)
+        + ip: 10.2.32.155
+        + netmask: 255.255.255.255
+        + define: ip của server2
+        
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (object)
+            + ip_id: 1 (number)
+            + ip: 10.2.32.155
+            + netmask: 255.255.255.255
+            + define: ip của server2 
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+# Group Object Services
+Hỗ trợ cấu hình Group Services. Đường dẫn cấu hình Setting -> Object -> Service
+## Object Service [/groupservices/{groupservice_id}]
+Chứa các thông tin cấu hình về một bản ghi
++ Parameters
+    + groupservice_id (number)
+
++ Attributes (Service Object Base)
+    + groupservice_id: 1 (number, required)
+
+### Retrieve a Service Object [GET]
+Lấy thông tin về một 
+
++ Response 200 (application/json)
+    + Attributes (Object Service)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Edit a Object Service [PUT]
++ Attributes (Service Object Base)
+    + groupservice_id: 1 (number, required)
+
++ Request (application/json)
+    
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Object Service)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string))
+
+### Delete a Object Service [DELETE]
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+## Object Service Collection [/groupservices]
++ Attributes (array)
+    + (Object Service)
+    + (Object Service)
+        + name: test2
+
+### List all  Object Service [GET]
++ Response 200 (application/json)
+    + Attributes (Object Service Collection)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Show entries and pagination [GET /groupservices{?search,limit,page}]
++ Parameters
+    + limit (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+        + Sample: 10
+    + page (number, optional) - Số trang
+        + Default: 1
+    + search: test2 (string) - Trong trường hợp dùng tính năng search thì sẽ có thêm parameter search. Nếu chỉ lấy tổng dữ liệu bình thường thì bỏ parameter này.
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (Object Service Collection)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
+### Create a Object Service [POST]
++ Attributes (Service Object Base)
+
++ Request (application/json)
+
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Object Service)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+## Services Collection [/groupservices/{groupservice_id}/services]
++ Parameters
+    + groupservice_id: 4 (number)
+
+### Get detail a Service [GET /groupservices/{groupservice_id}/services{?search,limit,page}]
++ Parameters
+    + limit (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+        + Sample: 10
+    + page (number, optional) - Số trang
+        + Default: 1
+    + search: 53 (string) - Trong trường hợp dùng tính năng search thì sẽ có thêm parameter search. Nếu chỉ lấy tổng dữ liệu bình thường thì bỏ parameter này.
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array)
+            + (object)
+                + service_id: 1 (number)
+                + protocol: `tcp,udp`
+                + port: 53
+                + define
+            + (object)
+                + service_id: 1 (number)
+                + protocol: tcp
+                + port: 20-21
+                + define
+        + paging (object)
+            + total_count: 2 (number)
+            + total_page: 1 (number)
+            + current_page: 1 (number)
+
+    
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Creat a Service [POST]
++ Request (application/json)
+    + Attributes (object)
+        + protocol: `tcp,udp`
+        + port: 53
+        + define
+        
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (object)
+            + service_id: 1 (number)
+            + protocol: `tcp,udp`
+            + port: 53
+            + define
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+## Services [/groupservices/{groupservice_id}/services{service_id}]
++ Parameters
+    + groupservice_id: 4 (number)
+    + service_id: 1 (number)
+
+
+### Get a Service [GET]
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + service_id: 1 (number)
+        + protocol: `tcp,udp`
+        + port: 53
+        + define
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Edit a Service [PUT]
++ Request (application/json)
+    + Attributes (object)
+        + service_id: 1 (number)
+        + protocol: `tcp,udp`
+        + port: 53
+        + define
+        
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (object)
+            + service_id: 1 (number)
+            + protocol: `tcp,udp`
+            + port: 53
+            + define
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+# Group Object Schedules
+Hỗ trợ cấu hình Group Schedules. Đường dẫn cấu hình Setting -> Object -> Schedules
+## Object Schedule [/groupschedules/{groupschedule_id}]
+Chứa các thông tin cấu hình về một bản ghi
++ Parameters
+    + groupschedule_id (number)
+
++ Attributes (Schedule Object Base)
+    + groupschedule_id: 1 (number, required)
+    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
+### Retrieve a Schedule Object [GET]
+Lấy thông tin về một 
+
++ Response 200 (application/json)
+    + Attributes (Object Schedule)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Edit a Object Schedule [PUT]
++ Attributes (Schedule Object Base)
+    + groupschedule_id: 1 (number, required)
+
++ Request (application/json)
+    
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Object Schedule)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string))
+
+### Delete a Object Schedule [DELETE]
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string) 
+
+## Object Schedule Collection [/groupschedules]
++ Attributes (array)
+    + (Object Schedule)
+    + (Object Schedule)
+        + groupschedule_id: 2 (number)
+        + name: test ontime
+        + type: 3 (number)
+        + start_time: `2019-04-23 09:47` (string)
+        + stop_time: `2019-04-23 09:48` (string)
+        + days_of_the_week
+        + days_of_the_month
+        + months
+    + (Object Schedule)0
+        + groupschedule_id: 3 (number)
+        + name: test monthly
+        + type: 2 (number)
+        + start_time: `2019-04-23 09:47` (string)
+        + stop_time: `2019-04-23 09:48` (string)
+        + days_of_the_week
+        + days_of_the_month: 2,3,4,5,10,12,25
+        + months: Jan,Feb,Mar,Dec
+
+### Show entries and pagination [GET /groupschedules{?search,limit,page}]
++ Parameters
+    + limit (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+        + Sample: 10
+    + page (number, optional) - Số trang
+        + Default: 1
+    + search: test2 (string) - Trong trường hợp dùng tính năng search thì sẽ có thêm parameter search. Nếu chỉ lấy tổng dữ liệu bình thường thì bỏ parameter này.
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (Object Schedule Collection)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
+### List all  Object Schedule [GET]
++ Response 200 (application/json)
+    + Attributes (Object Schedule Collection)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Create a Object Schedule [POST]
++ Attributes (Schedule Object Base)
+
++ Request (application/json)
+
++ Response 200 (application/json)
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Object Schedule)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+# Group Object URL
+
+## Group URL [/groupsurl]
+
+Thêm sửa xóa các Group URL
+
+### List All Group URL [GET]
+
+Lấy danh sách các Group URL
+
++ Response 200 (application/json)
+        
+        [
+            {
+                "id": "1",
+                "name": "Đọc báo",
+                "description": "Block website đọc báo",
+                "domain": [
+                    {
+                        "id": 1,
+                        "name": "vnexpress.net"
+                    },
+                    {
+                        "id": 2,
+                        "name": "dantri.vn"
+                    }
+                ]
+            },
+            {
+                "id": "2",
+                "name": "Mạng xã hội",
+                "description": "Block mạng xã hội",
+                "domain": [
+                    {
+                        "id": 4,
+                        "name": "facebook.com"
+                    },
+                    {
+                        "id": 5,
+                        "name": "zalo.me"
+                    },
+                    {
+                        "id": 6,
+                        "name": "skype.com"
+                    }   
+                ]
+            }
+        ]
+
+### Create a New Group URL [POST]
+
+Tạo một Group URL mới
+
++ Attributes (object)
+    + name: Video(string, required)
+    + description (string, optional)
+
++ Request (application/json)
+
+        {
+            "name": "Video",
+            "description": "Block Video"
+        }
+
++ Response 201 (application/json)
+    
+    + Body
+
+            {
+                "status": 1,
+                "message": "CREATE SUCCESS",
+                "data": {
+                    "name": "Video",
+                    "description": "Block Video"
+                }
+            }
+
+## Group URL Detail [/groupsurl/{group_url_id}]
+
+Chi tiết group url
+
++ Parameters
+    + group_url_id: 1 (number)
+
+### Detail of a Group URL [GET]
+
++ Response 200 (application/json)
+
+    + Body
+    
+            [
+                {
+                    "id": 1,
+                    "name": "vnexpress.net",
+                    "description": "Báo vnexpress.net"
+                },
+                {
+                    "id": 2,
+                    "name": "dantri.vn",
+                    "description": "Báo dantri.vn"
+                }
+            ]
+
+### Edit a Group URL [PUT]
+
++ Attributes (object)
+    + name (string, optional)
+    + description (string, optional)
+
++ Request (application/json)
+
+        {
+            "group_url_id": "1",
+            "name": "Tên sửa của Group URL 1",
+            "description": "Sửa Description của Group URL 1"
+        }
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "status": 1,
+                "message": "EDIT SUCCESS",
+                "data": {
+                    "name": "Tên sửa của Group URL 1",
+                    "description": "Sửa Description của Group URL 1"
+                }
+            }
+
++ Response 403 (application/json)
+
+    + Body
+
+            {
+                status: 0,
+                "message": "EDIT FAIL",
+                "data": {}
+            }
+### Delete a Group URL [DELETE]
+
++ Response 200 (application/json)
+    
+    + Body
+
+            {
+                "status": 1,
+                "message": "DELETE SUCCESS",
+                "data": {}
+            }
+
++ Response 403 (application/json)
+
+    + Body
+    
+            {
+                "status": 0,
+                "message": "DELETE FAIL",
+                "data": {}
+            }
+
+## URLs [/groupsurl/{group_url_id}/urls]
+
++ Parameters
+    + group_url_id: 1 (number)
+
+### Create a URL [POST]
+
+Tạo một url mới. Lấy dữ liệu JSON từ form nhập.
+
++ Attributes (object)
+    + group_url_id: 1 (number, required)
+    + url_or_domain: bkav.com.vn (string, required)
+    + description: Mô tả của Group URL (string, optional)
+
++ Request (application/json)
+
+        {
+            "group_url_id": 1,
+            "url_or_domain": "bkav.com.vn",
+            "description": "Website bkav"
+        }
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "status": 1,
+                "message": "CREATE SUCCESS",
+                "data": {
+                    "group_url_id": 1,
+                    "url_or_domain": "bkav.com.vn",
+                    "description": "Website bkav"
+                }  
+            }
+
+## URL Detail [/groupsurl/{group_url_id}/urls/{url_id}]
+
++ Parameters
+    + group_url_id: 1 (number)
+    + url_id: 1 (number)
+
+### Detail of a URL [GET]
+
+Lấy thông tin chi tiết của một URL
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "group_url_id": 1,
+                "url_or_domain": "bkav.com.vn",
+                "description": "Website bkav"
+            }
+
+### Edit a URL [PUT]
+
+Chỉnh sửa thông tin của một URL
+
++ Attributes (object)
+    + group_url_id: 1 (number, required)
+    + url_or_domain (string, optional)
+    + description (string, optional)
+
++ Request (application/json)
+
+        {
+            "group_website_id": "1",
+            "url_or_domain": "bkav.com.vn",
+            "description": "Website bkav"
+        }
+
++ Response 200 (application/json)
+    Sửa thành công
+    + Body
+
+            {  
+                "status": 1,
+                "message": "EDIT SUCCESS",
+                "data": {
+                    "group_url_id": "1",
+                    "url_or_domain": "bkav.com.vn",
+                    "description": "Website bkav"
+                }
+            }
+
+### Delete a URL [DELETE]
+
+Xóa một url
+
++ Response 200 (application/json)
+    Xóa thành công
+    + Body
+
+            {
+                "status": 1,
+                "message": "DELETE SUCCESS",
+                "data": {}
+            }
+
++ Response 403 (application/json)
+    Xóa thất bại
+    + Body
+
+            {
+                "status": 0,
+                "message": "DELETE FAIL",
+                "data": {}
+            }
+
+
+
+# Group Firewall Policy
+Hỗ trợ cấu hình Policy trong firewall. Đường dẫn cấu hình Firewall -> Policy
+## Firewall Policy [/firewall-policies/{policy_id}]
+Chứa các thông tin cấu hình về một bản ghi
++ Parameters
+    + policy_id (number)
+
++ Attributes (Firewall Policy Base)
+    + policy_id: 4 (number, required)
+
+### Retrieve a Firewall Policy [GET]
+Lấy thông tin về một 
+
++ Response 200 (application/json)
+    + Attributes (Firewall Policy)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Edit a Firewall Policy [PUT]
++ Attributes (Firewall Policy Base)
+    + policy_id: 4 (number, required)
+    + sources (array)
+        + (object)
+            + groupip_id: 4 (number)
+        + (object)
+            + groupip_id: 5 (number)
+    + destinations (array)
+        + (object)
+            + groupip_id: 2 (number)
+    + services (array)
+        + (object)
+            + groupservice_id: 1 (number)
+    + schedules (array)
+        + (object)
+            + groupschedule_id: 2 (number)
+    + interfaces (array)
+        + (object)
+            + interface_id: 2 (number)
+            + interface_type: physical - Trường này có giá trị là physical - với giá trị này interface-id được lấy từ tài nguyên bảng Interface hoặc virual - với giá trị này interface-id được lấy từ tài nguyên bảng VLAN
+        + (object)
+            + interface_id: 1 (number)
+            + interface_type: virual  - Trường này có giá trị là physical - với giá trị này interface-id được lấy từ tài nguyên bảng Interface hoặc virual - với giá trị này interface-id được lấy từ tài nguyên bảng VLAN
+
++ Request (application/json)
+    
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Firewall Policy)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string))
+
+### Delete a Firewall Policy [DELETE]
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+        
+### Active a Firewall Policy [PUT /firewall-policies/active]
++ Attributes (object)
+    + policy_id: 4 (number, required)
+    + active: 0 (number) - Trang thai active = 1, not active = 0
+
++ Request (application/json)
+    
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Firewall Policy)
+            + active: 0 (number)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string))
+
+        
+### Log a Firewall Policy [PUT /firewall-policies/log]
++ Attributes (object)
+    + policy_id: 4 (number, required)
+    + log: 0 (number) - Trang thai log = 1, khong bat log = 0
+
++ Request (application/json)
+    
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Firewall Policy)
+            + log: 0 (number)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string))
+
+## Firewall Policy Collection [/firewall-policies]
++ Attributes (array)
+    + (Firewall Policy)
+        + policy_id: 1 (number)
+        + action: drop
+        + destinations: []
+        + interfaces: []
+        + log: 1 (number)
+        + name: Block All
+        + schedules: []
+        + services: []
+        + sources: []
+        + active: 1 (number)
+        + pos: 5 (number)
+
+    + (Firewall Policy)
+        + policy_id: 2  (number)
+        + pos: 4 (number)
+        + name: permit internet
+        + sources (array)
+            + (Object IP)
+                + groupip_id: 3 (number)
+                + name: lan-port1
+            + (Object IP)
+                + groupip_id: 4 (number)
+                + name: lan-vlan10
+            + (Object IP)
+                + groupip_id: 5 (number)
+                + name: lan-vlan20
+        + destinations (array)
+        + services (array)
+        + schedules (array)
+        + action: accept
+        + interfaces (array)
+            + (Interface)
+                + interface_id: 1 (number)
+                + name: port0
+                + type: WAN
+                + ip_address: 27.72.28.152
+                + netmask: 255.255.255.255
+                + gateway: 10.56.239.2
+                + active: 1 (number)
+            + (Interface)
+                + interface_id: 3 (number)
+                + name: port2
+                + type: WAN
+                + addressing_mode: DHCP
+                + ip_address: 192.168.1.20
+                + netmask: 255.255.255.0
+                + gateway: 192.168.1.1
+                + active: 1 (number)
+    + (Firewall Policy)
+        + policy_id: 3 (number)
+        + pos: 3 (number)
+        + name: block social
+        + sources (array)
+            + (Object IP)
+                + groupip_id: 3 (number)
+                + name: lan-port1
+            + (Object IP)
+                + groupip_id: 4 (number)
+                + name: lan-vlan10
+            + (Object IP)
+                + groupip_id: 5 (number)
+                + name: lan-vlan20
+        + destinations (array)
+        + services (array)
+        + schedules (array)
+            + (Object Schedule)
+        + action: drop
+        + security_options (object)
+            + status: 1 (number)
+            + blacklist: 0 (number)
+            + application_control (array)
+                + (object)
+                    + id: 1 (number)
+                    + name: Group Application 1
+                    + description: Description of Group Application 1
+                + (object)
+                    + id: 2 (number)
+                    + name: Group Application 2
+                    + description: Description of Group Application 2
+            + url_filter (array)
+                + (object)
+                    + id: 1 (number)
+                    + name: Đọc báo
+                    + description: Block website đọc báo
+                + (object)
+                    + id: 2 (number)
+                    + name: Mạng xã hội
+                    + description: Block mạng xã hội
+        + interfaces (array)
+            + (Interface)
+                + interface_id: 1 (number)
+                + name: port0
+                + type: WAN
+                + ip_address: 27.72.28.152
+                + netmask: 255.255.255.255
+                + gateway: 10.56.239.2
+                + active: 1 (number)
+            + (Interface)
+                + interface_id: 3 (number)
+                + name: port2
+                + type: WAN
+                + addressing_mode: DHCP
+                + ip_address: 192.168.1.20
+                + netmask: 255.255.255.0
+                + gateway: 192.168.1.1
+                + active: 1 (number)
+        + log: 1 (number)
+    + (Firewall Policy)
+        + policy_id: 4 (number)
+        + pos: 2 (number)
+        + name: block backlistCCServer
+        + sources (array)
+            + (Object IP)
+                + groupip_id: 3 (number)
+                + name: lan-port1
+
+            + (Object IP)
+                + groupip_id: 4 (number)
+                + name: lan-vlan10
+
+            + (Object IP)
+                + groupip_id: 5 (number)
+                + name: lan-vlan20
+
+        + destinations (array)
+        + services (array)
+        + schedules (array)
+            + (Object Schedule)
+        + action: drop
+        + security_options (object)
+            + status: 1 (number)
+            + blacklist: 0
+            + application_control (array)
+                + (object)
+                    + id: 1 (number)
+                    + name: Group Application 1
+                    + description: Description of Group Application 1
+                + (object)
+                    + id: 2 (number)
+                    + name: Group Application 2
+                    + description: Description of Group Application 2
+            + url_filter (array)
+                + (object)
+                    + id: 1 (number)
+                    + name: Đọc báo
+                    + description: Block website đọc báo
+                + (object)
+                    + id: 2 (number)
+                    + name: Mạng xã hội
+                    + description: Block mạng xã hội
+        + interfaces (array)
+    + (Firewall Policy)
+        + policy_id: 5 (number)
+
+### List all  Firewall Policy [GET]
++ Response 200 (application/json)
+    + Attributes (Firewall Policy Collection)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Create a Firewall Policy [POST]
++ Attributes (Firewall Policy Base)
+    + sources (array)
+        + (object)
+            + groupip_id: 4 (number)
+        + (object)
+            + groupip_id: 5 (number)
+    + destinations (array)
+        + (object)
+            + groupip_id: 2 (number)
+    + services (array)
+        + (object)
+            + groupservice_id: 1 (number)
+    + schedules (array)
+        + (object)
+            + groupschedule_id: 2 (number)
+    + interfaces (array)
+        + (object)
+            + interface_id: 2 (number)
+            + interface_type: physical - Trường này có giá trị là physical - với giá trị này interface-id được lấy từ tài nguyên bảng Interface hoặc virual - với giá trị này interface-id được lấy từ tài nguyên bảng VLAN
+        + (object)
+            + interface_id: 1 (number)
+            + interface_type: virual - Trường này có giá trị là physical - với giá trị này interface-id được lấy từ tài nguyên bảng Interface hoặc virual - với giá trị này interface-id được lấy từ tài nguyên bảng VLAN
+
++ Request (application/json)
+
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Firewall Policy)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Show entries and pagination [GET /firewall-policies{?search,limit,page}]
++ Parameters
+    + limit (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+        + Sample: 10
+    + page (number, optional) - Số trang
+        + Default: 1
+    + search: 10.2.32.0 (string) - Trong trường hợp dùng tính năng search thì sẽ có thêm parameter search. Nếu chỉ lấy tổng dữ liệu bình thường thì bỏ parameter này.
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (Firewall Policy Collection)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
+### Advanced search, show entries and pagination [GET /firewall-policies{?column,search,limit,page}]
++ Parameters
+    + column (enum[string]) - Các giá trị tương ứng với các cột trong bảng
+        + Members
+            + sources
+            + destinations
+            + services
+        + Sample: sources
+    + limit (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+        + Sample: 10
+    + page (number, optional) - Số trang
+        + Default: 1
+    + search: 10.2.32.0 (string) - Trong trường hợp dùng tính năng search thì sẽ có thêm parameter search. Nếu chỉ lấy tổng dữ liệu bình thường thì bỏ parameter này.
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array)
+            + (Firewall Policy)
+                + policy_id: 1 (number)
+                + action: drop
+                + destinations: []
+                + interfaces: []
+                + log: 1 (number)
+                + name: Block All
+                + schedules: []
+                + services: []
+                + sources: []
+                + active: 1 (number)
+                + pos: 5 (number)
+            + (Firewall Policy)
+                + policy_id: 2  (number)
+                + pos: 4 (number)
+                + name: permit internet
+                + sources (array)
+                    + (Object IP)
+                        + groupip_id: 3 (number)
+                        + name: lan-port1
+                    + (Object IP)
+                        + groupip_id: 4 (number)
+                        + name: lan-vlan10
+                    + (Object IP)
+                        + groupip_id: 5 (number)
+                        + name: lan-vlan20
+
+                + destinations (array)
+                + services (array)
+                + schedules (array)
+                + action: accept
+                + interfaces (array)
+                    + (Interface)
+                        + interface_id: 1 (number)
+                        + name: port0
+                        + type: WAN
+                        + ip_address: 27.72.28.152
+                        + netmask: 255.255.255.255
+                        + gateway: 10.56.239.2
+                        + active: 1 (number)
+                    + (Interface)
+                        + interface_id: 3 (number)
+                        + name: port2
+                        + type: WAN
+                        + addressing_mode: DHCP
+                        + ip_address: 192.168.1.20
+                        + netmask: 255.255.255.0
+                        + gateway: 192.168.1.1
+                        + active: 1 (number)
+            + (Firewall Policy)
+                + policy_id: 3 (number)
+                + pos: 3 (number)
+                + name: block social
+                + sources (array)
+                    + (Object IP)
+                        + groupip_id: 3 (number)
+                        + name: lan-port1
+
+                    + (Object IP)
+                        + groupip_id: 4 (number)
+                        + name: lan-vlan10
+
+                    + (Object IP)
+                        + groupip_id: 5 (number)
+                        + name: lan-vlan20
+                + destinations (array)
+                + services (array)
+                + schedules (array)
+                    + (Object Schedule)
+                + action: drop
+                + security_options (object)
+                    + status: 1 (number)
+                    + blacklist: 0
+                    + application_control (array)
+                        + (object)
+                            + id: 1 (number)
+                            + name: Group Application 1
+                            + description: Description of Group Application 1
+                        + (object)
+                            + id: 2 (number)
+                            + name: Group Application 2
+                            + description: Description of Group Application 2
+                    + url_filter (array)
+                        + (object)
+                            + id: 1 (number)
+                            + name: Đọc báo
+                            + description: Block website đọc báo
+                        + (object)
+                            + id: 2 (number)
+                            + name: Mạng xã hội
+                            + description: Block mạng xã hội
+                + interfaces (array)
+                    + (Interface)
+                        + interface_id: 1 (number)
+                        + name: port0
+                        + type: WAN
+                        + ip_address: 27.72.28.152
+                        + netmask: 255.255.255.255
+                        + gateway: 10.56.239.2
+                        + active: 1 (number)
+                    + (Interface)
+                        + interface_id: 3 (number)
+                        + name: port2
+                        + type: WAN
+                        + addressing_mode: DHCP
+                        + ip_address: 192.168.1.20
+                        + netmask: 255.255.255.0
+                        + gateway: 192.168.1.1
+                        + active: 1 (number)
+            + (Firewall Policy)
+                + policy_id: 4 (number)
+                + pos: 2 (number)
+                + name: block backlistCCServer
+                + sources (array)
+                    + (Object IP)
+                        + groupip_id: 3 (number)
+                        + name: lan-port1
+                    + (Object IP)
+                        + groupip_id: 4 (number)
+                        + name: lan-vlan10
+                    + (Object IP)
+                        + groupip_id: 5 (number)
+                        + name: lan-vlan20
+                + destinations (array)
+                + services (array)
+                + schedules (array)
+                    + (Object Schedule)
+                + action: drop
+                + security_options (array)
+                    + status: 1 (number)
+                    + blacklist: 0 (number)
+                    + application_control (array)
+                        + (object)
+                            + id: 1 (number)
+                            + name: Group Application 1
+                            + description: Description of Group Application 1
+                        + (object)
+                            + id: 2 (number)
+                            + name: Group Application 2
+                            + description: Description of Group Application 2
+                    + url_filter (array)
+                        + (object)
+                            + id: 1 (number)
+                            + name: Đọc báo
+                            + description: Block website đọc báo
+                        + (object)
+                            + id: 2 (number)
+                            + name: Mạng xã hội
+                            + description: Block mạng xã hội
+                + interfaces (array)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+# Group Traffic Shaper
+Hỗ trợ cấu hình tính năng giới hạn băng thông. Đường dẫn cấu hình Firewall -> Traffic Shaper
+## Traffic Shaper [/traffic-shaper/{trafficshaper_id}]
+Chứa các thông tin cấu hình về một bản ghi
++ Parameters
+    + trafficshaper_id (number)
+
++ Attributes (Traffic Shaper Base)
+    + trafficshaper_id: 1 (number, required)
+    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
+### Retrieve a Traffic Shaper [GET]
+Lấy thông tin về một 
+
++ Response 200 (application/json)
+    + Attributes (Traffic Shaper)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Edit a Traffic Shaper [PUT]
++ Attributes (Traffic Shaper Base)
+    + trafficshaper_id: 1 (number, required)
+    + interfaces (array)
+        + (object)
+            + interface_id: 2 (number)
+            + interface_type: physical - Trường này có giá trị là physical - với giá trị này interface-id được lấy từ tài nguyên bảng Interface hoặc virual - với giá trị này interface-id được lấy từ tài nguyên bảng VLAN
+    + ip_address (array)
+        + (object)
+            + groupip_id: 3 (number)
+    + whitelist_ip (array)
+        + (object)
+            + groupip_id: 2 (number)
+
++ Request (application/json)
+    
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Traffic Shaper)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string))
+
+### Delete a Traffic Shaper [DELETE]
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string) 
+
+## Traffic Shaper Collection [/traffic-shaper]
++ Attributes (array)
+    + (Traffic Shaper)
+    + (Traffic Shaper)
+        + interfaces (array)
+            + (VLAN)
+                + vlan_id: 1 (number)
+                + interface 
+                + vlanID: 10 (number)
+                + ip_address: 172.16.10.1
+                + netmask: 255.255.255.0
+                + name: vlan10
+        + ip_address (array)
+            + (Object IP)
+                + groupip_id: 4 (number)
+                + name: lan-vlan10
+        + whitelist_ip (array)
+
+### Show entries and pagination [GET /traffic-shaper{?search,limit,page}]
++ Parameters
+    + limit (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+        + Sample: 10
+    + page (number, optional) - Số trang
+        + Default: 1
+    + search: test2 (string) - Trong trường hợp dùng tính năng search thì sẽ có thêm parameter search. Nếu chỉ lấy tổng dữ liệu bình thường thì bỏ parameter này.
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (Traffic Shaper Collection)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
+### List all  Traffic Shaper [GET]
++ Response 200 (application/json)
+    + Attributes (Traffic Shaper Collection)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Create a Traffic Shaper [POST]
++ Attributes (Traffic Shaper Base)
+    + trafficshaper_id: 1 (number, required)
+    + interfaces (array)
+        + (object)
+            + interface_id: 2 (number)
+            + interface_type: physical - Trường này có giá trị là physical - với giá trị này interface-id được lấy từ tài nguyên bảng Interface hoặc virual - với giá trị này interface-id được lấy từ tài nguyên bảng VLAN
+    + ip_address (array)
+        + (object)
+            + groupip_id: 3 (number)
+    + whitelist_ip (array)
+        + (object)
+            + groupip_id: 2 (number)
+
++ Request (application/json)
+
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Traffic Shaper)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+
+# Group IPS Network Layer Rule
+
+## Network Layer Rule [/network_layer_rules]
+---
+Luật chống tấn công ddos tầng mạng.
+
++ Attributes (object)
+    + id: 1 (string, required)
+    + name: "name" (string,required)  - định danh cho luật
+    + threshold: 50 (number,required) - ngưỡng request
+    + duration: 1 (number,required) - thời gian quan sát
+    + action: 1 (number,required) -  loại action
+    + block_duration: 3600 (number,required) -  thời gian chặn
+    + state: 1 (number,required) -  trạng thái bật tắt luật
+    + created_at: 1415203908 (number,required)  - Thời điểm tạo
+    + updated_at: 1415203908 (number,required)  - Thời điểm cập nhật gần nhất
+
+### Retrieve all  [GET]
+Lấy danh sách tất cả luật.
+
++ Response 200 (application/json)
+
+        {
+            "data": [{
+                "id":1,
+                "name":"ICMP flood",
+                "threshold":50,
+                "duration": 1,
+                "action":1,
+                "block_duration":3600,
+                "state":1,
+                "created_at":1415203908,
+                "updated_at":1415203908
+            },{
+                "id":2,
+                "name":"ICMP flood",
+                "threshold":50,
+                "duration": 1,
+                "action":1,
+                "block_duration":3600,
+                "state":1,
+                "created_at":1415203908,
+                "updated_at":1415203908
+            } ],
+            "len":2
+        }
+        
+
+### Retrieve one [GET /network_layer_rules/{network_layer_ruleID}]
+Lấy thông tin của 1 luật.
+
++ Parameters
+    + network_layer_ruleID (required, Number, `1`) 
+
++ Response 200 (application/json)
+
+        {
+                "id":1,
+                "name":"ICMP flood",
+                "threshold":50,
+                "duration": 1,
+                "action":1,
+                "block_duration":3600,
+                "state":1,
+                "created_at":1415203908,
+                "updated_at":1415203908
+        }
+
+### Add new [POST]
+Thêm mới 1 luật.
++ Request
+
+            {
+                "name":"ICMP flood",
+                "threshold":50,
+                "duration": 1,
+                "action":1,
+                "block_duration":3600,
+                "state":1,
+                "created_at":1415203908,
+                "updated_at":1415203908
+            }
+
++ Response 200 (application/json)
+
+        {
+            "status":1,
+            "message":"",
+            "data":{
+                "id":1,
+                "name":"ICMP flood",
+                "threshold":50,
+                "duration": 1,
+                "action":1,
+                "block_duration":3600,
+                "state":1,
+                "created_at":1415203908,
+                "updated_at":1415203908
+            }
+        }
+        
+### Edit Rule [PUT /network_layer_rules/{network_layer_ruleID}]
+Sửa 1 luật có sẵn.
++ Parameters
+    + network_layer_ruleID (required, Number, `1`) 
++ Request
+
+        {
+                "id":1,
+                "name":"ICMP flood",
+                "threshold":50,
+                "duration": 1,
+                "action":1,
+                "block_duration":3600,
+                "state":1,
+                "created_at":1415203908,
+                "updated_at":1415203908
+            }
+        
++ response 200 (application/json)
+
+        {
+            "status":1,
+            "message":"",
+            "data":{
+                "id":1,
+                "name":"ICMP flood",
+                "threshold":50,
+                "duration": 1,
+                "action":1,
+                "block_duration":3600,
+                "state":1,
+                "created_at":1415203908,
+                "updated_at":1415203908
+            }
+        }
+        
+### Delete Rule [DELETE /network_layer_rules/{network_layer_ruleID}]
+Xóa 1 luật.
+
+
++ Parameters
+    + network_layer_ruleID (required, Number, `1`) 
++ response 200 (application/json)
+
+        {
+            "status":1,
+            "message":""
+        }
+
+### Delete all [DELETE]
+Xóa tất cả network_layer_rule.
++ response 200 (application/json)
+
+        {
+            "status":1,
+            "message":""
+        }
+
+### Reset [GET /network_layer_rules/reset]
+Reset về cấu hình của nhà phát triển.
++ response 200 (application/json)
+
+        {
+            "status":1,
+            "message":""
+        }
+
+
+# Group Monitor Resource
+## Monitor Resource [/monitor-resources]
+Chứa các thông tin cấu hình về một bản ghi
+
++ Attributes (Monitor Resource Base)
+    + resources_id: 1 (number, required)
+    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
+### Retrieve data within time in seconds [GET /monitor-resources{?seconds}]
++ Parameters
+    + seconds: 5 (number) - number of seconds
+
++ Response 200 (application/json)
+    + Attributes (array)
+        + (Monitor Resource)
+            + resources_id: 1 (number, required)
+            + cpu: 23.9 (number)
+            + ram: 50.1 (number)
+            + disk: 12.0  (number)
+            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+        + (Monitor Resource)
+            + resources_id: 2 (number, required)
+            + cpu: 10.6 (number)
+            + ram: 50.1 (number)
+            + disk: 12.0  (number)
+            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+        + (Monitor Resource)
+            + resources_id: 2 (number, required)
+            + cpu: 23.0 (number)
+            + ram: 49.8 (number)
+            + disk: 12.0  (number)
+            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Retrieve data within time in hours [GET /monitor-resources{?hours}]
++ Parameters
+    + hours: 10 (number) - number of minutes
+
++ Response 200 (application/json)
+    + Attributes (array)
+        + (Monitor Resource)
+            + resources_id: 1 (number, required)
+            + cpu: 23.9 (number)
+            + ram: 50.1 (number)
+            + disk: 12.0  (number)
+            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+        + (Monitor Resource)
+            + resources_id: 2 (number, required)
+            + cpu: 10.6 (number)
+            + ram: 50.1 (number)
+            + disk: 12.0  (number)
+            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+        + (Monitor Resource)
+            + resources_id: 2 (number, required)
+            + cpu: 23.0 (number)
+            + ram: 49.8 (number)
+            + disk: 12.0  (number)
+            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Retrieve data within time in days [GET /monitor-resources{?days}]
++ Parameters
+    + days: 10 (number) - number of minutes
+
++ Response 200 (application/json)
+    + Attributes (array)
+        + (Monitor Resource)
+            + resources_id: 1 (number, required)
+            + cpu: 23.9 (number)
+            + ram: 50.1 (number)
+            + disk: 12.0  (number)
+            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+        + (Monitor Resource)
+            + resources_id: 2 (number, required)
+            + cpu: 10.6 (number)
+            + ram: 50.1 (number)
+            + disk: 12.0  (number)
+            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+        + (Monitor Resource)
+            + resources_id: 2 (number, required)
+            + cpu: 23.0 (number)
+            + ram: 49.8 (number)
+            + disk: 12.0 (number) 
+            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Retrieve data for a period of time [GET /monitor-resources{?from,to}]
++ Parameters
+    + from: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + to: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
++ Response 200 (application/json)
+    + Attributes (array)
+        + (Monitor Resource)
+            + resources_id: 1 (number, required)
+            + cpu: 23.9 (number)
+            + ram: 50.1 (number)
+            + disk: 12.0  (number)
+            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+        + (Monitor Resource)
+            + resources_id: 2 (number, required)
+            + cpu: 10.6 (number)
+            + ram: 50.1 (number)
+            + disk: 12.0  (number)
+            + created_at: `2019-04-23 09:47:50` (string) - typetime %Y-%m-%d %H:%M:%S
+        + (Monitor Resource)
+            + resources_id: 2 (number, required)
+            + cpu: 23.0 (number)
+            + ram: 49.8 (number)
+            + disk: 12.0 (number) 
+            + created_at: `2019-04-23 09:48:00` (string) - typetime %Y-%m-%d %H:%M:%S
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+# Group Monitor Traffic
+
+## Monitor Traffic [/monitor-traffic]
+Chứa các thông tin cấu hình về một bản ghi
+
++ Attributes (Monitor Traffic Base)
+    + traffic_id (number)
+    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
+### Retrieve data within time in seconds [GET /monitor-traffic{?interfacetype,interfaces,seconds}]
++ Parameters
+    + interfacetype (enum[string])
+        + Sample: physical
+        + Members
+            + physical - Đây là loại interface vậy lý, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên Interface
+            + virual - Đây là loại interface ảo, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên VLAN
+    + interfaces: 1 (number) - Đây là id trong Group Interface hoặc VLAN
+    + seconds: 5 (number)
+
++ Response 200 (application/json)
+    + Attributes (array)
+        + (Monitor Traffic)
+            + traffic_id: 1 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+        + (Monitor Traffic)
+            + traffic_id: 2 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 27 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic) (number)
+            + traffic_id: 3
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 30 (number)
+            + bw_output: 2 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Retrieve data within time in hours [GET /monitor-traffic{?interfacetype,interfaces,hours}]
++ Parameters
+    + interfacetype (enum[string])
+        + Sample: physical
+        + Members
+            + physical - Đây là loại interface vậy lý, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên Interface
+            + virual - Đây là loại interface ảo, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên VLAN
+    + interfaces: 1 (number) - Đây là id trong Group Interface hoặc VLAN
+    + hours: 5 (number)
+
++ Response 200 (application/json)
+    + Attributes (array)
+        + (Monitor Traffic)
+            + traffic_id: 1 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+        + (Monitor Traffic)
+            + traffic_id: 2 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 27 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 3 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 30 (number)
+            + bw_output: 2 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Retrieve data within time in days [GET /monitor-traffic{?interfacetype,interfaces,days}]
++ Parameters
+    + interfacetype (enum[string])
+        + Sample: physical
+        + Members
+            + physical - Đây là loại interface vậy lý, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên Interface
+            + virual - Đây là loại interface ảo, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên VLAN
+    + interfaces: 1 (number) - Đây là id trong Group Interface hoặc VLAN
+    + days: 5 (number)
+
++ Response 200 (application/json)
+    + Attributes (array)
+        + (Monitor Traffic)
+            + traffic_id: 1 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+        + (Monitor Traffic)
+            + traffic_id: 2 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 27 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 3 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 30 (number)
+            + bw_output: 2 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Retrieve data for a period of time [GET /monitor-traffic{?interfacetype,interfaces,from,to}]
++ Parameters
+    + interfacetype (enum[string])
+        + Sample: physical
+        + Members
+            + physical - Đây là loại interface vậy lý, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên Interface
+            + virual - Đây là loại interface ảo, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên VLAN
+    + interfaces: 1 (number) - Đây là id trong Group Interface hoặc VLAN
+    + from: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + to: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
++ Response 200 (application/json)
+    + Attributes (array)
+        + (Monitor Traffic)
+            + traffic_id: 1 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+        + (Monitor Traffic)
+            + traffic_id: 2 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 27 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 3 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 30 (number)
+            + bw_output: 2 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+### Show entries and pagination with period and a interface [GET /monitor-traffic-detail{?interfacetype,interfaces,minutes,limit,page}]
++ Parameters
+    + interfacetype (enum[string])
+        + Sample: physical
+        + Members
+            + physical - Đây là loại interface vậy lý, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên Interface
+            + virual - Đây là loại interface ảo, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên VLAN
+    + interfaces: 1 (number) - Đây là id trong Group Interface hoặc VLAN
+    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, days, months
+    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+    + page: 1 (number, optional) - Số trang
+        + Default: 1
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array)        
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 2 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 1 (number)
+                    + interface_name: port0
+                + sources: 192.168.3.1
+                + destinations: 220.231.105.100
+                + destinations_port: 80 (number)
+                + protocol: tcp
+                + application: http
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 1 (number)
+                    + interface_name: port0
+                + sources: 192.168.100.1
+                + destinations: 220.231.105.100
+                + destinations_port: 443 (number)
+                + protocol: tcp
+                + application: https
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 1 (number)
+                    + interface_name: port0
+                + sources: 192.168.20.1
+                + destinations: 220.231.105.100
+                + destinations_port: 5001 (number)
+                + protocol: tcp
+                + application: iperf
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+### Show entries and pagination with period of time and a interface [GET /monitor-traffic-detail{?interfacetype,interfaces,from,to,limit,page}]
++ Parameters
+    + interfacetype (enum[string])
+        + Sample: physical
+        + Members
+            + physical - Đây là loại interface vậy lý, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên Interface
+            + virual - Đây là loại interface ảo, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên VLAN
+    + interfaces: 1 (number) - Đây là id trong Group Interface hoặc VLAN
+    + from: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + to: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+    + page: 1 (number, optional) - Số trang
+        + Default: 1
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 2 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 1 (number)
+                    + interface_name: port0
+                + sources: 192.168.3.1
+                + destinations: 220.231.105.100
+                + destinations_port: 80 (number)
+                + protocol: tcp
+                + application: http
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:50` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 1 (number)
+                    + interface_name: port0
+                + sources: 192.168.100.1
+                + destinations: 220.231.105.100
+                + destinations_port: 443 (number)
+                + protocol: tcp
+                + application: https
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 1 (number)
+                    + interface_name: port0
+                + sources: 192.168.20.1
+                + destinations: 220.231.105.100
+                + destinations_port: 5001 (number)
+                + protocol: tcp
+                + application: iperf
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+
+### Filter value a interfaces [GET /monitor-traffic-detail{?interfacetype,interfaces,minutes,column,limit,page}]
++ Parameters
+    + interfacetype (enum[string])
+        + Sample: physical
+        + Members
+            + physical - Đây là loại interface vậy lý, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên Interface
+            + virual - Đây là loại interface ảo, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên VLAN
+    + interfaces: 1 (number) - Đây là id trong Group Interface hoặc VLAN
+    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, days, months
+    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?minutes,limit,page,column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
+    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+    + page: 1 (number, optional) - Số trang
+        + Default: 1
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 2 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 1 (number)
+                    + interface_name: port0
+                + sources: 192.168.3.1
+                + destinations: 220.231.105.100
+                + destinations_port: 80 (number)
+                + protocol: tcp
+                + application: http
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 1 (number)
+                    + interface_name: port0
+                + sources: 192.168.100.1
+                + destinations: 220.231.105.100
+                + destinations_port: 443 (number)
+                + protocol: tcp
+                + application: https
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 1 (number)
+                    + interface_name: port0
+                + sources: 192.168.20.1
+                + destinations: 220.231.105.100
+                + destinations_port: 5001 (number)
+                + protocol: tcp
+                + application: iperf
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+### Filter value a interfaces and period of time [GET /monitor-traffic-detail{?interfacetype,interfaces,from,to,column,limit,page}]
++ Parameters
+    + interfacetype (enum[string])
+        + Sample: physical
+        + Members
+            + physical - Đây là loại interface vậy lý, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên Interface
+            + virual - Đây là loại interface ảo, tương ứng sẽ lấy interfaces id từ bảng của tài nguyên VLAN
+    + interfaces: 1 (number) - Đây là id trong Group Interface hoặc VLAN
+    + from: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + to: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?minutes,limit,page,column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
+    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+    + page: 1 (number, optional) - Số trang
+        + Default: 1
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+        + data (array)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 2 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 1 (number)
+                    + interface_name: port0
+                + sources: 192.168.3.1
+                + destinations: 220.231.105.100
+                + destinations_port: 80 (number)
+                + protocol: tcp
+                + application: http
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:50` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 1 (number)
+                    + interface_name: port0
+                + sources: 192.168.100.1
+                + destinations: 220.231.105.100
+                + destinations_port: 443 (number)
+                + protocol: tcp
+                + application: https
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 1 (number)
+                    + interface_name: port0
+                + sources: 192.168.20.1
+                + destinations: 220.231.105.100
+                + destinations_port: 5001 (number)
+                + protocol: tcp
+                + application: iperf
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+## Monitor Traffic Collection [/monitor-traffic{?seconds}]
+### List all data within time in seconds [GET /monitor-traffic{?seconds}]
++ Parameters
+    + seconds: 5 (number)
+
++ Response 200 (application/json)
+    + Attributes (array)
+        + (Monitor Traffic)
+            + traffic_id: 1 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+        + (Monitor Traffic)
+            + traffic_id: 2 (number)
+            + interface (object)
+                + interface_id: 2 (number)
+                + interface_name: port1
+            + bw_input: 10 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 3 (number)
+            + interface (object)
+                + interface_id: 3 (number)
+                + interface_name: port2
+            + bw_input: 40 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 4 (number)
+            + interface (object)
+                + interface_id: 4 (number)
+                + interface_name: port3
+            + bw_input: 0 (number)
+            + bw_output: 0 (number)
+        + (Monitor Traffic)
+            + traffic_id: 5 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: vlan10
+            + bw_input: 10 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 6 (number)
+            + interface (object)
+                + interface_id: 2 (number) - đây là id của vlan
+                + interface_name: vlan20
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+        + (Monitor Traffic)
+            + traffic_id: 7
+            + interface (object)
+                + interface_id: 3 (number) - đây là id của vlan
+                + interface_name: vlan30
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### List all data within time in hours [GET /monitor-traffic{?hours}]
++ Parameters
+    + hours: 5 (number)
+
++ Response 200 (application/json)
+    + Attributes (array)
+        + (Monitor Traffic)
+            + traffic_id: 1 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+        + (Monitor Traffic)
+            + traffic_id: 2 (number)
+            + interface (object)
+                + interface_id: 2 (number)
+                + interface_name: port1
+            + bw_input: 10 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 3 (number)
+            + interface (object)
+                + interface_id: 3 (number)
+                + interface_name: port2
+            + bw_input: 40 (number) (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 4 (number)
+            + interface (object)
+                + interface_id: 4 (number)
+                + interface_name: port3
+            + bw_input: 0 (number)
+            + bw_output: 0 (number)
+        + (Monitor Traffic)
+            + traffic_id: 5 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: vlan10
+            + bw_input: 10 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 6 (number)
+            + interface (object)
+                + interface_id: 2 (number) - đây là id của vlan
+                + interface_name: vlan20
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+        + (Monitor Traffic)
+            + traffic_id: 7 (number)
+            + interface (object)
+                + interface_id: 3 (number) - đây là id của vlan
+                + interface_name: vlan30
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### List all data within time in days [GET /monitor-traffic{?days}]
++ Parameters
+    + days: 5 (number)
+
++ Response 200 (application/json)
+    + Attributes (array)
+        + (Monitor Traffic)
+            + traffic_id: 1 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+        + (Monitor Traffic)
+            + traffic_id: 2 (number)
+            + interface (object)
+                + interface_id: 2 (number)
+                + interface_name: port1
+            + bw_input: 10 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 3 (number)
+            + interface (object)
+                + interface_id: 3 (number)
+                + interface_name: port2
+            + bw_input: 40 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 4 (number)
+            + interface (object)
+                + interface_id: 4 (number)
+                + interface_name: port3
+            + bw_input: 0 (number)
+            + bw_output: 0 (number)
+        + (Monitor Traffic)
+            + traffic_id: 5 (number)
+            + interface (object)
+                + interface_id: 1 (number) 
+                + interface_name: vlan10
+            + bw_input: 10 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 6 (number)
+            + interface (object)
+                + interface_id: 2 (number) - đây là id của vlan
+                + interface_name: vlan20
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+        + (Monitor Traffic)
+            + traffic_id: 7 (number)
+            + interface (object)
+                + interface_id: 3 (number) - đây là id của vlan
+                + interface_name: vlan30
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### List all data within period of time in days [GET /monitor-traffic{?from,to}]
++ Parameters
+    + from: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + to: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
++ Response 200 (application/json)
+    + Attributes (array)
+        + (Monitor Traffic)
+            + traffic_id: 1 (number)
+            + interface (object)
+                + interface_id: 1 (number)
+                + interface_name: port0
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+        + (Monitor Traffic)
+            + traffic_id: 2 (number)
+            + interface (object)
+                + interface_id: 2 (number)
+                + interface_name: port1
+            + bw_input: 10 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 3 (number)
+            + interface (object)
+                + interface_id: 3 (number)
+                + interface_name: port2
+            + bw_input: 40 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 4 (number)
+            + interface (object)
+                + interface_id: 4 (number)
+                + interface_name: port3
+            + bw_input: 0 (number)
+            + bw_output: 0 (number)
+        + (Monitor Traffic)
+            + traffic_id: 5 (number)
+            + interface (object)
+                + interface_id: 1 (number) 
+                + interface_name: vlan10
+            + bw_input: 10 (number)
+            + bw_output: 10 (number)
+        + (Monitor Traffic)
+            + traffic_id: 6 (number)
+            + interface (object)
+                + interface_id: 2 (number) - đây là id của vlan
+                + interface_name: vlan20
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+        + (Monitor Traffic)
+            + traffic_id: 7 (number)
+            + interface (object)
+                + interface_id: 3 (number) - đây là id của vlan
+                + interface_name: vlan30
+            + bw_input: 25 (number)
+            + bw_output: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+### Show entries and pagination with period all interfaces [GET /monitor-traffic-detail{?minutes,limit,page}]
++ Parameters
+    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, days, months
+    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+    + page: 1 (number, optional) - Số trang
+        + Default: 1
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+        + data (array)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 2 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 2 (number)
+                    + interface_name: port1
+                + sources: 192.168.3.1
+                + destinations: 220.231.105.100
+                + destinations_port: 80 (number)
+                + protocol: tcp
+                + application: http
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 3 (number) - đây là id của vlan
+                    + interface_name: vlan30
+                + sources: 192.168.100.1
+                + destinations: 220.231.105.100
+                + destinations_port: 443 (number)
+                + protocol: tcp
+                + application: https
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 2 (number)
+                    + interface_name: port1
+                + sources: 192.168.20.1
+                + destinations: 220.231.105.100
+                + destinations_port: 5001 (number)
+                + protocol: tcp
+                + application: iperf
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+### Show entries and pagination with period of time all interfaces [GET /monitor-traffic-detail{?from,to,limit,page}]
++ Parameters
+    + from: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + to: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+    + page: 1 (number, optional) - Số trang
+        + Default: 1
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+        + data (array)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 2 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 2 (number)
+                    + interface_name: port1
+                + sources: 192.168.3.1
+                + destinations: 220.231.105.100
+                + destinations_port: 80 (number)
+                + protocol: tcp
+                + application: http
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:50` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 3 (number) - đây là id của vlan
+                    + interface_name: vlan30
+                + sources: 192.168.100.1
+                + destinations: 220.231.105.100
+                + destinations_port: 443 (number)
+                + protocol: tcp
+                + application: https
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 2 (number)
+                    + interface_name: port1
+                + sources: 192.168.20.1
+                + destinations: 220.231.105.100
+                + destinations_port: 5001 (number)
+                + protocol: tcp
+                + application: iperf
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+### Filter value all interfaces and period [GET /monitor-traffic-detail{?minutes,limit,page,column}]
++ Parameters
+    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, days, months
+    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+    + page: 1 (number, optional) - Số trang
+        + Default: 1
+    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?minutes,limit,page,column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+        + data (array)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 2 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 2 (number)
+                    + interface_name: port1
+                + sources: 192.168.3.1
+                + destinations: 220.231.105.100
+                + destinations_port: 80 (number)
+                + protocol: tcp
+                + application: http
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 3 (number) - đây là id của vlan
+                    + interface_name: vlan30
+                + sources: 192.168.100.1
+                + destinations: 220.231.105.100
+                + destinations_port: 443 (number)
+                + protocol: tcp
+                + application: https
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 2 (number)
+                    + interface_name: port1
+                + sources: 192.168.20.1
+                + destinations: 220.231.105.100
+                + destinations_port: 5001 (number)
+                + protocol: tcp
+                + application: iperf
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+### Filter value all interfaces and period of time [GET /monitor-traffic-detail{?from,to,limit,page,column}]
++ Parameters
+    + from: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + to: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+    + page: 1 (number, optional) - Số trang
+        + Default: 1
+    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?minutes,limit,page,column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+        + data (array)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 2 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 2 (number)
+                    + interface_name: port1
+                + sources: 192.168.3.1
+                + destinations: 220.231.105.100
+                + destinations_port: 80 (number)
+                + protocol: tcp
+                + application: http
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:47:50` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 3 (number) - đây là id của vlan
+                    + interface_name: vlan30
+                + sources: 192.168.100.1
+                + destinations: 220.231.105.100
+                + destinations_port: 443 (number)
+                + protocol: tcp
+                + application: https
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+            + (Monitor Traffic Detail Base)
+                + traffic_detail_id: 1 (number)
+                + no: 2 (number)
+                + datetime: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
+                + interface (object)
+                    + interface_id: 2 (number)
+                    + interface_name: port1
+                + sources: 192.168.20.1
+                + destinations: 220.231.105.100
+                + destinations_port: 5001 (number)
+                + protocol: tcp
+                + application: iperf
+                + byte_send: 536 (number)
+                + byte_received: 777 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+        
+### Download data from table [GET /monitor-traffic-detail/download{?minutes,column,orderBy,orderType}]
++ Parameters
+    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, hours, days, months hoặc from to
+    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
+    + orderBy: content (string) - Giá trị tên cột được lấy theo tên các trường trong json
+    + orderType (string, optional)
+        + Default: desc
+        + Members
+            + desc
+            + asc
+        + Sample: desc
+        
++ Response 200 (text/csv)
+    
+    + Headers
+        
+        Content-Disposition: attachment; filename=bif_export_data.csv;filename*=utf-8''bif_export_data.csv
+        Content-Length: 242
+        
+    + Body
+    
+        action,datetime,destination,destination_port,no,policy,protocol,source,source_port
+        drop,2019-10-07 09:19:08,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080617,Deny All,UDP,"{'country': u'CN', 'ip_address': u'140.143.6.5'}",7946
+        drop,2019-10-07 09:19:07,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080616,Deny All,UDP,"{'country': u'HK', 'ip_address': u'223.197.113.11'}",1024
+        drop,2019-10-07 09:19:07,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080615,Deny All,UDP,"{'country': u'CN', 'ip_address': u'119.1.174.24'}",7946
+        drop,2019-10-07 09:19:06,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080614,Deny All,UDP,"{'country': u'CN', 'ip_address': u'101.251.207.204'}",7946
+        drop,2019-10-07 09:19:02,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080613,Deny All,UDP,"{'country': u'CN', 'ip_address': u'183.63.113.42'}",34834
+        drop,2019-10-07 09:19:00,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",2594,1080612,Deny All,TCP,"{'country': u'NL', 'ip_address': u'80.82.70.239'}",48844
+        drop,2019-10-07 09:18:59,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",445,1080611,Deny All,TCP,"{'country': u'VN', 'ip_address': u'113.20.109.161'}",61695
+        drop,2019-10-07 09:18:59,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080610,Deny All,UDP,"{'country': u'CN', 'ip_address': u'122.114.69.3'}",7946
+        drop,2019-10-07 09:18:59,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",3189,1080609,Deny All,TCP,"{'country': u'Other', 'ip_address': u'185.175.93.78'}",45313
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+# Group Monitor Setting
+## Monitor Setting [/monitor-setting]
+
++ Attributes (Monitor Setting Base)
+    + setting_id: 1 (number, required)
+    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
+### List all value [GET]
++ Response 200 (application/json)
+    + Attributes (array)
+        + (Monitor Setting)
+        + (Monitor Setting)
+            + no: 2 (number)
+            + setting_id: 2 (number, required)
+        + (Monitor Setting)
+            + no: 3 (number)
+            + setting_id: 3 (number, required)
+        + (Monitor Setting)
+            + no: 4 (number)
+            + setting_id: 4 (number, required)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Show entries and pagination [GET /monitor-setting{?minutes,column,limit,page,orderBy,orderType}]
++ Parameters
+    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, days, months
+    + limit (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+        + Sample: 10
+    + page (number, optional) - Số trang
+        + Default: 1
+    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
+    + orderBy: content (string) - Giá trị tên cột được lấy theo tên các trường trong json
+    + orderType (string, optional)
+        + Default: desc
+        + Members
+            + desc
+            + asc
+        + Sample: desc
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array)
+            + (Monitor Setting)
+            + (Monitor Setting)
+                + no: 2 (number)
+                + setting_id: 2 (number, required)
+            + (Monitor Setting)
+                + no: 3 (number)
+                + setting_id: 3 (number, required)
+            + (Monitor Setting)
+                + no: 4 (number)
+                + setting_id: 4 (number, required)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Show entries and pagination in period of time [GET /monitor-setting{?from,to,column,limit,page}]
++ Parameters
+    + from: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + to: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + limit (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+        + Sample: 10
+    + page (number, optional) - Số trang
+        + Default: 1
+    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array)
+            + (Monitor Setting)
+            + (Monitor Setting)
+                + no: 2 (number)
+                + setting_id: 2 (number, required)
+            + (Monitor Setting)
+                + no: 3 (number)
+                + setting_id: 3 (number, required)
+            + (Monitor Setting)
+                + no: 4 (number)
+                + setting_id: 4 (number, required)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+      
+### Download data from table [GET /monitor-setting/download{?minutes,column,orderBy,orderType}]
++ Parameters
+    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, hours, days, months hoặc from to
+    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
+    + orderBy: content (string) - Giá trị tên cột được lấy theo tên các trường trong json
+    + orderType (string, optional)
+        + Default: desc
+        + Members
+            + desc
+            + asc
+        + Sample: desc
+        
++ Response 200 (text/csv)
+    
+    + Headers
+        
+        Content-Disposition: attachment; filename=bif_export_data.csv;filename*=utf-8''bif_export_data.csv
+        Content-Length: 242
+        
+    + Body
+    
+        action,address,content,datetime,no,status,user
+        edit,"{'country': u'Other', 'ip_address': u'127.0.0.1'}",ssssss,2019-06-10 15:39:13,2036,1,admin
+        add,"{'country': u'Other', 'ip_address': u'10.2.32.90'}",test,2019-06-10 15:39:13,2034,1,admin
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+        
+
+
+# Group Monitor Firewall
+## Monitor Firewall [/monitor-firewall]
+
++ Attributes (Monitor Firewall Base)
+    + firewall_id: 1 (number, required)
+    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
+
+
+### Show entries and pagination with period [GET /monitor-firewall{?minutes,limit,page,column,orderBy,orderType}]
++ Parameters
+    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, days, months
+    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+    + page: 1 (number, optional) - Số trang
+        + Default: 1
+    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
+    + orderBy: protocol (string) - Giá trị tên cột được lấy theo tên các trường trong json
+    + orderType (string, optional)
+        + Default: desc
+        + Members
+            + desc
+            + asc
+        + Sample: desc
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array)
+            + (Monitor Firewall)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+
+### Show entries and pagination with period of time [GET /monitor-firewall{?from,to,limit,page}]
++ Parameters
+    + from: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + to: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+    + page: 1 (number, optional) - Số trang
+        + Default: 1
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array)
+            + (Monitor Firewall)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+
+### Filter value [GET /monitor-firewall{?minutes,limit,page,column}]
++ Parameters
+    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, days, months
+    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+    + page: 1 (number, optional) - Số trang
+        + Default: 1
+    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?minutes,limit,page,column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array)
+            + (Monitor Firewall)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+### Filter value with period of time [GET /monitor-firewall{?from,to,limit,page,column}]
++ Parameters
+    + from: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + to: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+    + page: 1 (number, optional) - Số trang
+        + Default: 1
+    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?minutes,limit,page,column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array)
+            + (Monitor Firewall)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+            + (Monitor Firewall)
+                + firewall_id: 2 (number)
+                + no: 2 (number)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+### Download data from table [GET /monitor-firewall/download{?minutes,column,orderBy,orderType}]
++ Parameters
+    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, hours, days, months hoặc from to
+    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
+    + orderBy: content (string) - Giá trị tên cột được lấy theo tên các trường trong json
+    + orderType (string, optional)
+        + Default: desc
+        + Members
+            + desc
+            + asc
+        + Sample: desc
+        
++ Response 200 (text/csv)
+    
+    + Headers
+        
+        Content-Disposition: attachment; filename=bif_export_data.csv;filename*=utf-8''bif_export_data.csv
+        Content-Length: 242
+        
+    + Body
+    
+        action,datetime,destination,destination_port,no,policy,protocol,source,source_port
+        drop,2019-10-07 09:19:08,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080617,Deny All,UDP,"{'country': u'CN', 'ip_address': u'140.143.6.5'}",7946
+        drop,2019-10-07 09:19:07,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080616,Deny All,UDP,"{'country': u'HK', 'ip_address': u'223.197.113.11'}",1024
+        drop,2019-10-07 09:19:07,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080615,Deny All,UDP,"{'country': u'CN', 'ip_address': u'119.1.174.24'}",7946
+        drop,2019-10-07 09:19:06,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080614,Deny All,UDP,"{'country': u'CN', 'ip_address': u'101.251.207.204'}",7946
+        drop,2019-10-07 09:19:02,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080613,Deny All,UDP,"{'country': u'CN', 'ip_address': u'183.63.113.42'}",34834
+        drop,2019-10-07 09:19:00,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",2594,1080612,Deny All,TCP,"{'country': u'NL', 'ip_address': u'80.82.70.239'}",48844
+        drop,2019-10-07 09:18:59,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",445,1080611,Deny All,TCP,"{'country': u'VN', 'ip_address': u'113.20.109.161'}",61695
+        drop,2019-10-07 09:18:59,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080610,Deny All,UDP,"{'country': u'CN', 'ip_address': u'122.114.69.3'}",7946
+        drop,2019-10-07 09:18:59,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",3189,1080609,Deny All,TCP,"{'country': u'Other', 'ip_address': u'185.175.93.78'}",45313
 
 + Response 500 (application/json)
     + Attributes

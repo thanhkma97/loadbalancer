@@ -1423,3 +1423,322 @@ Lấy thông tin về một
     + Attributes
         + status: 0 (number)
         + message: lỗi database (string)
+
+
+        
+# Group Load Balancers
+Hỗ trợ cấu hình Load Balancing. Đường dẫn cấu hình Setting -> Networking -> Load Balancing
+
+## Load Balancer [/loadbalancers/{loadbalancer_id}]
+Chứa các thông tin cấu hình về một bản ghi nat
++ Parameters
+    + loadbalancer_id (number)
+
++ Attributes (Load Balancer Base)
+    + loadbalancer_id: 1 (number, required)
+    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
+### Retrieve a Load Balancers [GET]
+Lấy thông tin về một
++ Response 200 (application/json)
+    + Attributes (Load Balancer)
+        + gateway (array)
+            + (object)
+                + interface (Interface)
+                    + interface_id: 1 (number)
+                    + name: port0
+                    + type: WAN
+                    + ip_address: 27.72.28.152
+                    + netmask: 255.255.255.255
+                    + gateway: 10.56.239.2
+                    + active: 1 (number)
+                + weight: 1 (number)
+            + (object)
+                + interface (Interface)
+                    + interface_id: 3 (number)
+                    + name: port2
+                    + type: WAN
+                    + addressing_mode: DHCP
+                    + ip_address: 192.168.1.20
+                    + netmask: 255.255.255.0
+                    + gateway: 192.168.1.1
+                    + active: 1 (number)
+                + weight: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Edit a Load Balancer [PUT]
++ Attributes (Load Balancer Base)
+    + loadbalancer_id: 1 (number)
+
++ Request (application/json)
+    
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Load Balancer)
+            + gateway (array)
+                + (object)
+                    + interface (Interface)
+                        + interface_id: 1 (number)
+                        + name: port0
+                        + type: WAN
+                        + ip_address: 27.72.28.152
+                        + netmask: 255.255.255.255
+                        + gateway: 10.56.239.2
+                        + active: 1 (number)
+                    + weight: 1 (number)
+                + (object)
+                    + interface (Interface)
+                        + interface_id: 3 (number)
+                        + name: port2
+                        + type: WAN
+                        + addressing_mode: DHCP
+                        + ip_address: 192.168.1.20
+                        + netmask: 255.255.255.0
+                        + gateway: 192.168.1.1
+                        + active: 1 (number)
+                    + weight: 1 (number)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string))
+
+### Delete a Load Balancer [DELETE]
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Create a Load Balancer [POST /loadbalancers]
++ Attributes (Load Balancer Base)
+
++ Request (application/json)
+
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Load Balancer)
+            + gateway (array)
+                + (object)
+                    + interface (Interface)
+                        + interface_id: 1 (number)
+                        + name: port0
+                        + type: WAN
+                        + ip_address: 27.72.28.152
+                        + netmask: 255.255.255.255
+                        + gateway: 10.56.239.2
+                        + active: 1 (number)
+                    + weight: 1 (number)
+                + (object)
+                    + interface (Interface)
+                        + interface_id: 3 (number)
+                        + name: port2
+                        + type: WAN
+                        + addressing_mode: DHCP
+                        + ip_address: 192.168.1.20
+                        + netmask: 255.255.255.0
+                        + gateway: 192.168.1.1
+                        + active: 1 (number)
+                    + weight: 1 (number)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
+
+# Group NAT
+Hỗ trợ cấu hình NAT trên mạng. Đường dẫn cấu hình Setting -> Networking -> NAT
+
+## NAT [/nat/{nat_id}]
+Chứa các thông tin cấu hình về một bản ghi nat
++ Parameters
+    + nat_id (number)
+
++ Attributes (NAT Base)
+    + id: 1 (number, required)
+    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
+### Retrieve a NAT [GET]
+Lấy thông tin về một nat
+
++ Response 200 (application/json)
+    + Attributes (NAT)
+        + interface (Interface)
+            + name: port0
+            + type: WAN
+            + ip_address: 27.72.28.152
+            + netmask: 255.255.255.255
+            + gateway: 10.56.239.2
+            + active: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Edit a NAT [PUT]
++ Attributes (NAT Base)
+    + nat_id: 1 (number)
+
++ Request (application/json)
+    
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (NAT)
+            + interface (Interface)
+                + name: port0
+                + type: WAN
+                + ip_address: 27.72.28.152
+                + netmask: 255.255.255.255
+                + gateway: 10.56.239.2
+                + active: 1 (number)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string))
+
+### Delete a NAT [DELETE]
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string) 
+
+## NAT Collection [/nat]
++ Attributes (array)
+    + (NAT)
+        + interface (Interface)
+            + name: port0
+            + type: WAN
+            + ip_address: 27.72.28.152
+            + netmask: 255.255.255.255
+            + gateway: 10.56.239.2
+            + active: 1 (number)
+    + (NAT)
+        + type: 1 (number)
+        + name: nat_internet
+        + interface (Interface)
+            + name: port0
+            + type: WAN
+            + ip_address: 27.72.28.152
+            + netmask: 255.255.255.255
+            + gateway: 10.56.239.2
+            + active: 1 (number)
+        + ip
+        + service_port
+        + protocol
+        + ip_map: 27.72.28.152
+        + port_map
+
+### List all nat [GET]
++ Response 200 (application/json)
+    + Attributes (NAT Collection)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Show entries and pagination [GET /nat{?search,limit,page}]
++ Parameters
+    + limit (number, optional) - Giới hạn số bản ghi trong một page
+        + Default: 10
+        + Members
+            + 10
+            + 25
+            + 50
+            + 100
+        + Sample: 10
+    + page (number, optional) - Số trang
+        + Default: 1
+    + search: 27.72.28.152 (string) - Trong trường hợp dùng tính năng search thì sẽ có thêm parameter search. Nếu chỉ lấy tổng dữ liệu bình thường thì bỏ parameter này.
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (NAT Collection)
+        + paging (object)
+            + total_count: 12 (number)
+            + total_page: 2 (number)
+            + current_page: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Create a NAT [POST]
++ Attributes (NAT Base)
+    + interface: 1 (number)
+
++ Request (application/json)
+
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (NAT)
+            + interface (Interface)
+                + name: port0
+                + type: WAN
+                + ip_address: 27.72.28.152
+                + netmask: 255.255.255.255
+                + gateway: 10.56.239.2
+                + active: 1 (number)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)

@@ -6,7 +6,6 @@ HOST: http://polls.apiblueprint.org/
 Hiện nay, nhu cầu truy cập mạng của các tổ chức, doanh nghiệp ngày càng tăng cao , dẫn tới việc băng thông đường truyền bị quá tải. Để giải quyết vấn đề này , không chỉ đơn giản là nâng cao tốc độ hay băng thông đường truyền mà còn phải chú trọng đến việc tránh các rủi ro về sự cố trên đường truyền, giải pháp load balancing cho đường truyền là giải pháp tối ưu cho vấn đề này
 
 BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên cạnh các tính năng của NGFW như URL Filter, Black list IP,... BLB là 1 trong những Firewall thế hệ mới hiếm hoi trên thế giới trang bị đầy đủ tính năng giới hạn băng thông (Traffic Shapping) và cân bằng tải cho đường truyền( Load Balancer)
-
 ## About [/about]
 ### System infomation [GET]
 
@@ -20,7 +19,7 @@ BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên 
             "dashboard_disk": "HDD : 1TB (21%)",
             "Temperature": "70°C"
             "Licence": "123 day ",
-            "System time": "Sat 2019-09-07 09:22:31 UTC+07 "
+            "System time": "Sat 2019-09-07 09:22:31 UTC+07 
         }
 ## Licence [/licence]
 
@@ -125,7 +124,7 @@ Thêm licence cho BLB
 
         {
             "data": {
-                "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2NsYWltcyI6eyJpZCI6MTZ9LCJqdGkiOiIzNjg1YThmMC0zMzRjLTQ0ZWYtYTg2Mi0zNGYwZmIxNTQzYzYiLCJleHAiOjE1NjkzMTEyOTEsImZyZXNoIjpmYWxzZSwiaWF0IjoxNTY5MzEwMzkxLCJ0eXBlIjoiYWNjZXNzIiwibmJmIjoxNTY5MzEwMzkxLCJpZGVudGl0eSI6ImFkbWluIn0.Y6tfljESXbPdT8VPjnSBMy4Cx5kYArl4LEkdGRRlJKQ"
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2NsYWltcyI6eyJpZCI6MTZ9LCJqdGkiOiIzNjg1YThmMC0zMzRjLTQ0ZWYtYTg2Mi0zNGYwZmIxNTQzYzYiLCJleHAiOjE1NjkzMTEyOTEsImZyZXNoIjpmYWxzZSwiaWF0IjoxNTY5MzEwMzkxLCJ0eXBlIjoiYWNjZXNzIiwibmJmIjoxNTY5MzEwMzkxLCJpZGVudGl0eSI6ImFkbWluIn0.Y6tfljESXbPdT8VPjnSBMy4Cx5kYArl4LEkdGRRlJKQ"
             },
             "message": "",
             "status": 1
@@ -150,10 +149,10 @@ Thêm licence cho BLB
 + Response 403 (application/json)
     
     + Body
-    
+
             {
                 "status": 0,
-                "message": "Logout Unsuccess",
+                "message": "Authentication Failed",
                 "data": {}
             }
 
@@ -181,12 +180,12 @@ Thêm licence cho BLB
         }
 
 + Response 403 (application/json)
-    
+
     + Body
-    
+
             {
                 "status": 0,
-                "message": "Logout Unsuccess",
+                "message": "Authentication Failed",
                 "data": {}
             }
 
@@ -199,388 +198,35 @@ Thêm licence cho BLB
                 "message": "Unauthorized",
                 "data": {}
             }
-## Dashboad [/dashboard]
-## Network interface [/interfae]
-cau hinh interface
 
-# Group NAT
-Hỗ trợ cấu hình NAT trên mạng. Đường dẫn cấu hình Setting -> Networking -> NAT
-
-## NAT [/nat/{nat_id}]
-Chứa các thông tin cấu hình về một bản ghi nat
+## Interface [/interface/{interface_id}]
 + Parameters
-    + nat_id (number)
+    + interface_id (number)
 
-+ Attributes (NAT Base)
-    + id: 1 (number, required)
-### Retrieve a NAT [GET]
-Lấy thông tin về một nat
+### Get a Interface [GET]
+Lấy thông tin về một interface
 
 + Response 200 (application/json)
-    + Attributes (NAT)
-        + interface (Interface)
-            + name: port0
-            + type: WAN
-            + ip_address: 27.72.28.152
-            + netmask: 255.255.255.255
-            + gateway: 10.56.239.2
-            + active: 1 (number)
-
-+ Response 500 (application/json)
     + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Edit a NAT [PUT]
-+ Attributes (NAT Base)
-    + nat_id: 1 (number)
-
-+ Request (application/json)
-    
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (NAT)
-            + interface (Interface)
-                + name: port0
-                + type: WAN
-                + ip_address: 27.72.28.152
-                + netmask: 255.255.255.255
-                + gateway: 10.56.239.2
-                + active: 1 (number)
-
+        + name: port0
+        + type: WAN
+        + ip_address: 27.72.28.152
+        + netmask: 255.255.255.255
+        + gateway: 10.56.239.2
+        + pppoe (object)
+            + ispname: test (string)
+            + username: viettel-provider (string, required)
+            + password: xxxxxx (string, required)
+            + mtu (number)
+                + Default: 1480
+            + fixed_ip: 27.72.28.152 (string)
+            + clone_mac: 20:1a:06:96:c5:36 (string)
+        + active: 1 (number)
+        + mac: 20:1a:06:96:c5:36 (string) - Địa chỉ MAC của interface
 + Response 400 (application/json)
     + Attributes
         + status: 0 (number)
         + message: lỗi verify đầu vào (string)
-
 + Response 500 (application/json)
     + Attributes
         + status: 0 (number)
-        + message: lỗi database (string))
-
-### Delete a NAT [DELETE]
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string) 
-
-## NAT Collection [/nat]
-+ Attributes (array)
-    + (NAT)
-        + interface (Interface)
-            + name: port0
-            + type: WAN
-            + ip_address: 27.72.28.152
-            + netmask: 255.255.255.255
-            + gateway: 10.56.239.2
-            + active: 1 (number)
-    + (NAT)
-        + type: 1 (number)
-        + name: nat_internet
-        + interface (Interface)
-            + name: port0
-            + type: WAN
-            + ip_address: 27.72.28.152
-            + netmask: 255.255.255.255
-            + gateway: 10.56.239.2
-            + active: 1 (number)
-        + ip
-        + service_port
-        + protocol
-        + ip_map: 27.72.28.152
-        + port_map
-
-### List all nat [GET]
-+ Response 200 (application/json)
-    + Attributes (NAT Collection) 
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Show entries and pagination [GET /nat{?search,limit,page}]
-+ Parameters
-    + limit (number, optional) - Giới hạn số bản ghi trong một page
-        + Default: 10
-        + Members
-            + 10
-            + 25
-            + 50
-            + 100
-        + Sample: 10
-    + page (number, optional) - Số trang
-        + Default: 1
-    + search: 27.72.28.152 (string) - Trong trường hợp dùng tính năng search thì sẽ có thêm parameter search. Nếu chỉ lấy tổng dữ liệu bình thường thì bỏ parameter này.
-
-+ Response 200 (application/json)
-    + Attributes (object)
-        + data (NAT Collection)
-        + paging (object)
-            + total_count: 12 (number)
-            + total_page: 2 (number)
-            + current_page: 1 (number)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Create a NAT [POST]
-+ Attributes (NAT Base)
-    + interface: 1 (number)
-
-+ Request (application/json)
-
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (NAT)
-            + interface (Interface)
-                + name: port0
-                + type: WAN
-                + ip_address: 27.72.28.152
-                + netmask: 255.255.255.255
-                + gateway: 10.56.239.2
-                + active: 1 (number)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-cau hinh nat
-## network loadbalancer [/balancer]
-cau hinh balancer
-
-## System [/system]
-cau hinh system
-
-## object ip-address [/ip-address]
-cau hinh object IP address
-### 
-
-# Group Object Services
-Hỗ trợ cấu hình Group Services. Đường dẫn cấu hình Setting -> Object -> Service
-## Object Service [/groupservices/{groupservice_id}]
-Chứa các thông tin cấu hình về một bản ghi
-+ Parameters
-    + groupservice_id (number)
-+ Attributes (object)
-    + groupservice_id: 1 (number, required)
-    + name: test
-    + description: đây là nhóm test
-### Retrieve a Service Object [GET]
-Lấy thông tin về một 
-+ Response 200 (application/json)
-    + Attributes (Object Service)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-### Edit a Object Service [PUT]
-sua 1 object service
-+ Attributes (object)
-    + groupservice_id: 1 (number, required)
-    + name: test
-    + description: đây là nhóm test
-+ Request (application/json)
-    
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (Object Service)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string))
-### Delete a Object Service [DELETE]
-sua 1 object service
-+ Attributes (object)
-    + groupservice_id: 1 (number, required)
-    + name: test
-    + description: đây là nhóm test
-+ Request (application/json)
-    
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (Object Service)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string))
-## Object Service Collection [/groupservices]
-chua cau hinh cua ca ban ghi
-+ Attributes
-    + groupservice_id: 1 (number, required)
-    + name: test
-    + description: đây là nhóm test
-### List all  Object Service [GET]
-list tat ca cac ban ghi cua bang
-+ Response 200 (application/json)
-    + Attributes (Object Service Collection)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-### Show entries and pagination [GET /groupservices{?search,limit,page}]
-show theo entries
-### Create a Object Service [POST]
-tạo 1 bản ghi cho group
-
-+ Request (application/json)
-    + Attributes (object)
-        + groupservice_id: 1 (number, required)
-        + name: test
-        + description: đây là nhóm test
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (Object Service)
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Get a Service [GET]
-+ Response 200 (application/json)
-    + Attributes (object)
-        + service_id: 1 (number)
-        + protocol: `tcp,udp`
-        + port: 53
-        + define
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-### Edit a Service [PUT]
-+ Request (application/json)
-    + Attributes (object)
-        + service_id: 1 (number)
-        + protocol: `tcp,udp`
-        + port: 53
-        + define
-        
-+ Response 200 (application/json)    
-    + Attributes
-        + status: 1 (number)
-        + message (string)
-        + data (object)
-            + service_id: 1 (number)
-            + protocol: `tcp,udp`
-            + port: 53
-            + define
-
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)0
-
-## Services Collection [/groupservices/{groupservice_id}/services]
-+ Parameters
-    + groupservice_id: 4 (number)
-### Get detail a Service [GET /groupservices/{groupservice_id}/services{?search,limit,page}]
-+ Parameters
-    + limit (number, optional) - Giới hạn số bản ghi trong một page
-        + Default: 10
-        + Members
-            + 10
-            + 25
-            + 50
-            + 100
-        + Sample: 10
-    + page (number, optional) - Số trang
-        + Default: 1
-    + search: 53 (string) - Trong trường hợp dùng tính năng search thì sẽ có thêm parameter search. Nếu chỉ lấy tổng dữ liệu bình thường thì bỏ parameter này.
-
-+ Response 200 (application/json)
-    + Attributes (object)
-        + data (array)
-            + (object)
-                + service_id: 1 (number)
-                + protocol: `tcp,udp`
-                + port: 53
-                + define
-            + (object)
-                + service_id: 1 (number)
-                + protocol: tcp
-                + port: 20-21
-                + define
-        + paging (object)
-            + total_count: 2 (number)
-            + total_page: 1 (number)
-            + current_page: 1 (number)
-
-    
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-
-## object schedules [/schedules]
-cau hinh scheddule servicer
-
-## object url [/url]
-cau hinh object url
-
-## object mail [/mail]
-cau hinh orl mail
-
-## Firewall policy [/policy]
-cau hinh policy
-
-## firewall [/traffic-shaping]
-cau hinh traffic shapping
-## Monitor system[/monitor-system]
-cau hinh hien thi system
-
-## About  licensen [/license]
-cau hinh license

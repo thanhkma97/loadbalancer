@@ -311,44 +311,54 @@ sua 1 interface - cac gia trij cau hinh tro ve null, van giu nguyen interface_id
 {
     "status": 1 ,
     "message": "access"
-    "data" :{
-        + Attributes (array)
-            + (object)
-                + name: port0
-                + type: WAN
-                + ip_address: 27.72.28.152
-                + netmask: 255.255.255.255
-                + gateway: 10.56.239.2
-                + pppoe (object)
-                    + ispname: test (string)
-                    + username: viettel-provider (string, required)
-                    + password: xxxxxx (string, required)
-                    + mtu (number)
-                        + Default: 1480
-                    + fixed_ip: 27.72.28.152 (string)
-                    + clone_mac: 20:1a:06:96:c5:36 (string)
-                + active: 1 (number)
-                + mac: 20:1a:06:96:c5:36 (string) - Địa chỉ MAC của interface
-            + (object)
-                + interface_id: 2 (number)
-                + name: port1
-                + type: LAN
-                + addressing_mode: Static
-                + ip_address: 10.2.32.90
-                + netmask: 255.255.255.0
-                + gateway (string)
-                + active: 1 (number)
-                + mac: 20:1a:06:96:c5:36 (string) - Địa chỉ MAC của interface
-            + (object)
-                + interface_id: 3 (number)
-                + name: port2
-                + type: WAN
-                + addressing_mode: DHCP
-                + ip_address: 192.168.1.20
-                + netmask: 255.255.255.0
-                + gateway: 192.168.1.1
-                + active: 1 (number)
-    }
+    "data" :
+        [
+             {
+            "interface_id":"1",
+            "name":"port0",
+            "netmask": "255.255.255.255"
+            "gateway": "10.56.239.2"
+            "pppoe: "{
+                "ispname": "test" (string)
+                "username": viettel-provider (string, required)
+                "password": "********" (string, required)
+                
+                "mtu":{
+                    "Default": "1480"
+                }
+                    
+                "clone_mac": "20:1a:06:96:c5:36" (string)
+            }
+            "DNS":"8.8.8.8",
+            "active": 1 (number)
+            },
+             {
+            "interface_id":"2",
+            "name":"port1",
+            "type":"LAN",
+            "netmask": "255.255.255.255",
+            "addressing_mode": "Static",
+            "ip_address":"10.2.32.90",
+            "netmask: "255.255.255.0",
+            "gateway":"192.168.1.1",
+            "DNS":"8.8.8.8",
+            "mac": 20:1a:06:96:c5:36 (string) - Địa chỉ MAC của interface,
+            "active": 1 (number)
+            },
+            {
+            "interface_id": 3 (number),
+            "name": "port2",
+            "type": "WAN",
+            "addressing_mode": DHCP,
+            "ip_address": 192.168.1.20,
+            "netmask": 255.255.255.0,
+            "gateway": 192.168.1.1,
+            "DNS":"8.8.8.8",
+            "mac": 20:1a:06:96:c5:36 (string) - Địa chỉ MAC của interface,
+            "active": 1 (number)
+            }
+        ]
+    
 }
 + Response 400 (application/json)
     + Attributes

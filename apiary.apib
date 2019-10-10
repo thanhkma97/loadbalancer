@@ -19,7 +19,7 @@ BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên 
             "dashboard_disk": "HDD : 1TB (21%)",
             "Temperature": "70°C"
             "Licence": "123 day ",
-            "System time": "Sat 2019-09-07 09:22:31 UTC+07 
+            "System time": "Sat 2019-09-07 09:22:31 UTC+07 "
         }
 ## Licence [/licence]
 
@@ -199,9 +199,9 @@ Thêm licence cho BLB
                 "data": {}
             }
 
-## Interface [/interface/{interface_id}]
+## Interface [/interfaces/{interfaces_id}]
 + Parameters
-    + interface_id (number)
+    + interfaces_id (number)
 
 ### Get a Interface [GET]
 Lấy thông tin về một interface
@@ -227,6 +227,128 @@ Lấy thông tin về một interface
     + Attributes
         + status: 0 (number)
         + message: lỗi verify đầu vào (string)
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        
+### Edit a Interface [PUT]
+sua 1 interface
++ Request (application/json)
+    + Attributes
+        + interface_id: 1 (number)
+        + name: port0
+        + type: WAN
+        + ip_address: 27.72.28.152
+        + netmask: 255.255.255.255
+        + gateway: 10.56.239.2
+        + pppoe (object)
+            + ispname: test (string)
+            + username: viettel-provider (string, required)
+            + password: xxxxxx (string, required)
+            + mtu (number)
+                + Default: 1480
+            + clone_mac: 20:1a:06:96:c5:36 (string)
+        + active: 1 (number)
++ Response 200 (application/json)
+    + Attributes
+        + status: 1 (number)
+        + message: Success (string)
+        + data :{
+            + Attributes 
+                iterface_id :1 (number)
+    }
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### FLUSH a Interface [PUT]
+sua 1 interface - cac gia trij cau hinh tro ve null, van giu nguyen interface_id, name cua bang
++ Response 200 (application/json)
+    {
+        "status": 1,
+        "mesages": "success",
+        "data":
+        {
+            "interface_id":"1",
+            "name":"port0",
+            "netmask": "255.255.255.255"
+            "gateway": "null"
+            "pppoe: "{
+                "ispname": "null" (string)
+                "username": "null" (string, required)
+                "password": "null" (string, required)
+                
+                "mtu":{
+                    "Default": "null"
+                }
+                    
+                "clone_mac": "20:1a:06:96:c5:36" (string)
+            }
+    
+            "active": 0 (number)
+            }
+    }
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        
+## Interface Collection [/interfaces]
+
+### List all Interfaces [GET]
+
++ Response 200 (application/json)
++ Attributes (array)
+    + (object)
+        + name: port0
+        + type: WAN
+        + ip_address: 27.72.28.152
+        + netmask: 255.255.255.255
+        + gateway: 10.56.239.2
+        + pppoe (object)
+            + ispname: test (string)
+            + username: viettel-provider (string, required)
+            + password: xxxxxx (string, required)
+            + mtu (number)
+                + Default: 1480
+            + fixed_ip: 27.72.28.152 (string)
+            + clone_mac: 20:1a:06:96:c5:36 (string)
+        + active: 1 (number)
+        + mac: 20:1a:06:96:c5:36 (string) - Địa chỉ MAC của interface
+    + (object)
+        + interface_id: 2 (number)
+        + name: port1
+        + type: LAN
+        + addressing_mode: Static
+        + ip_address: 10.2.32.90
+        + netmask: 255.255.255.0
+        + gateway (string)
+        + active: 1 (number)
+        + mac: 20:1a:06:96:c5:36 (string) - Địa chỉ MAC của interface
+    + (object)
+        + interface_id: 3 (number)
+        + name: port2
+        + type: WAN
+        + addressing_mode: DHCP
+        + ip_address: 192.168.1.20
+        + netmask: 255.255.255.0
+        + gateway: 192.168.1.1
+        + active: 1 (number)
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
 + Response 500 (application/json)
     + Attributes
         + status: 0 (number)

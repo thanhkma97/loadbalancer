@@ -449,36 +449,8 @@ BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên 
         + 0 - Lock
 + proof: dữ liệu log
 
-## Monitor WAF Base (object)
-+ no: 1 (number)
-+ datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-+ blocktime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-+ address (object)
-    + ip_address: 14.161.41.169 (string)
-    + country: VN
-+ action: block
-+ websites: bkav.com.vn
-+ group_websites: sitebkav
-+ group_rule: APPLICATION ATTACK SQLI
-+ request_header: data
-+ matched_info: data
 
 
-## Monitor VPN Base (object)
-+ no: 1 (number)
-+ datetime: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-+ account: vpnipsec
-+ address_connect (object)
-    + ip_address: 58.187.67.52
-    + country: VN
-+ ip_vpn: 172.26.10.10
-+ vpn_type: ipsec
-+ name_tunel: remotetest
-+ status (enum[number])
-    + Default: 1
-    + Members
-        + 1 - Login
-        + 0 - Logout
 
 ## Error Base (object)
 + error: tin nhắn lỗi trả về từ server (string)
@@ -1425,7 +1397,7 @@ Lấy thông tin về một
         + message: lỗi database (string)
 
 
-        
+
 # Group Load Balancers
 Hỗ trợ cấu hình Load Balancing. Đường dẫn cấu hình Setting -> Networking -> Load Balancing
 

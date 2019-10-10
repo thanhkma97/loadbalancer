@@ -6,6 +6,7 @@ HOST: http://polls.apiblueprint.org/
 Hiện nay, nhu cầu truy cập mạng của các tổ chức, doanh nghiệp ngày càng tăng cao , dẫn tới việc băng thông đường truyền bị quá tải. Để giải quyết vấn đề này , không chỉ đơn giản là nâng cao tốc độ hay băng thông đường truyền mà còn phải chú trọng đến việc tránh các rủi ro về sự cố trên đường truyền, giải pháp load balancing cho đường truyền là giải pháp tối ưu cho vấn đề này
 
 BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên cạnh các tính năng của NGFW như URL Filter, Black list IP,... BLB là 1 trong những Firewall thế hệ mới hiếm hoi trên thế giới trang bị đầy đủ tính năng giới hạn băng thông (Traffic Shapping) và cân bằng tải cho đường truyền( Load Balancer)
+
 ## About [/about]
 ### System infomation [GET]
 
@@ -308,58 +309,21 @@ sua 1 interface - cac gia trij cau hinh tro ve null, van giu nguyen interface_id
 ### List all Interfaces [GET]
 
 + Response 200 (application/json)
-{
-    "status": 1 ,
-    "message": "access"
-    "data" :
-        [
-             {
-            "interface_id":"1",
-            "name":"port0",
-            "netmask": "255.255.255.255"
-            "gateway": "10.56.239.2"
-            "pppoe: "{
-                "ispname": "test" (string)
-                "username": viettel-provider (string, required)
-                "password": "********" (string, required)
-                
-                "mtu":{
-                    "Default": "1480"
-                }
-                    
-                "clone_mac": "20:1a:06:96:c5:36" (string)
-            }
-            "DNS":"8.8.8.8",
-            "active": 1 (number)
-            },
-             {
-            "interface_id":"2",
-            "name":"port1",
-            "type":"LAN",
-            "netmask": "255.255.255.255",
-            "addressing_mode": "Static",
-            "ip_address":"10.2.32.90",
-            "netmask: "255.255.255.0",
-            "gateway":"192.168.1.1",
-            "DNS":"8.8.8.8",
-            "mac": 20:1a:06:96:c5:36 (string) - Địa chỉ MAC của interface,
-            "active": 1 (number)
-            },
-            {
-            "interface_id": 3 (number),
-            "name": "port2",
-            "type": "WAN",
-            "addressing_mode": DHCP,
-            "ip_address": 192.168.1.20,
-            "netmask": 255.255.255.0,
-            "gateway": 192.168.1.1,
-            "DNS":"8.8.8.8",
-            "mac": 20:1a:06:96:c5:36 (string) - Địa chỉ MAC của interface,
-            "active": 1 (number)
-            }
-        ]
-    
-}
+    + Attributes
+        + interface_id: 1 (number)
+        + name: port0
+        + type: WAN
+        + ip_address: 27.72.28.152
+        + netmask: 255.255.255.255
+        + gateway: 10.56.239.2
+        + pppoe (object)
+            + ispname: test (string)
+            + username: viettel-provider (string, required)
+            + password: xxxxxx (string, required)
+            + mtu (number)
+                + Default: 1480
+            + clone_mac: 20:1a:06:96:c5:36 (string)
+        + active: 1 (number)
 + Response 400 (application/json)
     + Attributes
         + status: 0 (number)

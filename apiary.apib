@@ -824,8 +824,6 @@ Hỗ trợ cấu hình thêm sửa xóa cho Interface. Đường dẫn cấu hì
 
 + Attributes (Interface Base)
     + interface_id: 1 (number, required)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
 
 ### Retrieve a Interface [GET]
 Lấy thông tin về một interface
@@ -1022,8 +1020,6 @@ Chứa các thông tin cấu hình về một bản ghi nat
 
 + Attributes (Virual IP Base)
     + virual_id: 1 (number, required)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
 
 ### Retrieve a Virual IP [GET]
 Lấy thông tin về một
@@ -2713,15 +2709,20 @@ cau hinh object mail Object->mail
                 + yahoo
                 + bmail
 + Request (application/json)
+
 + Respone 200 (application/json)
-    + Attributes(object)
-        + status: 1(number,required)
-        + message: cerate success(string)
-        + mail_sender_id: 1(number,required)
-        + mail_sender_id: 1(number,required)
-        + mail_sernder_name : admin97@gmail.com(string)
-        + mail_sender_password : ********** (string)
-        + mail_sender_mailserver : gmail (string)
+    + Body
+
+            {
+                "status": 1,
+                "message": "DELETE SUCCESS",
+                "data": {
+                    "mail_sender_id": 2
+                    "mail_sender_name":"admin97@gmail.com",
+                    "mail_sender_password ": "************",
+                    "mail_sender_mailserver": "gmail"
+                }
+            }
 + Response 400 (application/json)
     + Attributes
         + status: 0 (number)
@@ -2731,29 +2732,38 @@ cau hinh object mail Object->mail
     + Attributes
         + status: 0 (number)
         + message: lỗi database (string)
-##detail mail_serder[/sernsermail/{mail_senser_id}]
+
+##detail mail_sender[/sernsermail/{mail_senser_id}]
++ Parameters
+    + mail_sender_id: 1 (number)
+
 ###edit mail_sender [POST]
-+ Attributes(object)
-    + mail_sender_id: 1(number,required)
-    + mail_sernder_name : admin97@gmail.com(string)
++ Attributes(object)   
+    + mail_sennder_name : admin97@gmail.com(string)
     + mail_sender_password : ********** (string)
-    + mail_sender_mailserver : (string, optional)
+    + mail_sender_mailserver (enum[arrar[string]])
         + Default : gmail
             + Members
                 + gamil
                 + yahoo
                 + bmail
+
 + Request (application/json)
 
 + Respone 200 (application/json)
-    + Attributes(object)
-        + status: 1(number,required)
-        + message: edit success(string)
-        + mail_sender_id: 1(number,required)
-        + mail_sernder_name : admin97@gmail.com(string)
-        + mail_sender_password : ********** (string)
-        + mail_sender_mailserver : gmail (string)
-        
+    + Body
+
+            {
+                "status": 1,
+                "message": "DELETE SUCCESS",
+                "data": {
+                    "mail_sender_id": 2
+                    "mail_sender_name":"admin97@gmail.com",
+                    "mail_sender_password ": "************",
+                    "mail_sender_mailserver": "gmail"
+                }
+            }
+
 + Response 400 (application/json)
     + Attributes
         + status: 0 (number)

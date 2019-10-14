@@ -1463,7 +1463,7 @@ Lấy thông tin về một
         + status: 0 (number)
         + message: lỗi database (string))
 
-### Delete a Load Balancer [DELETE]
+### Flush a Load Balancer [DELETE]
 + Response 200 (application/json)    
     + Attributes
         + status: 1 (number)
@@ -1478,6 +1478,113 @@ Lấy thông tin về một
     + Attributes
         + status: 0 (number)
         + message: lỗi database (string)
+
+
+## Load Balancer Overflow [/loadbalancers/{loadbalancer_id}]
+Chứa các thông tin cấu hình về LBL
++ Parameters
+    + loadbalancer_id (number)
+
++ Attributes (Load Balancer Base Overflow)
+    + loadbalancer_id: 1 (number, required)
+
+### Retrieve a Load Balancers [GET]
+Lấy thông tin về một
+
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Load Balancer Overflow)
+            + gateway (array)
+                + (object)
+                    + interface (Interface)
+                        + interface_id: 1 (number)
+                        + name: port0
+                        + type: WAN
+                        + ip_address: 27.72.28.152
+                        + netmask: 255.255.255.255
+                        + gateway: 10.56.239.2
+                        + active: 1 (number)
+                    + weight: 1 (number)
+                + (object)
+                    + interface (Interface)
+                        + interface_id: 3 (number)
+                        + name: port2
+                        + type: WAN
+                        + addressing_mode: DHCP
+                        + ip_address: 192.168.1.20
+                        + netmask: 255.255.255.0
+                        + gateway: 192.168.1.1
+                        + active: 1 (number)
+                    + weight: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Edit a Load Balancer [PUT]
++ Attributes (Load Balancer Base Overflow)
+    + loadbalancer_id: 1 (number)
+
++ Request (application/json)
+    
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Load Balancer Overflow)
+            + gateway (array)
+                + (object)
+                    + interface (Interface)
+                        + interface_id: 1 (number)
+                        + name: port0
+                        + type: WAN
+                        + ip_address: 27.72.28.152
+                        + netmask: 255.255.255.255
+                        + gateway: 10.56.239.2
+                        + active: 1 (number)
+                    + weight: 1 (number)
+                + (object)
+                    + interface (Interface)
+                        + interface_id: 3 (number)
+                        + name: port2
+                        + type: WAN
+                        + addressing_mode: DHCP
+                        + ip_address: 192.168.1.20
+                        + netmask: 255.255.255.0
+                        + gateway: 192.168.1.1
+                        + active: 1 (number)
+                    + weight: 1 (number)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string))
+
+### Flush a Load Balancer [DELETE]
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+
 
 
 

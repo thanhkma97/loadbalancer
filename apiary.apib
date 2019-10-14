@@ -181,9 +181,6 @@ BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên 
     + (object)
         + interface_id: 2
         + highest priority: 2
-    +  (object)
-        + interface_id: 3
-        + highest priority: 3
 + status_checking (object)
     + protocol: ping (string)
     + server_check: 8.8.8.8 (string)
@@ -1384,7 +1381,7 @@ Chứa các thông tin cấu hình về LBL
     + loadbalancer_id: 1 (number, required)
 
 ### Retrieve a Load Balancers [GET]
-Lấy thông tin về một
+Lấy thông tin ban ghi
 
 + Response 200 (application/json)    
     + Attributes
@@ -1489,7 +1486,7 @@ Chứa các thông tin cấu hình về LBL
     + loadbalancer_id: 1 (number, required)
 
 ### Retrieve a Load Balancers [GET]
-Lấy thông tin về một
+Lấy thông tin ban ghi
 
 + Response 200 (application/json)    
     + Attributes
@@ -1506,7 +1503,7 @@ Lấy thông tin về một
                         + netmask: 255.255.255.255
                         + gateway: 10.56.239.2
                         + active: 1 (number)
-                    + weight: 1 (number)
+                    + highest priority: 1 (number)
                 + (object)
                     + interface (Interface)
                         + interface_id: 3 (number)
@@ -1517,7 +1514,7 @@ Lấy thông tin về một
                         + netmask: 255.255.255.0
                         + gateway: 192.168.1.1
                         + active: 1 (number)
-                    + weight: 1 (number)
+                    + highest priority: 1 (number)
 
 + Response 500 (application/json)
     + Attributes
@@ -1545,7 +1542,7 @@ Lấy thông tin về một
                         + netmask: 255.255.255.255
                         + gateway: 10.56.239.2
                         + active: 1 (number)
-                    + weight: 1 (number)
+                    + highest priority: 1 (number)
                 + (object)
                     + interface (Interface)
                         + interface_id: 3 (number)
@@ -1556,7 +1553,7 @@ Lấy thông tin về một
                         + netmask: 255.255.255.0
                         + gateway: 192.168.1.1
                         + active: 1 (number)
-                    + weight: 1 (number)
+                    + highest priority: 1 (number)
 
 + Response 400 (application/json)
     + Attributes

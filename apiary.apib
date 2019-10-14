@@ -1385,30 +1385,34 @@ Chứa các thông tin cấu hình về LBL
 
 ### Retrieve a Load Balancers [GET]
 Lấy thông tin về một
-+ Response 200 (application/json)
-    + Attributes (Load Balancer Weight)
-        + gateway (array)
-            + (object)
-                + interface (Interface)
-                    + interface_id: 1 (number)
-                    + name: port0
-                    + type: WAN
-                    + ip_address: 27.72.28.152
-                    + netmask: 255.255.255.255
-                    + gateway: 10.56.239.2
-                    + active: 1 (number)
-                + weight: 1 (number)
-            + (object)
-                + interface (Interface)
-                    + interface_id: 3 (number)
-                    + name: port2
-                    + type: WAN
-                    + addressing_mode: DHCP
-                    + ip_address: 192.168.1.20
-                    + netmask: 255.255.255.0
-                    + gateway: 192.168.1.1
-                    + active: 1 (number)
-                + weight: 1 (number)
+
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Load Balancer Weight)
+            + gateway (array)
+                + (object)
+                    + interface (Interface)
+                        + interface_id: 1 (number)
+                        + name: port0
+                        + type: WAN
+                        + ip_address: 27.72.28.152
+                        + netmask: 255.255.255.255
+                        + gateway: 10.56.239.2
+                        + active: 1 (number)
+                    + weight: 1 (number)
+                + (object)
+                    + interface (Interface)
+                        + interface_id: 3 (number)
+                        + name: port2
+                        + type: WAN
+                        + addressing_mode: DHCP
+                        + ip_address: 192.168.1.20
+                        + netmask: 255.255.255.0
+                        + gateway: 192.168.1.1
+                        + active: 1 (number)
+                    + weight: 1 (number)
 
 + Response 500 (application/json)
     + Attributes

@@ -2695,102 +2695,296 @@ chi tiet ve 1 mail
                 "data": {}
             }
 
-#Object mail sender
-cau hinh object mail Object->mail
-## Sender mail [/sendermail]
-###create mail_sender [POST]
-+ Attributes(object)
-    + mail_sernder_name : admin97@gmail.com(string)
-    + mail_sender_password : ********** (string)
-    + mail_sender_mailserver : (string, optional)
-        + Default : gmail
-            + Members
-                + gamil
-                + yahoo
-                + bmail
-+ Request (application/json)
+# Mail Server [/mail_servers]
+---
+Object Mail Server
 
-+ Respone 200 (application/json)
-    + Body
 
-            {
-                "status": 1,
-                "message": "DELETE SUCCESS",
-                "data": {
-                    "mail_sender_id": 2
-                    "mail_sender_name":"admin97@gmail.com",
-                    "mail_sender_password ": "************",
-                    "mail_sender_mailserver": "gmail"
-                }
-            }
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
++ Attributes (object)
+    + id: 1 (string, required)
+    + name: "name" (string,required)  - định danh cho Mail Server
+    + description: "description" (string,required) - mô tả về Mail Server
+    + domain: "ldap1.bmail.vn" (string,required) - địa chỉ của Mail Server
+    + port: 587 (number,required) - cổng dịch vụ Mail server
+    
 
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
+## Retrieve all  [GET]
+Lấy danh sách tất cả Mail Server.
++ Response 200 (application/json)
 
-##detail mail_sender[/sernsermail/{mail_senser_id}]
+        {
+            "status": 1
+            "messages": "Retrive access"
+            "data": [{
+                "id":1
+                "name":"Bmail",
+                "description":"",
+                "domain": "ldap1.bmail.vn",
+                "port": 587,
+
+            },{
+                "id":2
+                "name":"Gmail",
+                "description":"",
+                "domain": "gmail.com",
+                "port": 587,
+            }],
+        }
+        
+
+## Retrieve one [GET /mail_servers/{mail_serverID}]
+Lấy thông tin của 1 Mail Server.
+
 + Parameters
-    + mail_sender_id: 1 (number)
+    + mail_serverID (required, Number, `1`) 
 
-###edit mail_sender [POST]
-+ Attributes(object)   
-    + mail_sennder_name : admin97@gmail.com(string)
-    + mail_sender_password : ********** (string)
-    + mail_sender_mailserver (enum[arrar[string]])
-        + Default : gmail
-            + Members
-                + gamil
-                + yahoo
-                + bmail
++ Response 200 (application/json)
 
-+ Request (application/json)
+        {
+                "id":1
+                "name":"Bmail",
+                "description":"",
+                "domain": "ldap1.bmail.vn",
+                "port": 587,
+        }
+## Add new [POST]
+Thêm mới 1 Mail Server.
++ Request
 
-+ Respone 200 (application/json)
-    + Body
-
-            {
-                "status": 1,
-                "message": "DELETE SUCCESS",
-                "data": {
-                    "mail_sender_id": 2
-                    "mail_sender_name":"admin97@gmail.com",
-                    "mail_sender_password ": "************",
-                    "mail_sender_mailserver": "gmail"
-                }
+        {
+                "name":"Bmail",
+                "description":"",
+                "domain": "ldap1.bmail.vn",
+                "port": 587,
             }
 
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
++ Response 200 (application/json)
 
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-### Delete mail_sender [DELETE]
-+ Attributes(object)
-    + mail_sender_id: 1(number,required)
-+ Request (application/json)
+        {
+            "status":1,
+            "message":"",
+            "data":{
+                "id":1
+                "name":"Bmail",
+                "description":"",
+                "domain": "ldap1.bmail.vn",
+                "port": 587,
+                "created_at":1415203908,
+                "updated_at":1415203908
+            }
+        }
+        
+## Edit Mail Server [PUT /mail_servers/{mail_serverID}]
+Sửa 1 Mail Server có sẵn.
++ Parameters
+    + mail_serverID (required, Number, `1`) 
++ Request
 
-+ Respone 200 (application/json)
-    + Attributes(object)
-        + status: 1(number,required)
-        + message: delete success(string)
-+ Response 400 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi verify đầu vào (string)
+        {
+                "id":1
+                "name":"Bmail",
+                "description":"",
+                "domain": "ldap1.bmail.vn",
+                "port": 587,
+            }
+        
++ response 200 (application/json)
 
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
+        {
+            "status":1,
+            "message":"",
+            "data":{
+                "id":1
+                "name":"Bmail",
+                "description":"",
+                "domain": "ldap1.bmail.vn",
+                "port": 587,
+            }
+        }
+        
+## Delete Mail Server [DELETE /mail_servers/{mail_serverID}]
+Xóa 1 Mail Server.
+
+
++ Parameters
+    + mail_serverID (required, Number, `1`) 
++ response 200 (application/json)
+
+        {
+            "status":1,
+            "message":""
+        }
+# Mail Sender [/mail_senders]
+
++ Attributes (object)
+    + id: 1 (string, required)
+    + name: "name" (string,required)  - ten nhom email
+    + email: "description" (string,required) - ten mail gui
+    + password: "abcd@123" (string,required) - mat khau mail gui
+    + mail_server (Mail Server) - Mail Server
+## Retrieve all  [GET]
+Lấy danh sách tất cả Mail Sender.
++ Response 200 (application/json)
+
+        {
+            "data": [{
+                "id":1
+                "name":"sender",
+                "email":"bif@bmail.vn",
+                "password": "123123123",
+                "mail_server":{
+                        "id":1
+                        "name":"Bmail",
+                        "description":"",
+                        "domain": "ldap1.bmail.vn",
+                        "port": 587,
+
+                    }
+
+                },
+                {
+                "id":2
+                "name":"bif",
+                "email":"bif@gmail.vn",
+                "mail_server":{
+                        "id":1
+                        "name":"Bmail",
+                        "description":"",
+                        "domain": "ldap1.bmail.vn",
+                        "port": 587,
+
+                    },
+                "password": "123123123",
+
+                }]
+        }
+        
+## Retrieve one [GET /mail_senders/{mail_senderID}]
+Lấy thông tin của 1 Mail Sender.
+
++ Parameters
+    + mail_senderID (required, Number, `1`) 
+
++ Response 200 (application/json)
+
+            {
+                "id":1
+                "name":"bif-gmail",
+                "email":"bif@gmail.vn",
+                "password": "123123123",
+                "created_at": 1415203908,
+                "updated_at": 1415203908,
+                "mail_server":{
+                        "id":1
+                        "name":"Bmail",
+                        "description":"",
+                        "domain": "ldap1.bmail.vn",
+                        "port": 587,
+                        "created_at":1415203908,
+                        "updated_at":1415203908
+                    }
+            }
+## Add new [POST]
+Thêm mới 1 Mail Sender.
++ Request
+
+            {
+                "name":"bif-gmail",
+                "email":"bif@gmail.vn",
+                "password": "123123123",
+                "mail_server":{
+                        "id":1
+                    },
+                "created_at": 1415203908,
+                "updated_at": 1415203908
+            }
+
++ Response 200 (application/json)
+
+        {
+            "status":1,
+            "message":"",
+            "data": {
+                "id":1
+                "name":"bif-gmail",
+                "email":"bif@gmail.vn",
+                "password": "123123123",
+                "mail_server":{
+                        "id":1
+                        "name":"Bmail",
+                        "description":"",
+                        "domain": "ldap1.bmail.vn",
+                        "port": 587,
+                        "created_at":1415203908,
+                        "updated_at":1415203908
+                    },
+                "created_at": 1415203908,
+                "updated_at": 1415203908
+            }
+        }
+        
+## Edit Mail Sender [PUT /mail_senders/{mail_senderID}]
+Sửa 1 Mail Sender có sẵn.
++ Parameters
+    + mail_senderID (required, Number, `1`) 
++ Request
+
+            {
+                "id":1
+                "name":"bif-gmail",
+                "email":"bif@gmail.vn",
+                "password": "123123123",
+                "mail_server":{
+                        "id":1
+                    },
+                "created_at": 1415203908,
+                "updated_at": 1415203908
+            }
+        
++ response 200 (application/json)
+
+        {
+            "status":1,
+            "message":"",
+            "data":{
+                "id":1
+                "name":"Sender",
+                "email":"admin97@bmail.vn",
+                "password": "123123123",
+                "mail_server":{
+                        "id":1
+                        "name":"Bmail",
+                        "description":"",
+                        "domain": "ldap1.bmail.vn",
+                        "port": 587,
+                    },
+                "created_at": 1415203908,
+                "updated_at": 1415203908
+            }
+        }
+        
+## Delete Mail Sender [DELETE /mail_senders/{mail_senderID}]
+Xóa 1 Mail Sender.
+
+
++ Parameters
+    + mail_senderID (required, Number, `1`) 
++ response 200 (application/json)
+
+        {
+            "status":1,
+            "message":"access"
+        }
+
+## Delete all [DELETE]
+Xóa tất cả mail_sender.
++ response 200 (application/json)
+
+        {
+            "status":1,
+            "message":"access"
+        }
+    
 
 
 # Group Firewall Policy

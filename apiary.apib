@@ -1387,6 +1387,9 @@ Chứa các thông tin cấu hình về LBL
 
 ### Create a Load Balancer [POST /loadbalancers]
 
+
+
+
 # Group NAT
 Hỗ trợ cấu hình NAT trên mạng. Đường dẫn cấu hình Setting -> Networking -> NAT
 
@@ -2480,7 +2483,7 @@ Thêm sửa xóa các Group mail
         
         [
             {
-                "group_mail_id": "1",
+                "group_receive_id": "1",
                 "name": "QTV",
                 "email": [
                     {
@@ -2508,7 +2511,7 @@ Thêm sửa xóa các Group mail
 Tạo một mail mới. Lấy dữ liệu JSON từ form nhập.
 
 + Attributes (object)
-    + group_mail_id: 1 (number, required)
+    + group_receive_id: 1 (number, required)
     + email: thanhlhb@bkav.com (string, required)
 + Request (application/json)
 
@@ -2533,17 +2536,17 @@ Tạo một mail mới. Lấy dữ liệu JSON từ form nhập.
         + message: lỗi database (string)
 ## Group mail Detail [/groupsmail/{group_mail_id}]
 + Parameters
-    + group_url_id: 1 (number)
+    + group_receive_id: 1 (number)
 ### Edit a Group mail [PUT]
 + Attributes (object)
-    + group_mail_id: 1 (number, required)
+    + group_receive_id: 1 (number, required)
     + name: QTV (string, required)
 
 + Request (application/json)
 
         {
-            "group_mail_id": 1,
-            "name": "bkav.com.vn",
+            "group_receive_id": 1,
+            "name": "bkav",
         }
 
 + Response 201 (application/json)
@@ -2554,13 +2557,13 @@ Tạo một mail mới. Lấy dữ liệu JSON từ form nhập.
                 "status": 1,
                 "message": "EDIT SUCCESS",
                 "data": {
-                    "group_url_id": 1,
-                    "name": "QTV",
+                    "group_receive_id": 1,
+                    "name": "bkav",
                 }  
             }
 ### DELETE a Group mail [DELETE]
 + Attributes (object)
-    + group_mail_id: 1 (number, required)
+    + group_receive_id: 1 (number, required)
     + name: QTV (string, required)
 
 + Request (application/json)
@@ -2591,11 +2594,11 @@ Tạo một mail mới. Lấy dữ liệu JSON từ form nhập.
 ## mail Detail [/groupsurl/{group_mail_id}/{mail_id}]
 chi tiet ve 1 mail
 + Parameters
-    + group_mail_id: 1 (number)
+    + group_receive_id: 1 (number)
     + mail_id: 1 (number)
 ### Create a mail [POST]
 + Attributes (object)
-    + group_mail_id: 1 (number, required)
+    + group_receive_id: 1 (number, required)
     + mail_id: 1 (number, required)
     + email: abc@gmail.com (string, optional)
 
@@ -2609,7 +2612,7 @@ chi tiet ve 1 mail
                 "status": 1,
                 "message": "CREATE SUCCESS",
                 "data": {
-                    "group_url_id": 1,
+                    "group_receive_id": 1,
                     "mail_id": "1",
                     "email": "abc@gmail.com"
                 }  
@@ -2632,10 +2635,10 @@ chi tiet ve 1 mail
                 "status": 1,
                 "message": "CREATE SUCCESS",
                 "data": {
-                    "group_url_id": 1,
+                    "group_receive_id": 1,
                     "mail_id": "1",
                     "email": [
-                        "thanhkma97@gmail.com"
+                        "thanhkma97@gmail.com","ngocnnb@gmail.com"
                     ]
                 }  
             }
@@ -2650,7 +2653,7 @@ chi tiet ve 1 mail
         + message: lỗi database (string)
 ### Edit a mail [PUT]
 + Attributes (object)
-    + group_mail_id: 1 (number, required)
+    + group_receive_id: 1 (number, required)
     + mail_id: 1 (number, required)
     + email: abc@gmail.com (string, optional)
 
@@ -2664,7 +2667,7 @@ chi tiet ve 1 mail
                 "status": 1,
                 "message": "CREATE SUCCESS",
                 "data": {
-                    "group_url_id": 1,
+                    "group_receive_id": 1,
                     "mail_id": "1",
                     "email": "abc@gmail.com"
                 }  
@@ -2681,7 +2684,7 @@ chi tiet ve 1 mail
 
 ### Delete a mail [DELETE]
 + Attributes (object)
-    + group_mail_id: 1 (number, required)
+    + group_receive_id: 1 (number, required)
     + mail_id: 1 (number, required)
 + Request (application/json)
 
@@ -2728,7 +2731,13 @@ Lấy danh sách tất cả Mail Server.
                 "description":"",
                 "domain": "gmail.com",
                 "port": 587,
-            }],
+            },{
+                "id":3
+                "name":"Yahoo",
+                "description":"",
+                "domain": "yahoo.com",
+                "port": 587,
+            }]
         }
         
 
@@ -2807,7 +2816,7 @@ Xóa 1 Mail Server.
 
 
 + Parameters
-    + mail_serverID (required, Number, `1`) 
+    + mail_serverID: 1 (required, Number)
 + response 200 (application/json)
 
         {

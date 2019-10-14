@@ -2452,6 +2452,7 @@ Chỉnh sửa thông tin của một URL
                 }
             }
 
+
 ### Delete a URL [DELETE]
 
 Xóa một url
@@ -2478,18 +2479,230 @@ Xóa một url
 
 #Group Object mail
 cau hinh object mail Object->mail
-## Group mail [/groupsurl]
+## Group mail [/groupsmail]
 Thêm sửa xóa các Group mail
 ### List All Group mail [GET]
-### Create a New Group URL [POST]
-### Edit a Group mail [PUT]
++ Response 200 (application/json)
+        
+        [
+            {
+                "group_mail_id": "1",
+                "name": "QTV",
+                "email": [
+                    {
+                        "mail_id": 1,
+                        "name": "thanhkma97@gmail.com"
+                    },
+                    {
+                        "mail_id": 2,
+                        "name": "ngocnnb@bkav.com"
+                    }
+                ]
+            }
+        ]
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
 
-## URL Detail [/groupsurl/{group_url_id}/urls/{url_id}]
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
+### Create a New Group mail [POST]
+Tạo một mail mới. Lấy dữ liệu JSON từ form nhập.
+
++ Attributes (object)
+    + group_mail_id: 1 (number, required)
+    + email: thanhlhb@bkav.com (string, required)
++ Request (application/json)
+
++ Response 201 (application/json)
+    
+    + Body
+
+            {
+                "status": 1,
+                "message": "CREATE SUCCESS",
+                "data": {
+                }
+            }
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+## Group mail Detail [/groupsmail/{group_mail_id}]
++ Parameters
+    + group_url_id: 1 (number)
+### Edit a Group mail [PUT]
++ Attributes (object)
+    + group_mail_id: 1 (number, required)
+    + name: QTV (string, required)
+
++ Request (application/json)
+
+        {
+            "group_mail_id": 1,
+            "name": "bkav.com.vn",
+        }
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "status": 1,
+                "message": "EDIT SUCCESS",
+                "data": {
+                    "group_url_id": 1,
+                    "name": "QTV",
+                }  
+            }
+### DELETE a Group mail [DELETE]
++ Attributes (object)
+    + group_mail_id: 1 (number, required)
+    + name: QTV (string, required)
+
++ Request (application/json)
+
+        {
+            "group_mail_id": 1,
+        }
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "status": 1,
+                "message": "Delete SUCCESS",
+                "data": {
+                }  
+            }
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+## mail Detail [/groupsurl/{group_mail_id}/{mail_id}]
 chi tiet ve 1 mail
-### Create a URL [POST]
++ Parameters
+    + group_mail_id: 1 (number)
+    + mail_id: 1 (number)
+### Create a mail [POST]
++ Attributes (object)
+    + group_mail_id: 1 (number, required)
+    + mail_id: 1 (number, required)
+    + email: abc@gmail.com (string, optional)
+
++ Request (application/json)
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "status": 1,
+                "message": "CREATE SUCCESS",
+                "data": {
+                    "group_url_id": 1,
+                    "mail_id": "1",
+                    "email": "abc@gmail.com"
+                }  
+            }
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
 ### Detail of a mail [GET]
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "status": 1,
+                "message": "CREATE SUCCESS",
+                "data": {
+                    "group_url_id": 1,
+                    "mail_id": "1",
+                    "email": [
+                        "thanhkma97@gmail.com"
+                    ]
+                }  
+            }
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
 ### Edit a mail [PUT]
++ Attributes (object)
+    + group_mail_id: 1 (number, required)
+    + mail_id: 1 (number, required)
+    + email: abc@gmail.com (string, optional)
+
++ Request (application/json)
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "status": 1,
+                "message": "CREATE SUCCESS",
+                "data": {
+                    "group_url_id": 1,
+                    "mail_id": "1",
+                    "email": "abc@gmail.com"
+                }  
+            }
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
+
 ### Delete a mail [DELETE]
++ Attributes (object)
+    + group_mail_id: 1 (number, required)
+    + mail_id: 1 (number, required)
++ Request (application/json)
+
++ Response 200 (application/json)
+    Xóa thành công
+    + Body
+
+            {
+                "status": 1,
+                "message": "DELETE SUCCESS",
+                "data": {}
+            }
+
+
+
 
 # Group Firewall Policy
 Hỗ trợ cấu hình Policy trong firewall. Đường dẫn cấu hình Firewall -> Policy

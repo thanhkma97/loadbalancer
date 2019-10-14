@@ -153,8 +153,9 @@ BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên 
         + 0 - off
         + 1 - on
 
-## Load Balancer Base (object)
+## Load Balancer Base weight (object)
 + name: test (string)
++ algorithm : weight (string)
 + gateway (array)
     + (object)
         + interface_id: 1
@@ -162,12 +163,34 @@ BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên 
     + (object)
         + interface_id: 3
         + weight: 1
+    +
 + status_checking (object)
     + protocol: ping (string)
     + server_check: 8.8.8.8 (string)
     + timeout: 3 (number)
     + threshold_before_failover: 5 (number)
 + description: test loadbalancer (string)
+
+## Load Balancer Base Overflow (object)
++ name: test (string)
++ algorithm : Overflow (string)
++ gateway (array)
+    + (object)
+        + interface_id: 1
+        + highest priority: 1
+    + (object)
+        + interface_id: 2
+        + highest priority: 2
+    +  (object)
+        + interface_id: 3
+        + highest priority: 3
++ status_checking (object)
+    + protocol: ping (string)
+    + server_check: 8.8.8.8 (string)
+    + timeout: 3 (number)
+    + threshold_before_failover: 5 (number)
++ description: test loadbalancer (string)
+
 
 ## DNS Server Base (object)
 + type: master (enum[string])
@@ -724,20 +747,17 @@ Thêm licence cho BIF
 
 # Group Dashboard
 ## Dashboard [/dashboard]
----
 Dashboard
 
 
 + Attributes (object)
-    + firewall: 0  (number, required) 
-    + ips: 0 (number,required)
-    + waf: 0 (number,required)
-    + name: "BIF NGFW" (string,required)
-    + version: "3.0.1" (string,required)
-    + license: "123123123123123123" (string,required)
-    + cpu: "Xeon CPU E3-1220 v3" (string,required)
+    + name: "BLB" (string,required)
+    + version: "1.0.1" (string,required)
+    + cpu: "Intel Core i3 Kabylake 7020U 2.30 GHz" (string,required)
     + memory: "16GB" (string,required)
-    + hdd: "5TB" (string,required)
+    + hdd: "1TB" (string,required)
+    + temperature : 70c
+    + license: "45613134845412145" (string,required)
     + system_time: 1556617095 (number,required)
 
 
@@ -746,25 +766,12 @@ Lấy dữ liệu Dashboard.
 + Response 200 (application/json)
 
         {
-            "firewall": {
-                "count":3,
-                "serious":0,
-                "shortcut": ""
-                },
-            "ips": {
-                "count":100,
-                "serious":1,
-                "shortcut":""
-                },
-            "waf": {
-                "count":0,
-                "serious":0,
-                "shortcut":""
-                },
-            "name":"BIF NGFW",
-            "version": "3.0.1",
-            "license": "Activated",
+            "name":"BLB",
+            "version": "1.0.1",
+            "cpu" : "Intel Core i3 Kabylake 7020U 2.30 GHz" ,
+            "license": "125 day",
             "hdd": "30%",
+            "temperature" : "70c",
             "system_time": "Mon 2018-10-22 2209:220931:11 +07"
         }
 
@@ -1183,8 +1190,6 @@ Chứa các thông tin cấu hình về một bản ghi nat
 
 + Attributes (VLAN Base)
     + vlan_id: 1 (number, required)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
 
 ### Retrieve a VLAN [GET]
 Lấy thông tin về một
@@ -1370,23 +1375,105 @@ Lấy thông tin về một
 # Group Load Balancers
 Hỗ trợ cấu hình Load Balancing. Đường dẫn cấu hình Setting -> Networking -> Load Balancing
 
-## Load Balancer [/loadbalancers/{loadbalancer_id}]
+## Load Balancer Weight [/loadbalancers/{loadbalancer_id}]
 Chứa các thông tin cấu hình về LBL
 + Parameters
     + loadbalancer_id (number)
 
-+ Attributes (Load Balancer Base)
++ Attributes (Load Balancer Base weight)
     + loadbalancer_id: 1 (number, required)
 
 ### Retrieve a Load Balancers [GET]
+Lấy thông tin về một
++ Response 200 (application/json)
+    + Attributes (Load Balancer Weight)
+        + gateway (array)
+            + (object)
+                + interface (Interface)
+                    + interface_id: 1 (number)
+                    + name: port0
+                    + type: WAN
+                    + ip_address: 27.72.28.152
+                    + netmask: 255.255.255.255
+                    + gateway: 10.56.239.2
+                    + active: 1 (number)
+                + weight: 1 (number)
+            + (object)
+                + interface (Interface)
+                    + interface_id: 3 (number)
+                    + name: port2
+                    + type: WAN
+                    + addressing_mode: DHCP
+                    + ip_address: 192.168.1.20
+                    + netmask: 255.255.255.0
+                    + gateway: 192.168.1.1
+                    + active: 1 (number)
+                + weight: 1 (number)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
 
 ### Edit a Load Balancer [PUT]
++ Attributes (Load Balancer Base weight)
+    + loadbalancer_id: 1 (number)
 
++ Request (application/json)
+    
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
+        + data (Load Balancer Weight)
+            + gateway (array)
+                + (object)
+                    + interface (Interface)
+                        + interface_id: 1 (number)
+                        + name: port0
+                        + type: WAN
+                        + ip_address: 27.72.28.152
+                        + netmask: 255.255.255.255
+                        + gateway: 10.56.239.2
+                        + active: 1 (number)
+                    + weight: 1 (number)
+                + (object)
+                    + interface (Interface)
+                        + interface_id: 3 (number)
+                        + name: port2
+                        + type: WAN
+                        + addressing_mode: DHCP
+                        + ip_address: 192.168.1.20
+                        + netmask: 255.255.255.0
+                        + gateway: 192.168.1.1
+                        + active: 1 (number)
+                    + weight: 1 (number)
+
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
+
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string))
 
 ### Delete a Load Balancer [DELETE]
++ Response 200 (application/json)    
+    + Attributes
+        + status: 1 (number)
+        + message (string)
 
-### Create a Load Balancer [POST /loadbalancers]
++ Response 400 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi verify đầu vào (string)
 
++ Response 500 (application/json)
+    + Attributes
+        + status: 0 (number)
+        + message: lỗi database (string)
 
 
 
@@ -1400,8 +1487,6 @@ Chứa các thông tin cấu hình về một bản ghi nat
 
 + Attributes (NAT Base)
     + id: 1 (number, required)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
 
 ### Retrieve a NAT [GET]
 Lấy thông tin về một nat
@@ -1519,7 +1604,7 @@ Lấy thông tin về một nat
     + Attributes (object)
         + data (NAT Collection)
         + paging (object)
-            + total_count: 12 (number)
+            + total_count: 10 (number)
             + total_page: 2 (number)
             + current_page: 1 (number)
 
@@ -1639,16 +1724,16 @@ Lấy thông tin về một
 
     + (Object IP)
     + (Object IP)
-        + groupip_id: 5 (number)
+        + groupip_id: 4 (number)
         + name: lan-port1
         + description
 
     + (Object IP)
-        + groupip_id: 6 (number)
+        + groupip_id: 5 (number)
         + name: lan-vlan10
 
     + (Object IP)
-        + groupip_id: 7 (number)
+        + groupip_id: 6 (number)
         + name: lan-vlan20
 
 
@@ -2075,8 +2160,6 @@ Chứa các thông tin cấu hình về một bản ghi
 
 + Attributes (Schedule Object Base)
     + groupschedule_id: 1 (number, required)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
 
 ### Retrieve a Schedule Object [GET]
 Lấy thông tin về một 
@@ -2200,6 +2283,7 @@ Lấy thông tin về một
     + Attributes
         + status: 0 (number)
         + message: lỗi database (string)
+
 
 # Group Object URL
 
@@ -2699,7 +2783,7 @@ chi tiet ve 1 mail
             }
 
 # Mail Server [/mail_servers]
----
+
 Object Mail Server
 
 
@@ -2778,8 +2862,6 @@ Thêm mới 1 Mail Server.
                 "description":"",
                 "domain": "ldap1.bmail.vn",
                 "port": 587,
-                "created_at":1415203908,
-                "updated_at":1415203908
             }
         }
         
@@ -3549,8 +3631,6 @@ Chứa các thông tin cấu hình về một bản ghi
 
 + Attributes (Traffic Shaper Base)
     + trafficshaper_id: 1 (number, required)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + updated_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
 
 ### Retrieve a Traffic Shaper [GET]
 Lấy thông tin về một 
@@ -3744,19 +3824,16 @@ Chứa các thông tin cấu hình về một bản ghi
             + cpu: 23.9 (number)
             + ram: 50.1 (number)
             + disk: 12.0  (number)
-            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
         + (Monitor Resource)
             + resources_id: 2 (number, required)
             + cpu: 10.6 (number)
             + ram: 50.1 (number)
             + disk: 12.0  (number)
-            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
         + (Monitor Resource)
             + resources_id: 2 (number, required)
             + cpu: 23.0 (number)
             + ram: 49.8 (number)
             + disk: 12.0  (number)
-            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
 
 + Response 500 (application/json)
     + Attributes
@@ -3774,19 +3851,19 @@ Chứa các thông tin cấu hình về một bản ghi
             + cpu: 23.9 (number)
             + ram: 50.1 (number)
             + disk: 12.0  (number)
-            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
         + (Monitor Resource)
             + resources_id: 2 (number, required)
             + cpu: 10.6 (number)
             + ram: 50.1 (number)
             + disk: 12.0  (number)
-            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
         + (Monitor Resource)
             + resources_id: 2 (number, required)
             + cpu: 23.0 (number)
             + ram: 49.8 (number)
             + disk: 12.0 (number) 
-            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
+
 
 + Response 500 (application/json)
     + Attributes
@@ -3805,24 +3882,22 @@ Chứa các thông tin cấu hình về một bản ghi
             + cpu: 23.9 (number)
             + ram: 50.1 (number)
             + disk: 12.0  (number)
-            + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
         + (Monitor Resource)
             + resources_id: 2 (number, required)
             + cpu: 10.6 (number)
             + ram: 50.1 (number)
             + disk: 12.0  (number)
-            + created_at: `2019-04-23 09:47:50` (string) - typetime %Y-%m-%d %H:%M:%S
         + (Monitor Resource)
             + resources_id: 2 (number, required)
             + cpu: 23.0 (number)
             + ram: 49.8 (number)
             + disk: 12.0 (number) 
-            + created_at: `2019-04-23 09:48:00` (string) - typetime %Y-%m-%d %H:%M:%S
 
 + Response 500 (application/json)
     + Attributes
         + status: 0 (number)
         + message: lỗi database (string)
+
 
 # Group Monitor Traffic
 
@@ -3831,7 +3906,6 @@ Chứa các thông tin cấu hình về một bản ghi
 
 + Attributes (Monitor Traffic Base)
     + traffic_id (number)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
 
 ### Retrieve data within time in seconds [GET /monitor-traffic{?interfacetype,interfaces,seconds}]
 + Parameters
@@ -4839,383 +4913,6 @@ Chứa các thông tin cấu hình về một bản ghi
 
         
 ### Download data from table [GET /monitor-traffic-detail/download{?minutes,column,orderBy,orderType}]
-+ Parameters
-    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, hours, days, months hoặc from to
-    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
-    + orderBy: content (string) - Giá trị tên cột được lấy theo tên các trường trong json
-    + orderType (string, optional)
-        + Default: desc
-        + Members
-            + desc
-            + asc
-        + Sample: desc
-        
-+ Response 200 (text/csv)
-    
-    + Headers
-        
-        Content-Disposition: attachment; filename=bif_export_data.csv;filename*=utf-8''bif_export_data.csv
-        Content-Length: 242
-        
-    + Body
-    
-        action,datetime,destination,destination_port,no,policy,protocol,source,source_port
-        drop,2019-10-07 09:19:08,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080617,Deny All,UDP,"{'country': u'CN', 'ip_address': u'140.143.6.5'}",7946
-        drop,2019-10-07 09:19:07,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080616,Deny All,UDP,"{'country': u'HK', 'ip_address': u'223.197.113.11'}",1024
-        drop,2019-10-07 09:19:07,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080615,Deny All,UDP,"{'country': u'CN', 'ip_address': u'119.1.174.24'}",7946
-        drop,2019-10-07 09:19:06,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080614,Deny All,UDP,"{'country': u'CN', 'ip_address': u'101.251.207.204'}",7946
-        drop,2019-10-07 09:19:02,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080613,Deny All,UDP,"{'country': u'CN', 'ip_address': u'183.63.113.42'}",34834
-        drop,2019-10-07 09:19:00,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",2594,1080612,Deny All,TCP,"{'country': u'NL', 'ip_address': u'80.82.70.239'}",48844
-        drop,2019-10-07 09:18:59,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",445,1080611,Deny All,TCP,"{'country': u'VN', 'ip_address': u'113.20.109.161'}",61695
-        drop,2019-10-07 09:18:59,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",7946,1080610,Deny All,UDP,"{'country': u'CN', 'ip_address': u'122.114.69.3'}",7946
-        drop,2019-10-07 09:18:59,"{'country': u'VN', 'ip_address': u'118.70.80.143'}",3189,1080609,Deny All,TCP,"{'country': u'Other', 'ip_address': u'185.175.93.78'}",45313
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-
-# Group Monitor Setting
-## Monitor Setting [/monitor-setting]
-
-+ Attributes (Monitor Setting Base)
-    + setting_id: 1 (number, required)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-
-### List all value [GET]
-+ Response 200 (application/json)
-    + Attributes (array)
-        + (Monitor Setting)
-        + (Monitor Setting)
-            + no: 2 (number)
-            + setting_id: 2 (number, required)
-        + (Monitor Setting)
-            + no: 3 (number)
-            + setting_id: 3 (number, required)
-        + (Monitor Setting)
-            + no: 4 (number)
-            + setting_id: 4 (number, required)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Show entries and pagination [GET /monitor-setting{?minutes,column,limit,page,orderBy,orderType}]
-+ Parameters
-    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, days, months
-    + limit (number, optional) - Giới hạn số bản ghi trong một page
-        + Default: 10
-        + Members
-            + 10
-            + 25
-            + 50
-            + 100
-        + Sample: 10
-    + page (number, optional) - Số trang
-        + Default: 1
-    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
-    + orderBy: content (string) - Giá trị tên cột được lấy theo tên các trường trong json
-    + orderType (string, optional)
-        + Default: desc
-        + Members
-            + desc
-            + asc
-        + Sample: desc
-
-+ Response 200 (application/json)
-    + Attributes (object)
-        + data (array)
-            + (Monitor Setting)
-            + (Monitor Setting)
-                + no: 2 (number)
-                + setting_id: 2 (number, required)
-            + (Monitor Setting)
-                + no: 3 (number)
-                + setting_id: 3 (number, required)
-            + (Monitor Setting)
-                + no: 4 (number)
-                + setting_id: 4 (number, required)
-        + paging (object)
-            + total_count: 12 (number)
-            + total_page: 2 (number)
-            + current_page: 1 (number)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-### Show entries and pagination in period of time [GET /monitor-setting{?from,to,column,limit,page}]
-+ Parameters
-    + from: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + to: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + limit (number, optional) - Giới hạn số bản ghi trong một page
-        + Default: 10
-        + Members
-            + 10
-            + 25
-            + 50
-            + 100
-        + Sample: 10
-    + page (number, optional) - Số trang
-        + Default: 1
-    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
-
-+ Response 200 (application/json)
-    + Attributes (object)
-        + data (array)
-            + (Monitor Setting)
-            + (Monitor Setting)
-                + no: 2 (number)
-                + setting_id: 2 (number, required)
-            + (Monitor Setting)
-                + no: 3 (number)
-                + setting_id: 3 (number, required)
-            + (Monitor Setting)
-                + no: 4 (number)
-                + setting_id: 4 (number, required)
-        + paging (object)
-            + total_count: 12 (number)
-            + total_page: 2 (number)
-            + current_page: 1 (number)
-
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-      
-### Download data from table [GET /monitor-setting/download{?minutes,column,orderBy,orderType}]
-+ Parameters
-    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, hours, days, months hoặc from to
-    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
-    + orderBy: content (string) - Giá trị tên cột được lấy theo tên các trường trong json
-    + orderType (string, optional)
-        + Default: desc
-        + Members
-            + desc
-            + asc
-        + Sample: desc
-        
-+ Response 200 (text/csv)
-    
-    + Headers
-        
-        Content-Disposition: attachment; filename=bif_export_data.csv;filename*=utf-8''bif_export_data.csv
-        Content-Length: 242
-        
-    + Body
-    
-        action,address,content,datetime,no,status,user
-        edit,"{'country': u'Other', 'ip_address': u'127.0.0.1'}",ssssss,2019-06-10 15:39:13,2036,1,admin
-        add,"{'country': u'Other', 'ip_address': u'10.2.32.90'}",test,2019-06-10 15:39:13,2034,1,admin
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-        
-
-
-# Group Monitor Firewall
-## Monitor Firewall [/monitor-firewall]
-
-+ Attributes (Monitor Firewall Base)
-    + firewall_id: 1 (number, required)
-    + created_at: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-
-
-
-### Show entries and pagination with period [GET /monitor-firewall{?minutes,limit,page,column,orderBy,orderType}]
-+ Parameters
-    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, days, months
-    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
-        + Default: 10
-        + Members
-            + 10
-            + 25
-            + 50
-            + 100
-    + page: 1 (number, optional) - Số trang
-        + Default: 1
-    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
-    + orderBy: protocol (string) - Giá trị tên cột được lấy theo tên các trường trong json
-    + orderType (string, optional)
-        + Default: desc
-        + Members
-            + desc
-            + asc
-        + Sample: desc
-
-+ Response 200 (application/json)
-    + Attributes (object)
-        + data (array)
-            + (Monitor Firewall)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-        + paging (object)
-            + total_count: 12 (number)
-            + total_page: 2 (number)
-            + current_page: 1 (number)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-
-
-### Show entries and pagination with period of time [GET /monitor-firewall{?from,to,limit,page}]
-+ Parameters
-    + from: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + to: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
-        + Default: 10
-        + Members
-            + 10
-            + 25
-            + 50
-            + 100
-    + page: 1 (number, optional) - Số trang
-        + Default: 1
-
-+ Response 200 (application/json)
-    + Attributes (object)
-        + data (array)
-            + (Monitor Firewall)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-        + paging (object)
-            + total_count: 12 (number)
-            + total_page: 2 (number)
-            + current_page: 1 (number)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-
-
-### Filter value [GET /monitor-firewall{?minutes,limit,page,column}]
-+ Parameters
-    + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, days, months
-    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
-        + Default: 10
-        + Members
-            + 10
-            + 25
-            + 50
-            + 100
-    + page: 1 (number, optional) - Số trang
-        + Default: 1
-    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?minutes,limit,page,column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
-
-+ Response 200 (application/json)
-    + Attributes (object)
-        + data (array)
-            + (Monitor Firewall)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-        + paging (object)
-            + total_count: 12 (number)
-            + total_page: 2 (number)
-            + current_page: 1 (number)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-
-### Filter value with period of time [GET /monitor-firewall{?from,to,limit,page,column}]
-+ Parameters
-    + from: `2019-04-23 09:47:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + to: `2019-04-23 09:48:40` (string) - typetime %Y-%m-%d %H:%M:%S
-    + limit: 10 (number, optional) - Giới hạn số bản ghi trong một page
-        + Default: 10
-        + Members
-            + 10
-            + 25
-            + 50
-            + 100
-    + page: 1 (number, optional) - Số trang
-        + Default: 1
-    + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?minutes,limit,page,column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168
-
-+ Response 200 (application/json)
-    + Attributes (object)
-        + data (array)
-            + (Monitor Firewall)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-            + (Monitor Firewall)
-                + firewall_id: 2 (number)
-                + no: 2 (number)
-        + paging (object)
-            + total_count: 12 (number)
-            + total_page: 2 (number)
-            + current_page: 1 (number)
-
-+ Response 500 (application/json)
-    + Attributes
-        + status: 0 (number)
-        + message: lỗi database (string)
-
-
-### Download data from table [GET /monitor-firewall/download{?minutes,column,orderBy,orderType}]
 + Parameters
     + minutes: 5 (number) - Đây là tham số period . Period có thể là: minutes, hours, days, months hoặc from to
     + column: 192.168 (string) - Column ở đây chính là tên của các cột. Nếu filter nhiều cột hơn thì sẽ thêm tiếp vào url vd như:{?column1,column2}. Nếu chọn toán tử là 'do not exist' thì trước giá trị truyền vào phải thêm dấu '!', vd: column: !192.168

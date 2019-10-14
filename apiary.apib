@@ -2701,15 +2701,17 @@ chi tiet ve 1 mail
                 "data": {}
             }
 
-##mail sender[/mail_sender]
+#Object mail sender
+cau hinh object mail Object->mail
+## Sender mail [/sendermail]
 ###create mail_sender [POST]
 + Attributes(object)
     + mail_sender_id: 1(number,required)
     + mail_sernder_name : admin97@gmail.com(string)
     + mail_sender_password : ********** (string)
-    + mail_sender_mailserver : (enum[string])
-        + default : gmail
-            + member
+    + mail_sender_mailserver : (enum [string] )
+        + Default : gmail
+            + Members
                 + gamil
                 + yahoo
                 + bmail

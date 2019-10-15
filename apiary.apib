@@ -2681,11 +2681,11 @@ Thêm sửa xóa các Group mail
                 "name": "QTV",
                 "email": [
                     {
-                        "mail_id": 1,
+                        "receive_id": 1,
                         "name": "thanhkma97@gmail.com"
                     },
                     {
-                        "mail_id": 2,
+                        "receive_id": 2,
                         "name": "ngocnnb@bkav.com"
                     }
                 ]
@@ -2728,7 +2728,7 @@ Tạo một mail mới. Lấy dữ liệu JSON từ form nhập.
     + Attributes
         + status: 0 (number)
         + message: lỗi database (string)
-## Group mail Detail [/groupsmail/{group_mail_id}]
+## Group mail Detail [/groupsmail/{group_receive_id}]
 + Parameters
     + group_receive_id: 1 (number)
 ### Edit a Group mail [PUT]
@@ -2763,7 +2763,7 @@ Tạo một mail mới. Lấy dữ liệu JSON từ form nhập.
 + Request (application/json)
 
         {
-            "group_mail_id": 1,
+            "group_receive_id": 1,
         }
 
 + Response 200 (application/json)
@@ -2785,15 +2785,15 @@ Tạo một mail mới. Lấy dữ liệu JSON từ form nhập.
     + Attributes
         + status: 0 (number)
         + message: lỗi database (string)
-## mail Detail [/groupsurl/{group_mail_id}/{mail_id}]
+## mail Detail [/groupsurl/{group_receive_id}/{receive_id}]
 chi tiet ve 1 mail
 + Parameters
     + group_receive_id: 1 (number)
-    + mail_id: 1 (number)
+    + receive_id: 1 (number)
 ### Create a mail [POST]
 + Attributes (object)
     + group_receive_id: 1 (number, required)
-    + mail_id: 1 (number, required)
+    + receive_id: 1 (number, required)
     + email: abc@gmail.com (string, optional)
 
 + Request (application/json)
@@ -2807,7 +2807,7 @@ chi tiet ve 1 mail
                 "message": "CREATE SUCCESS",
                 "data": {
                     "group_receive_id": 1,
-                    "mail_id": "1",
+                    "receive_id": "1",
                     "email": "abc@gmail.com"
                 }  
             }
@@ -2830,7 +2830,7 @@ chi tiet ve 1 mail
                 "message": "CREATE SUCCESS",
                 "data": {
                     "group_receive_id": 1,
-                    "mail_id": "1",
+                    "receive_id": "1",
                     "email": [
                         "thanhkma97@gmail.com","ngocnnb@gmail.com"
                     ]
@@ -2848,7 +2848,7 @@ chi tiet ve 1 mail
 ### Edit a mail [PUT]
 + Attributes (object)
     + group_receive_id: 1 (number, required)
-    + mail_id: 1 (number, required)
+    + receive_id: 1 (number, required)
     + email: abc@gmail.com (string, optional)
 
 + Request (application/json)
@@ -2862,7 +2862,7 @@ chi tiet ve 1 mail
                 "message": "CREATE SUCCESS",
                 "data": {
                     "group_receive_id": 1,
-                    "mail_id": "1",
+                    "receive_id": "1",
                     "email": "abc@gmail.com"
                 }  
             }
@@ -2879,7 +2879,7 @@ chi tiet ve 1 mail
 ### Delete a mail [DELETE]
 + Attributes (object)
     + group_receive_id: 1 (number, required)
-    + mail_id: 1 (number, required)
+    + receive_id: 1 (number, required)
 + Request (application/json)
 
 + Response 200 (application/json)
@@ -3029,7 +3029,7 @@ Lấy danh sách tất cả Mail Sender.
 
         {
             "data": [{
-                "id":1
+                "sender_id":1
                 "name":"sender",
                 "email":"bif@bmail.vn",
                 "password": "123123123",
@@ -3044,7 +3044,7 @@ Lấy danh sách tất cả Mail Sender.
 
                 },
                 {
-                "id":2
+                "sender_id":2
                 "name":"bif",
                 "email":"bif@gmail.vn",
                 "mail_server":{
@@ -3060,16 +3060,16 @@ Lấy danh sách tất cả Mail Sender.
                 }]
         }
         
-## Retrieve one [GET /mail_senders/{mail_senderID}]
+## Retrieve one [GET /mail_senders/{sender_id}]
 Lấy thông tin của 1 Mail Sender.
 
 + Parameters
-    + mail_senderID (required, Number, `1`) 
+    + sender_id (required, Number, `1`) 
 
 + Response 200 (application/json)
 
             {
-                "id":1
+                "sender_id":1
                 "name":"bif-gmail",
                 "email":"bif@gmail.vn",
                 "password": "123123123",
@@ -3080,9 +3080,7 @@ Lấy thông tin của 1 Mail Sender.
                         "name":"Bmail",
                         "description":"",
                         "domain": "ldap1.bmail.vn",
-                        "port": 587,
-                        "created_at":1415203908,
-                        "updated_at":1415203908
+                        "port": 587
                     }
             }
 ## Add new [POST]
@@ -3095,9 +3093,7 @@ Thêm mới 1 Mail Sender.
                 "password": "123123123",
                 "mail_server":{
                         "id":1
-                    },
-                "created_at": 1415203908,
-                "updated_at": 1415203908
+                    }
             }
 
 + Response 200 (application/json)
@@ -3106,7 +3102,7 @@ Thêm mới 1 Mail Sender.
             "status":1,
             "message":"",
             "data": {
-                "id":1
+                "sender_id":1
                 "name":"bif-gmail",
                 "email":"bif@gmail.vn",
                 "password": "123123123",
@@ -3115,12 +3111,8 @@ Thêm mới 1 Mail Sender.
                         "name":"Bmail",
                         "description":"",
                         "domain": "ldap1.bmail.vn",
-                        "port": 587,
-                        "created_at":1415203908,
-                        "updated_at":1415203908
-                    },
-                "created_at": 1415203908,
-                "updated_at": 1415203908
+                        "port": 587
+                    }
             }
         }
         
@@ -3131,15 +3123,13 @@ Sửa 1 Mail Sender có sẵn.
 + Request
 
             {
-                "id":1
+                "sender_id":1
                 "name":"bif-gmail",
                 "email":"bif@gmail.vn",
                 "password": "123123123",
                 "mail_server":{
                         "id":1
-                    },
-                "created_at": 1415203908,
-                "updated_at": 1415203908
+                    }
             }
         
 + response 200 (application/json)
@@ -3148,7 +3138,7 @@ Sửa 1 Mail Sender có sẵn.
             "status":1,
             "message":"",
             "data":{
-                "id":1
+                "sender_id":1
                 "name":"Sender",
                 "email":"admin97@bmail.vn",
                 "password": "123123123",
@@ -3158,9 +3148,7 @@ Sửa 1 Mail Sender có sẵn.
                         "description":"",
                         "domain": "ldap1.bmail.vn",
                         "port": 587,
-                    },
-                "created_at": 1415203908,
-                "updated_at": 1415203908
+                    }
             }
         }
         

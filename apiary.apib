@@ -1569,9 +1569,9 @@ Lấy thông tin về một nat
 
 + Response 200 (application/json)
     + Attributes (NAT)
+        + status: 1 (number)
+        + message (string)
         + interface (Interface)
-            + status: 1
-            + message: "CREATE SUCCESS"
             + name: port0
             + type: WAN
             + ip_address: 27.72.28.152
@@ -1640,6 +1640,8 @@ Lấy thông tin về một nat
             + gateway: 10.56.239.2
             + active: 1 (number)
     + (NAT)
+        + status: 1 (number)
+        + message (string)
         + type: 1 (number)
         + name: nat_internet
         + interface (Interface)
@@ -1680,6 +1682,8 @@ Lấy thông tin về một nat
 
 + Response 200 (application/json)
     + Attributes (object)
+        + status: 1 (number)
+        + message (string)
         + data (NAT Collection)
         + paging (object)
             + total_count: 10 (number)

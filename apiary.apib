@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: http://bif.apiblueprint.org/
+HOST: http://Blb.apiblueprint.org/
 
 # LBL
 Hiện nay, nhu cầu truy cập mạng của các tổ chức, doanh nghiệp ngày càng tăng cao , dẫn tới việc băng thông đường truyền bị quá tải. Để giải quyết vấn đề này , không chỉ đơn giản là nâng cao tốc độ hay băng thông đường truyền mà còn phải chú trọng đến việc tránh các rủi ro về sự cố trên đường truyền, giải pháp load balancing cho đường truyền là giải pháp tối ưu cho vấn đề này
@@ -537,7 +537,7 @@ BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên 
 
 ### Add Licence [POST]
 
-Thêm licence cho BIF
+Thêm licence cho BLB
 
 + Attributes (object)
     + licence (string, required)
@@ -558,8 +558,7 @@ Thêm licence cho BIF
                 "data": {
                     "license status " : "Actived",
                     "licence": "$2y$10$0AyR.0oC2cj2M..NvqdnxewSPqoH8CrlrcPJOhC6by/xEi5lHBvcO",
-                    "licence_expired": "125 day",
-                    "server_message": "Licence OK"
+                    "licence_expired": "125 day"
                 }
             }
 
@@ -1347,7 +1346,7 @@ Chứa các thông tin cấu hình về LBL
 + Attributes (Load Balancer Base weight)
     + loadbalancer_id: 1 (number, required)
 
-### Retrieve a Load Balancers [GET]
+### Retrieve a Load Balancers Weight [GET]
 Lấy thông tin ban ghi
 
 + Response 200 (application/json)    
@@ -1383,7 +1382,7 @@ Lấy thông tin ban ghi
         + status: 0 (number)
         + message: lỗi database (string)
 
-### Edit a Load Balancer [PUT]
+### Edit a Load Balancer Weight [PUT]
 + Attributes (Load Balancer Base weight)
     + loadbalancer_id: 1 (number)
 
@@ -1444,7 +1443,6 @@ Lấy thông tin ban ghi
         + message: lỗi database (string)
 
 
----
 ## Load Balancer Overflow [/loadbalancers/{loadbalancer_id}]
 Chứa các thông tin cấu hình về LBL
 + Parameters
@@ -1454,7 +1452,7 @@ Chứa các thông tin cấu hình về LBL
     + loadbalancer_id: 1 (number, required)
 
 
-### Retrieve a Load Balancers [GET]
+### Retrieve a Load Balancers Overflow [GET]
 Lấy thông tin ban ghi
 
 + Response 200 (application/json)    
@@ -1490,7 +1488,7 @@ Lấy thông tin ban ghi
         + status: 0 (number)
         + message: lỗi database (string)
 
-### Edit a Load Balancer [PUT]
+### Edit a Load Balancer Overflow [PUT]
 + Attributes (Load Balancer Base Overflow)
     + loadbalancer_id: 1 (number)
 
@@ -1534,7 +1532,7 @@ Lấy thông tin ban ghi
         + status: 0 (number)
         + message: lỗi database (string))
 
-### Flush a Load Balancer [DELETE]
+### Flush a Load Balancer Overflow [DELETE]
 + Response 200 (application/json)    
     + Attributes
         + status: 1 (number)

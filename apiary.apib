@@ -1568,6 +1568,9 @@ Chứa các thông tin cấu hình về một bản ghi nat
 Lấy thông tin về một nat
 
 + Response 200 (application/json)
+    +Attributes (object)
+        + status: 1 (number)
+        + message (string)
     + Attributes (NAT)
         + status: 1 (number)
         + message (string)
@@ -1659,6 +1662,9 @@ Lấy thông tin về một nat
 
 ### List all nat [GET]
 + Response 200 (application/json)
+    + Attributes (object)
+        + status: 1 (number)
+        + message (string)
     + Attributes (NAT Collection)
 
 + Response 500 (application/json)
@@ -1682,8 +1688,6 @@ Lấy thông tin về một nat
 
 + Response 200 (application/json)
     + Attributes (object)
-        + status: 1 (number)
-        + message (string)
         + data (NAT Collection)
         + paging (object)
             + total_count: 10 (number)

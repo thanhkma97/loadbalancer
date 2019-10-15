@@ -530,8 +530,9 @@ BKAV Load Balancer (BLB) là một thiết bị Firewall thế hệ mới, bên 
 + Response 200 (application/json)
         
         {
+            "license status " : "Actived",
             "licence": "$2y$10$0AyR.0oC2cj2M..NvqdnxewSPqoH8CrlrcPJOhC6by/xEi5lHBvcO",
-            "licence_expired": "2019-12-20"
+            "licence_expired": "125 day"
         }
 
 ### Add Licence [POST]
@@ -555,8 +556,9 @@ Thêm licence cho BIF
                 "status": 1,
                 "message": "LICENCE ADD SUCCESS",
                 "data": {
+                    "license status " : "Actived",
                     "licence": "$2y$10$0AyR.0oC2cj2M..NvqdnxewSPqoH8CrlrcPJOhC6by/xEi5lHBvcO",
-                    "licence_expired": "2019-12-20",
+                    "licence_expired": "125 day",
                     "server_message": "Licence OK"
                 }
             }
@@ -604,7 +606,7 @@ Thêm licence cho BIF
                 "message": "Sign Up successful",
                 "data": {
                     "username":"quinh",
-                    "name":"Ngô Hồng Quí",
+                    "name":"Ngô Hồng Quí"
                 }
             }            
 
@@ -753,8 +755,10 @@ Dashboard
     + cpu: "Intel Core i3 Kabylake 7020U 2.30 GHz" (string,required)
     + memory: "16GB" (string,required)
     + hdd: "1TB" (string,required)
-    + temperature : 70c
-    + license: "45613134845412145" (string,required)
+        + total : "5T" (string,required)
+        + percent : 30 (required, number)
+    + temperature : 70 (required, number)
+    + license: "125 day" (string,required)
     + system_time: 1556617095 (number,required)
 
 
@@ -767,53 +771,16 @@ Lấy dữ liệu Dashboard.
             "version": "1.0.1",
             "cpu" : "Intel Core i3 Kabylake 7020U 2.30 GHz" ,
             "license": "125 day",
-            "hdd": "30%",
+            "hdd": {
+                "total": "5T",
+                "percent": 30
+            },
             "temperature" : "70c",
-            "system_time": "Mon 2018-10-22 2209:220931:11 +07"
+            "system_time": "Mon 2019-10-22 2209:220931:11 +07"
         }
 
 
-### Get System time [GET /dashboard/system_time]
-Lấy thông tin giờ hệ thống
 
-
-+ Response 200 (application/json)
-
-        {
-            "system_time": 1556617095,
-            "time_zone" : "GMT +07",
-            "sync_on" : 0,
-            "server" : ""
-                
-        }
-
-
-### Set System time [PUT /dashboard/system_time]
-Cập nhật thông tin giờ hệ thống
-
-+ Request
-
-        {
-            "system_time": 1556617095,
-            "time_zone" : "07",
-            "sync_on" : 0,
-            "server" : ""
-        }
-
-
-+ Response 200 (application/json)
-
-
-        {
-            "status":1,
-            "message":"",
-            "data":{
-                "system_time": 1556617095,
-                "time_zone" : "07",
-                "sync_on" : 0,
-                "server" : ""
-            }
-        }
 
         
 

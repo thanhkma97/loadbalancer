@@ -1426,7 +1426,7 @@ Lấy thông tin ban ghi
         + status: 0 (number)
         + message: lỗi database (string))
 
-### Flush a Load Balancer [DELETE]
+### Flush a Load Balancer Weihht [DELETE]
 + Response 200 (application/json)    
     + Attributes
         + status: 1 (number)
@@ -1441,6 +1441,7 @@ Lấy thông tin ban ghi
     + Attributes
         + status: 0 (number)
         + message: lỗi database (string)
+
 
 
 ## Load Balancer Overflow [/loadbalancers/{loadbalancer_id}]
@@ -2717,7 +2718,7 @@ Tạo một mail mới. Lấy dữ liệu JSON từ form nhập.
                 "message": "EDIT SUCCESS",
                 "data": {
                     "group_receive_id": 1,
-                    "name": "bkav",
+                    "name": "bkav"
                 }  
             }
 ### DELETE a Group mail [DELETE]
@@ -2882,20 +2883,20 @@ Lấy danh sách tất cả Mail Server.
                 "name":"Bmail",
                 "description":"",
                 "domain": "ldap1.bmail.vn",
-                "port": 587,
+                "port": 587
 
             },{
                 "id":2
                 "name":"Gmail",
                 "description":"",
                 "domain": "gmail.com",
-                "port": 587,
+                "port": 587
             },{
                 "id":3
                 "name":"Yahoo",
                 "description":"",
                 "domain": "yahoo.com",
-                "port": 587,
+                "port": 587
             }]
         }
         
@@ -2913,7 +2914,7 @@ Lấy thông tin của 1 Mail Server.
                 "name":"Bmail",
                 "description":"",
                 "domain": "ldap1.bmail.vn",
-                "port": 587,
+                "port": 587
         }
 ## Add new [POST]
 Thêm mới 1 Mail Server.
@@ -2923,7 +2924,7 @@ Thêm mới 1 Mail Server.
                 "name":"Bmail",
                 "description":"",
                 "domain": "ldap1.bmail.vn",
-                "port": 587,
+                "port": 587
             }
 
 + Response 200 (application/json)
@@ -2936,7 +2937,7 @@ Thêm mới 1 Mail Server.
                 "name":"Bmail",
                 "description":"",
                 "domain": "ldap1.bmail.vn",
-                "port": 587,
+                "port": 587
             }
         }
         
@@ -2951,7 +2952,7 @@ Sửa 1 Mail Server có sẵn.
                 "name":"Bmail",
                 "description":"",
                 "domain": "ldap1.bmail.vn",
-                "port": 587,
+                "port": 587
             }
         
 + response 200 (application/json)
@@ -2964,7 +2965,7 @@ Sửa 1 Mail Server có sẵn.
                 "name":"Bmail",
                 "description":"",
                 "domain": "ldap1.bmail.vn",
-                "port": 587,
+                "port": 587
             }
         }
         
@@ -3003,7 +3004,7 @@ Lấy danh sách tất cả Mail Sender.
                         "name":"Bmail",
                         "description":"",
                         "domain": "ldap1.bmail.vn",
-                        "port": 587,
+                        "port": 587
 
                     }
 
@@ -3017,7 +3018,7 @@ Lấy danh sách tất cả Mail Sender.
                         "name":"Bmail",
                         "description":"",
                         "domain": "ldap1.bmail.vn",
-                        "port": 587,
+                        "port": 587
 
                     },
                 "password": "123123123",
@@ -3112,7 +3113,7 @@ Sửa 1 Mail Sender có sẵn.
                         "name":"Bmail",
                         "description":"",
                         "domain": "ldap1.bmail.vn",
-                        "port": 587,
+                        "port": 587
                     }
             }
         }

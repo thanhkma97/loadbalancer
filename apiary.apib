@@ -1444,7 +1444,8 @@ Lấy thông tin ban ghi
 
 
 
-## Load Balancer Overflow [/loadbalancers/{loadbalancer_id}]
+##
+ Load Balancer Overflow [/loadbalancers/{loadbalancer_id}]
 Chứa các thông tin cấu hình về LBL
 + Parameters
     + loadbalancer_id (number)
@@ -1568,12 +1569,9 @@ Chứa các thông tin cấu hình về một bản ghi nat
 Lấy thông tin về một nat
 
 + Response 200 (application/json)
-    +Attributes (object)
-        + status: 1 (number)
-        + message (string)
     + Attributes (NAT)
         + status: 1 (number)
-        + message (string)
+        + message : ""(string)
         + interface (Interface)
             + name: port0
             + type: WAN
@@ -1596,7 +1594,7 @@ Lấy thông tin về một nat
 + Response 200 (application/json)    
     + Attributes
         + status: 1 (number)
-        + message (string)
+        + message: "" (string)
         + data (NAT)
             + interface (Interface)
                 + name: port0
@@ -1620,7 +1618,7 @@ Lấy thông tin về một nat
 + Response 200 (application/json)    
     + Attributes
         + status: 1 (number)
-        + message (string)
+        + message: ""(string)
 
 + Response 400 (application/json)
     + Attributes
@@ -1634,6 +1632,8 @@ Lấy thông tin về một nat
 
 ## NAT Collection [/nat]
 + Attributes (array)
+    + status: 1 (number)
+    + message: "" (string)
     + (NAT)
         + interface (Interface)
             + name: port0
@@ -1643,8 +1643,6 @@ Lấy thông tin về một nat
             + gateway: 10.56.239.2
             + active: 1 (number)
     + (NAT)
-        + status: 1 (number)
-        + message (string)
         + type: 1 (number)
         + name: nat_internet
         + interface (Interface)
@@ -1664,7 +1662,7 @@ Lấy thông tin về một nat
 + Response 200 (application/json)
     + Attributes (object)
         + status: 1 (number)
-        + message (string)
+        + message: "" (string)
     + Attributes (NAT Collection)
 
 + Response 500 (application/json)
@@ -2928,6 +2926,7 @@ Lấy thông tin của 1 Mail Server.
         }
 ## Add new [POST]
 Thêm mới 1 Mail Server.
+
 + Request
 
         {
